@@ -1,0 +1,114 @@
+---
+import HexagonLogo from './HexagonLogo.astro';
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="brand">
+        <HexagonLogo size={20} variant="mini" />
+        <span class="wordmark">TAKTONLABS</span>
+      </div>
+      <p class="mission">쓰이는 소프트웨어를 끝까지 만듭니다</p>
+      <div class="contact">
+        <a href="mailto:hello@taktonlabs.com">hello@taktonlabs.com</a>
+        <span class="sep">·</span>
+        <a href="/">taktonlabs.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Taktonlabs</span>
+      <span class="legal">
+        <!-- 사업자 정보 placeholder: 대표자 · 사업자 등록번호 · 주소 표기 자리 -->
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-bg-alt);
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .footer-inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: center;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .wordmark {
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    font-size: 13px;
+    color: var(--color-text);
+  }
+
+  .mission {
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    margin: 0;
+    text-align: center;
+  }
+
+  .contact {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .contact a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s var(--ease-in-out);
+  }
+
+  .contact a:hover {
+    color: var(--color-accent);
+  }
+
+  .contact .sep {
+    margin: 0 8px;
+    color: var(--color-text-tertiary);
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 24px;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+  }
+
+  @media (max-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+
+    .mission {
+      text-align: center;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
+  }
+</style>
