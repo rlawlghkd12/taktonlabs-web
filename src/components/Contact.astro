@@ -1,0 +1,213 @@
+---
+import { Icon } from 'astro-icon/components';
+import ContactForm from './ContactForm.astro';
+---
+
+<section id="contact" class="contact">
+  <div class="contact-inner">
+    <div class="contact-header">
+      <p class="label">문의</p>
+      <h2 class="title">프로젝트 이야기하러 오세요</h2>
+      <p class="subcopy">작은 프로젝트도, 큰 프로젝트도 환영합니다.</p>
+    </div>
+    <div class="contact-grid">
+      <a href="mailto:hello@taktonlabs.com" class="card card-email">
+        <div class="card-icon"><Icon name="lucide:mail" width={28} height={28} /></div>
+        <p class="card-label">이메일</p>
+        <p class="card-title">hello@taktonlabs.com</p>
+        <p class="card-description">가볍게 안부, 질문 환영</p>
+      </a>
+      <div class="card card-form">
+        <div class="card-icon-dark">
+          <Icon name="lucide:send" width={28} height={28} />
+        </div>
+        <p class="card-label-dark">문의 폼</p>
+        <h3 class="card-title-dark">정식 문의</h3>
+        <p class="card-description-dark">프로젝트 내용을 자세히</p>
+        <div class="form-wrap">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    background: var(--color-bg);
+    padding: 120px 24px;
+  }
+
+  .contact-inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+
+  .contact-header {
+    text-align: center;
+    margin-bottom: 64px;
+    max-width: var(--container-narrow);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0 0 12px;
+  }
+
+  .title {
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-text);
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+
+  .subcopy {
+    font-size: clamp(15px, 1.3vw, 19px);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .contact-grid {
+    max-width: var(--container-grid);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.8fr;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .card {
+    border-radius: var(--radius-lg);
+    padding: 40px;
+    transition:
+      border-color 0.4s var(--ease-in-out),
+      box-shadow 0.4s var(--ease-in-out),
+      transform 0.4s var(--ease-in-out);
+  }
+
+  .card-email {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-soft);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .card-email:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 12px 28px rgba(10, 25, 41, 0.08);
+    transform: translate3d(0, -2px, 0);
+  }
+
+  .card-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(8, 145, 178, 0.08);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent);
+    margin-bottom: 12px;
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  .card-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .card-description {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .card-form {
+    background: #0a1929;
+    color: #fff;
+  }
+
+  .card-icon-dark {
+    width: 48px;
+    height: 48px;
+    background: rgba(94, 234, 212, 0.12);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-accent-mint);
+    margin-bottom: 16px;
+  }
+
+  .card-label-dark {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent-mint);
+    margin: 0 0 8px;
+  }
+
+  .card-title-dark {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .card-description-dark {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0 0 28px;
+  }
+
+  @media (max-width: 900px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .card {
+      padding: 32px 24px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .contact {
+      padding: 72px 20px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .contact {
+      padding: 160px 32px;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .contact {
+      padding: 192px 48px;
+    }
+  }
+</style>
