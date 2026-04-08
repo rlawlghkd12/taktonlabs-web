@@ -1,0 +1,111 @@
+---
+import ProductCard from './ProductCard.astro';
+import NoiseOverlay from './NoiseOverlay.astro';
+---
+
+<section id="products" class="products">
+  <div class="mint-line" data-mint-line></div>
+  <NoiseOverlay />
+  <div class="products-inner">
+    <div class="products-header">
+      <p class="label">제품</p>
+      <h2 class="title">이론이 아닙니다. 실제로 만들고 운영합니다.</h2>
+      <p class="subcopy">현재 출시 · 운영 중인 제품</p>
+    </div>
+    <ProductCard
+      label="주력 제품"
+      name="TutorMate"
+      description="60대 이상 강사의 수강 관리를 쉽게. 수강생 · 결제 · 대시보드까지 직관적으로."
+      tags={['Electron', 'Win · Mac', '자동 업데이트']}
+      ctaHref="#"
+      ctaLabel="자세히 보기"
+    />
+  </div>
+</section>
+
+<style>
+  .products {
+    position: relative;
+    background: linear-gradient(180deg, #0a1929 0%, #0f2340 100%);
+    padding: 120px 24px;
+    overflow: hidden;
+  }
+
+  .mint-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(94, 234, 212, 0.4),
+      transparent
+    );
+    transform-origin: left center;
+    will-change: transform;
+  }
+
+  .products-inner {
+    position: relative;
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    z-index: 1;
+  }
+
+  .products-header {
+    text-align: center;
+    margin-bottom: 64px;
+    max-width: var(--container-narrow);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent-mint);
+    margin: 0 0 12px;
+  }
+
+  .title {
+    font-size: clamp(24px, 4vw, 42px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+
+  .subcopy {
+    font-size: clamp(15px, 1.3vw, 19px);
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .products {
+      padding: 72px 20px;
+    }
+
+    .products-header {
+      margin-bottom: 40px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .products {
+      padding: 160px 32px;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    .products {
+      padding: 192px 48px;
+    }
+  }
+</style>
