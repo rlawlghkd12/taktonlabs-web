@@ -1,0 +1,96 @@
+@import "./tokens.css";
+
+/* ========== 폰트 자가 호스트 (Task 3에서 다운로드) ========== */
+@font-face {
+  font-family: 'Pretendard Variable';
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/PretendardVariable.woff2') format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Inter Variable';
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/InterVariable.woff2') format('woff2-variations');
+}
+
+/* ========== 기본 리셋 & 전역 설정 ========== */
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth; /* Lenis 비활성 시 폴백 */
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01', 'cv11', 'tnum';
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.005em;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 부드러움 축: 움직이는 요소는 transform만, top/left 금지 */
+[data-animate] {
+  will-change: transform, opacity;
+}
+
+/* 접근성: 스킵 링크 */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 100;
+  transition: top 0.3s var(--ease-out);
+}
+
+.skip-link:focus-visible {
+  top: 16px;
+}
+
+/* 접근성: prefers-reduced-motion 폴백 (애니메이션 "단축", 비활성 아님) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 포커스 링 (모든 인터랙티브 요소 공통) */
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+/* Lucide 아이콘 스트로크 두께 1.75px 강제 (프리미엄 감각) */
+[data-icon] svg,
+.astro-icon svg {
+  stroke-width: 1.75;
+}
