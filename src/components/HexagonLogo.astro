@@ -1,0 +1,57 @@
+---
+interface Props {
+  size?: number;
+  variant?: 'mini' | 'hero';
+  class?: string;
+}
+
+const { size = 28, variant = 'mini', class: className = '' } = Astro.props;
+---
+
+<div
+  class:list={['hexagon-logo', `variant-${variant}`, className]}
+  style={`--size: ${size}px;`}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 100 100" width={size} height={size}>
+    <defs>
+      <linearGradient id={`hex-${variant}-grad`} x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0a1929" />
+        <stop offset="100%" stop-color="#0891b2" />
+      </linearGradient>
+    </defs>
+    <path
+      d="M50 5 L88 27 L88 73 L50 95 L12 73 L12 27 Z"
+      fill={`url(#hex-${variant}-grad)`}
+    />
+    <path
+      d="M50 28 L50 70 M35 43 L50 28 L65 43"
+      stroke="#5eead4"
+      stroke-width="5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+  </svg>
+</div>
+
+<style>
+  .hexagon-logo {
+    display: inline-flex;
+    width: var(--size);
+    height: var(--size);
+    flex-shrink: 0;
+  }
+
+  .hexagon-logo.variant-hero {
+    filter: drop-shadow(0 40px 80px rgba(10, 25, 41, 0.12));
+    transform-style: preserve-3d;
+    perspective: 800px;
+    transition: transform 0.6s var(--ease-smooth);
+  }
+
+  .hexagon-logo.variant-hero svg {
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+</style>
