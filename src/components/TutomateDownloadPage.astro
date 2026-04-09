@@ -1,100 +1,105 @@
 ---
-import Base from '../layouts/Base.astro';
-import HexagonLogo from '../components/HexagonLogo.astro';
-import Footer from '../components/Footer.astro';
+import HexagonLogo from './HexagonLogo.astro';
 import { Icon } from 'astro-icon/components';
-import { tutomate, getDownloadUrl } from '../data/tutomate';
+import { getDownloadUrl, type TutomateVariant } from '../data/tutomate';
 
-const macUrl = getDownloadUrl('mac');
-const winUrl = getDownloadUrl('windows');
+interface Props {
+  variant: TutomateVariant;
+  otherVariantHref: string;
+  otherVariantLabel: string;
+}
 
-const pageTitle = `${tutomate.name} — ${tutomate.tagline} | Taktonlabs`;
-const pageDescription = tutomate.description;
+const { variant, otherVariantHref, otherVariantLabel } = Astro.props;
+
+const macUrl = getDownloadUrl(variant, 'mac');
+const winUrl = getDownloadUrl(variant, 'windows');
 ---
 
-<Base title={pageTitle} description={pageDescription}>
-  <nav class="mini-nav">
+<nav class="mini-nav">
+  <div class="mini-nav-inner">
     <a href="/" class="back-link">
-      <Icon name="lucide:arrow-right" width={16} height={16} style="transform: rotate(180deg)" />
+      <Icon name="lucide:arrow-right" width={16} height={16} class="back-icon" />
       <span>Taktonlabs</span>
     </a>
-  </nav>
+    <a href={otherVariantHref} class="variant-switch">
+      <span>{otherVariantLabel}</span>
+      <Icon name="lucide:arrow-up-right" width={14} height={14} />
+    </a>
+  </div>
+</nav>
 
-  <main id="main" class="page">
-    <section class="hero">
-      <div class="hero-inner">
-        <div class="badge">
-          <HexagonLogo size={96} variant="hero" />
-        </div>
-
-        <h1 class="name">{tutomate.name}</h1>
-        <p class="tagline">{tutomate.tagline}</p>
-        <p class="description">{tutomate.description}</p>
-
-        <div class="downloads">
-          <a
-            href={macUrl}
-            class="btn btn-primary"
-            data-platform="mac"
-            data-download
-          >
-            <Icon name="lucide:app-window" width={20} height={20} />
-            <span>macOS 다운로드</span>
-          </a>
-          <a
-            href={winUrl}
-            class="btn btn-secondary"
-            data-platform="windows"
-            data-download
-          >
-            <Icon name="lucide:layout-grid" width={20} height={20} />
-            <span>Windows 다운로드</span>
-          </a>
-        </div>
-
-        <p class="version-info">
-          <span class="version-num">v{tutomate.version}</span>
-          <span class="version-sep">·</span>
-          <span class="version-date">{tutomate.releaseDate} 업데이트</span>
-        </p>
+<main id="main" class="page">
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="badge">
+        <HexagonLogo size={96} variant="hero" />
       </div>
-    </section>
 
-    <section class="features">
-      <div class="features-inner">
-        <h2 class="features-title">주요 특징</h2>
-        <div class="feature-grid">
-          {
-            tutomate.features.map((feature) => (
-              <article class="feature-card">
-                <h3 class="feature-title">{feature.title}</h3>
-                <p class="feature-description">{feature.description}</p>
-              </article>
-            ))
-          }
+      <h1 class="name">{variant.name}</h1>
+      <p class="tagline">{variant.tagline}</p>
+      <p class="description">{variant.description}</p>
+
+      <div class="downloads">
+        <a
+          href={macUrl}
+          class="btn btn-primary"
+          data-platform="mac"
+          data-download
+        >
+          <Icon name="lucide:app-window" width={20} height={20} />
+          <span>macOS 다운로드</span>
+        </a>
+        <a
+          href={winUrl}
+          class="btn btn-secondary"
+          data-platform="windows"
+          data-download
+        >
+          <Icon name="lucide:layout-grid" width={20} height={20} />
+          <span>Windows 다운로드</span>
+        </a>
+      </div>
+
+      <p class="version-info">
+        <span class="version-num">v{variant.version}</span>
+        <span class="version-sep">·</span>
+        <span class="version-date">{variant.releaseDate} 업데이트</span>
+      </p>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="features-inner">
+      <h2 class="features-title">주요 특징</h2>
+      <div class="feature-grid">
+        {
+          variant.features.map((feature) => (
+            <article class="feature-card">
+              <h3 class="feature-title">{feature.title}</h3>
+              <p class="feature-description">{feature.description}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="requirements">
+    <div class="requirements-inner">
+      <h2 class="requirements-title">시스템 요구사항</h2>
+      <dl class="req-list">
+        <div class="req-item">
+          <dt>macOS</dt>
+          <dd>{variant.systemRequirements.mac}</dd>
         </div>
-      </div>
-    </section>
-
-    <section class="requirements">
-      <div class="requirements-inner">
-        <h2 class="requirements-title">시스템 요구사항</h2>
-        <dl class="req-list">
-          <div class="req-item">
-            <dt>macOS</dt>
-            <dd>{tutomate.systemRequirements.mac}</dd>
-          </div>
-          <div class="req-item">
-            <dt>Windows</dt>
-            <dd>{tutomate.systemRequirements.windows}</dd>
-          </div>
-        </dl>
-      </div>
-    </section>
-  </main>
-
-  <Footer />
-</Base>
+        <div class="req-item">
+          <dt>Windows</dt>
+          <dd>{variant.systemRequirements.windows}</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+</main>
 
 <script>
   // OS 자동 감지 — 사용 OS에 맞는 버튼 강조
@@ -149,13 +154,20 @@ const pageDescription = tutomate.description;
     );
   }
 
+  .mini-nav-inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
   .back-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    max-width: var(--container-wide);
-    margin: 0 auto;
-    padding: 16px 24px;
     color: var(--color-text-secondary);
     text-decoration: none;
     font-size: 14px;
@@ -165,6 +177,32 @@ const pageDescription = tutomate.description;
 
   .back-link:hover {
     color: var(--color-text);
+  }
+
+  .back-icon {
+    transform: rotate(180deg);
+  }
+
+  .variant-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-md);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    transition:
+      color 0.3s var(--ease-in-out),
+      border-color 0.3s var(--ease-in-out);
+  }
+
+  .variant-switch:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
   }
 
   .page {
@@ -391,6 +429,15 @@ const pageDescription = tutomate.description;
 
   /* ============ 반응형 ============ */
   @media (max-width: 768px) {
+    .mini-nav-inner {
+      padding: 14px 20px;
+    }
+
+    .variant-switch {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+
     .hero {
       padding: 64px 20px 60px;
     }

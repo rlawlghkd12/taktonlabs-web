@@ -99,7 +99,7 @@ test.describe('Taktonlabs 랜딩 스모크', () => {
   });
 });
 
-test.describe('TutorMate 다운로드 페이지', () => {
+test.describe('TutorMate 기본 버전 다운로드 페이지', () => {
   test('/tutomate 페이지 로드 & 콘솔 에러 없음', async ({ page }) => {
     const consoleErrors: string[] = [];
     page.on('console', (msg) => {
@@ -116,12 +116,13 @@ test.describe('TutorMate 다운로드 페이지', () => {
   test('TutorMate 제품명, 태그라인, 다운로드 버튼 렌더링', async ({ page }) => {
     await page.goto('/tutomate');
     await expect(page.locator('h1.name')).toContainText('TutorMate');
+    await expect(page.locator('h1.name')).not.toContainText('Q');
     await expect(page.locator('.tagline')).toBeVisible();
     await expect(page.locator('[data-platform="mac"]')).toBeVisible();
     await expect(page.locator('[data-platform="windows"]')).toBeVisible();
   });
 
-  test('다운로드 버튼이 GitHub Releases latest로 연결됨', async ({ page }) => {
+  test('regular 다운로드 URL이 올바른 파일명 사용', async ({ page }) => {
     await page.goto('/tutomate');
     const macHref = await page
       .locator('[data-platform="mac"]')
@@ -130,11 +131,14 @@ test.describe('TutorMate 다운로드 페이지', () => {
       .locator('[data-platform="windows"]')
       .getAttribute('href');
     expect(macHref).toMatch(
-      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-.+-universal\.dmg$/
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-\d+\.\d+\.\d+-universal\.dmg$/
     );
     expect(winHref).toMatch(
-      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Setup-.+\.exe$/
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Setup-\d+\.\d+\.\d+\.exe$/
     );
+    // Q 파일명이 아님을 확인
+    expect(macHref).not.toContain('TutorMate-Q');
+    expect(winHref).not.toContain('TutorMate-Q');
   });
 
   test('홈 → Products "체험하기" → /tutomate 이동 가능', async ({ page }) => {
@@ -150,6 +154,13 @@ test.describe('TutorMate 다운로드 페이지', () => {
     await expect(backLink).toContainText('Taktonlabs');
   });
 
+  test('/tutomate → Q 버전 variant switch 동작', async ({ page }) => {
+    await page.goto('/tutomate');
+    const switchLink = page.locator('.variant-switch');
+    await expect(switchLink).toHaveAttribute('href', '/tutomate/q');
+    await expect(switchLink).toContainText('Q 버전');
+  });
+
   test('시스템 요구사항 섹션 렌더링', async ({ page }) => {
     await page.goto('/tutomate');
     await expect(page.locator('.requirements-title')).toContainText(
@@ -157,5 +168,48 @@ test.describe('TutorMate 다운로드 페이지', () => {
     );
     await expect(page.locator('.req-item').first()).toContainText('macOS');
     await expect(page.locator('.req-item').nth(1)).toContainText('Windows');
+  });
+});
+
+test.describe('TutorMate Q 다운로드 페이지', () => {
+  test('/tutomate/q 페이지 로드 & 콘솔 에러 없음', async ({ page }) => {
+    const consoleErrors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
+
+    await page.goto('/tutomate/q');
+    await expect(page).toHaveTitle(/TutorMate Q.*Taktonlabs/);
+    await page.waitForLoadState('networkidle');
+
+    expect(consoleErrors).toEqual([]);
+  });
+
+  test('TutorMate Q 제품명 렌더링', async ({ page }) => {
+    await page.goto('/tutomate/q');
+    await expect(page.locator('h1.name')).toContainText('TutorMate Q');
+  });
+
+  test('Q 다운로드 URL이 Q 파일명 사용', async ({ page }) => {
+    await page.goto('/tutomate/q');
+    const macHref = await page
+      .locator('[data-platform="mac"]')
+      .getAttribute('href');
+    const winHref = await page
+      .locator('[data-platform="windows"]')
+      .getAttribute('href');
+    expect(macHref).toMatch(
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Q-\d+\.\d+\.\d+-universal-mac\.dmg$/
+    );
+    expect(winHref).toMatch(
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Q-Setup-\d+\.\d+\.\d+\.exe$/
+    );
+  });
+
+  test('/tutomate/q → /tutomate variant switch 동작', async ({ page }) => {
+    await page.goto('/tutomate/q');
+    const switchLink = page.locator('.variant-switch');
+    await expect(switchLink).toHaveAttribute('href', '/tutomate');
+    await expect(switchLink).toContainText('기본 버전');
   });
 });
