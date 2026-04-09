@@ -11,6 +11,10 @@ gsap.defaults({
   duration: 0.8,
 });
 
+// ========== ScrollTrigger 모바일 안정화 ==========
+// iOS Safari 의 browser chrome 숨김/표시 시 refresh 를 방지해 점프 제거
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 // Lenis와 ScrollTrigger 동기화
 function syncLenisWithScrollTrigger() {
   const lenis = getLenis();

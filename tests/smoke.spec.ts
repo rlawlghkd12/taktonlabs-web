@@ -39,12 +39,20 @@ test.describe('Taktonlabs 랜딩 스모크', () => {
     await page.waitForLoadState('networkidle');
 
     await page.click('a[href="#contact"]');
-    await page.waitForTimeout(1500); // Lenis 스크롤 대기
+    // Lenis 스크롤 (데스크톱) 또는 네이티브 smooth scroll (모바일) 완료 대기
+    await page.waitForFunction(
+      () => {
+        const contact = document.querySelector('#contact');
+        if (!contact) return false;
+        const box = contact.getBoundingClientRect();
+        return box.top < 200;
+      },
+      { timeout: 5000 }
+    );
 
     const contactSection = page.locator('#contact');
     const box = await contactSection.boundingBox();
     expect(box).not.toBeNull();
-    // 뷰포트 상단 근처에 contact 섹션이 있는지
     expect(box!.y).toBeLessThan(200);
   });
 
@@ -99,8 +107,50 @@ test.describe('Taktonlabs 랜딩 스모크', () => {
   });
 });
 
+// GitHub API mock — 테스트 rate limit 회피 + 결정적 동작
+const MOCK_RELEASE = {
+  tag_name: 'v0.6.1',
+  published_at: '2026-04-09T00:29:59Z',
+  assets: [
+    {
+      name: 'TutorMate-0.6.1-universal.dmg',
+      browser_download_url:
+        'https://github.com/rlawlghkd12/tutomate/releases/download/v0.6.1/TutorMate-0.6.1-universal.dmg',
+    },
+    {
+      name: 'TutorMate-Setup-0.6.1.exe',
+      browser_download_url:
+        'https://github.com/rlawlghkd12/tutomate/releases/download/v0.6.1/TutorMate-Setup-0.6.1.exe',
+    },
+    {
+      name: 'TutorMate-Q-0.6.1-universal-mac.dmg',
+      browser_download_url:
+        'https://github.com/rlawlghkd12/tutomate/releases/download/v0.6.1/TutorMate-Q-0.6.1-universal-mac.dmg',
+    },
+    {
+      name: 'TutorMate-Q-Setup-0.6.1.exe',
+      browser_download_url:
+        'https://github.com/rlawlghkd12/tutomate/releases/download/v0.6.1/TutorMate-Q-Setup-0.6.1.exe',
+    },
+  ],
+};
+
+async function mockGithubApi(page: import('@playwright/test').Page): Promise<void> {
+  await page.route(
+    'https://api.github.com/repos/rlawlghkd12/tutomate/releases/latest',
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(MOCK_RELEASE),
+      });
+    }
+  );
+}
+
 test.describe('TutorMate 기본 버전 다운로드 페이지', () => {
   test('/tutomate 페이지 로드 & 콘솔 에러 없음', async ({ page }) => {
+    await mockGithubApi(page);
     const consoleErrors: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') consoleErrors.push(msg.text());
@@ -174,6 +224,7 @@ test.describe('TutorMate 기본 버전 다운로드 페이지', () => {
 
 test.describe('TutorMate Q 다운로드 페이지', () => {
   test('/tutomate/q 페이지 로드 & 콘솔 에러 없음', async ({ page }) => {
+    await mockGithubApi(page);
     const consoleErrors: string[] = [];
     page.on('console', (msg) => {
       if (msg.type() === 'error') consoleErrors.push(msg.text());

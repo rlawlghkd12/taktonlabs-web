@@ -23,7 +23,29 @@
 }
 
 html {
-  scroll-behavior: smooth; /* Lenis 비활성 시 폴백 */
+  scroll-behavior: smooth; /* Lenis 비활성 시 폴백 (모바일/reduced-motion) */
+}
+
+/* ========== Lenis 공식 CSS (scroll-behavior 충돌 방지) ========== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+html.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {
@@ -37,7 +59,16 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   margin: 0;
-  overflow-x: hidden;
+  /* `clip` 은 `hidden` 과 달리 새 containing block 을 만들지 않아서
+     position: sticky 가 모바일 Safari 에서 정상 동작함. Safari 16+ 지원. */
+  overflow-x: clip;
+}
+
+/* Safari 16 이전 fallback */
+@supports not (overflow-x: clip) {
+  body {
+    overflow-x: hidden;
+  }
 }
 
 *,
