@@ -84,11 +84,13 @@ const jsonLd = {
     <script>
       import { initSmoothScroll } from '../scripts/smooth-scroll';
       import { initScrollAnimations } from '../scripts/scroll-animations';
+      import { initFaq } from '../scripts/faq';
 
       // DOM 준비 완료 후 순차 초기화
       function init() {
         initSmoothScroll();
         initScrollAnimations();
+        initFaq();
       }
 
       if (document.readyState === 'loading') {
