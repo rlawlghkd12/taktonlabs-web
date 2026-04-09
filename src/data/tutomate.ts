@@ -14,6 +14,7 @@ export interface TutomateVariant {
   version: string;
   releaseDate: string;
   githubRepo: string;
+  iconSrc: string;
   systemRequirements: {
     mac: string;
     windows: string;
@@ -33,6 +34,7 @@ export const tutomate: TutomateVariant = {
   version: '0.6.0',
   releaseDate: '2026-04-09',
   githubRepo: 'rlawlghkd12/tutomate',
+  iconSrc: '/tutomate/app-icon.png',
   systemRequirements: {
     mac: 'macOS 10.15 (Catalina) 이상 · Intel / Apple Silicon Universal',
     windows: 'Windows 10/11 · 64bit',
@@ -64,6 +66,7 @@ export const tutomateQ: TutomateVariant = {
   version: '0.6.0',
   releaseDate: '2026-04-09',
   githubRepo: 'rlawlghkd12/tutomate',
+  iconSrc: '/tutomate-q/app-icon.png',
   systemRequirements: {
     mac: 'macOS 10.15 (Catalina) 이상 · Intel / Apple Silicon Universal',
     windows: 'Windows 10/11 · 64bit',

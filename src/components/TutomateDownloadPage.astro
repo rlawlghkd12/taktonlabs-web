@@ -1,5 +1,4 @@
 ---
-import HexagonLogo from './HexagonLogo.astro';
 import { Icon } from 'astro-icon/components';
 import { getDownloadUrl, type TutomateVariant } from '../data/tutomate';
 
@@ -32,7 +31,15 @@ const winUrl = getDownloadUrl(variant, 'windows');
   <section class="hero">
     <div class="hero-inner">
       <div class="badge">
-        <HexagonLogo size={96} variant="hero" />
+        <img
+          src={variant.iconSrc}
+          alt={`${variant.name} 앱 아이콘`}
+          width="140"
+          height="140"
+          class="app-icon"
+          loading="eager"
+          decoding="async"
+        />
       </div>
 
       <h1 class="name">{variant.name}</h1>
@@ -228,6 +235,24 @@ const winUrl = getDownloadUrl(variant, 'windows');
   .badge {
     display: inline-flex;
     margin-bottom: 32px;
+  }
+
+  .app-icon {
+    width: 140px;
+    height: 140px;
+    filter: drop-shadow(0 30px 60px rgba(10, 25, 41, 0.18));
+    transition: transform 0.6s var(--ease-smooth);
+  }
+
+  .app-icon:hover {
+    transform: translate3d(0, -4px, 0) scale3d(1.03, 1.03, 1);
+  }
+
+  @media (max-width: 768px) {
+    .app-icon {
+      width: 112px;
+      height: 112px;
+    }
   }
 
   .name {
