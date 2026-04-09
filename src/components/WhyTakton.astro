@@ -1,0 +1,96 @@
+---
+import WhyCard from './WhyCard.astro';
+import { whyPromises } from '../data/why';
+---
+
+<section id="why" class="why" aria-labelledby="why-title">
+  <div class="why-inner">
+    <div class="why-header">
+      <p class="label">Why Takton Labs · 왜 우리인가</p>
+      <h2 id="why-title" class="title">네 가지 약속</h2>
+      <p class="subcopy">외주가 무서웠던 분들을 위한 준비된 답변입니다.</p>
+    </div>
+    <div class="card-grid">
+      {whyPromises.map((promise) => <WhyCard promise={promise} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .why {
+    background: var(--color-bg);
+    padding: 96px 24px;
+  }
+
+  .why-inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+
+  .why-header {
+    text-align: center;
+    margin-bottom: 56px;
+    max-width: var(--container-narrow);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .label {
+    display: inline-block;
+    font-family: var(--font-display-latin);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0 0 12px;
+  }
+
+  .title {
+    font-size: clamp(26px, 4.2vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+    margin: 0 0 12px;
+    line-height: 1.15;
+  }
+
+  .subcopy {
+    font-size: clamp(15px, 1.3vw, 19px);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .card-grid {
+    max-width: var(--container-grid);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .why {
+      padding: 72px 20px;
+    }
+
+    .why-header {
+      margin-bottom: 40px;
+    }
+
+    .card-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .why {
+      padding: 160px 32px;
+    }
+
+    .card-grid {
+      gap: 32px;
+    }
+  }
+</style>
