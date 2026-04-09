@@ -96,12 +96,12 @@ function animateHero(): void {
     '-=0.4'
   );
 
-  // 헥사곤 (등장)
+  // 로고 (등장)
   tl.from(
-    '.hero-hexagon svg',
+    '.hero-logo',
     {
       opacity: 0,
-      scale: 1.2,
+      scale: 1.1,
       duration: 1.2,
       ease: 'power2.out',
     },

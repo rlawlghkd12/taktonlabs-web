@@ -1,13 +1,19 @@
 ---
-import HexagonLogo from './HexagonLogo.astro';
 ---
 
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-top">
       <div class="brand">
-        <HexagonLogo size={20} variant="mini" />
-        <span class="wordmark">TAKTONLABS</span>
+        <img
+          src="/tektonmark.png"
+          alt="Takton Labs"
+          width="84"
+          height="36"
+          class="brand-logo"
+          decoding="async"
+          loading="lazy"
+        />
       </div>
       <p class="mission">쓰이는 소프트웨어를 끝까지 만듭니다</p>
       <div class="contact">
@@ -16,11 +22,28 @@ import HexagonLogo from './HexagonLogo.astro';
         <a href="/">taktonlabs.com</a>
       </div>
     </div>
+    <div class="footer-legal">
+      <dl class="legal-grid">
+        <div class="legal-row">
+          <dt>상호</dt><dd>텍톤랩스 (Takton Labs)</dd>
+        </div>
+        <div class="legal-row">
+          <dt>대표자</dt><dd>김상철</dd>
+        </div>
+        <div class="legal-row">
+          <dt>사업자등록번호</dt><dd>325-10-03297</dd>
+        </div>
+        <div class="legal-row">
+          <dt>업태</dt><dd>정보통신업 · 응용 소프트웨어 개발 및 공급업</dd>
+        </div>
+        <div class="legal-row">
+          <dt>소재지</dt><dd>경상남도 양산시 하북면 신평로 18, 1층</dd>
+        </div>
+      </dl>
+    </div>
     <div class="footer-bottom">
-      <span>© 2026 Taktonlabs</span>
-      <span class="legal">
-        <!-- 사업자 정보 placeholder: 대표자 · 사업자 등록번호 · 주소 표기 자리 -->
-      </span>
+      <span>© 2026 Takton Labs</span>
+      <span class="copyright-note">All rights reserved.</span>
     </div>
   </div>
 </footer>
@@ -49,14 +72,12 @@ import HexagonLogo from './HexagonLogo.astro';
   .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
   }
 
-  .wordmark {
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    font-size: 13px;
-    color: var(--color-text);
+  .brand-logo {
+    height: 28px;
+    width: auto;
+    display: block;
   }
 
   .mission {
@@ -87,12 +108,51 @@ import HexagonLogo from './HexagonLogo.astro';
     color: var(--color-text-tertiary);
   }
 
+  .footer-legal {
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .legal-grid {
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 32px;
+    font-size: 12px;
+  }
+
+  .legal-row {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    gap: 12px;
+    align-items: baseline;
+  }
+
+  .legal-row dt {
+    font-weight: 700;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10px;
+  }
+
+  .legal-row dd {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
   .footer-bottom {
     display: flex;
     justify-content: space-between;
-    padding-top: 24px;
+    padding-top: 20px;
     font-size: 12px;
     color: var(--color-text-tertiary);
+  }
+
+  .copyright-note {
+    font-style: italic;
   }
 
   @media (max-width: 768px) {
@@ -101,8 +161,23 @@ import HexagonLogo from './HexagonLogo.astro';
       text-align: center;
     }
 
+    .brand {
+      justify-content: center;
+    }
+
     .mission {
       text-align: center;
+    }
+
+    .legal-grid {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .legal-row {
+      grid-template-columns: 1fr;
+      gap: 2px;
+      text-align: left;
     }
 
     .footer-bottom {

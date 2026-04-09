@@ -1,5 +1,4 @@
 ---
-import HexagonLogo from './HexagonLogo.astro';
 import { Icon } from 'astro-icon/components';
 ---
 
@@ -25,28 +24,19 @@ import { Icon } from 'astro-icon/components';
       </div>
     </div>
     <div class="hero-visual">
-      <HexagonLogo size={220} variant="hero" class="hero-hexagon" />
+      <img
+        src="/tektonmark.png"
+        alt="Takton Labs"
+        width="420"
+        height="180"
+        class="hero-logo"
+        decoding="async"
+        fetchpriority="high"
+      />
     </div>
   </div>
   <div class="hero-bg-mesh" aria-hidden="true"></div>
 </section>
-
-<script>
-  // 모바일에서 헥사곤 크기 축소 (220 → 100px)
-  function adjustHexagonSize() {
-    const hex = document.querySelector('.hero-hexagon');
-    if (!hex) return;
-    const svg = hex.querySelector('svg');
-    if (!svg) return;
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const size = isMobile ? 100 : 220;
-    svg.setAttribute('width', String(size));
-    svg.setAttribute('height', String(size));
-    (hex as HTMLElement).style.setProperty('--size', `${size}px`);
-  }
-  adjustHexagonSize();
-  window.addEventListener('resize', adjustHexagonSize);
-</script>
 
 <style>
   .hero {
@@ -145,6 +135,21 @@ import { Icon } from 'astro-icon/components';
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .hero-logo {
+    width: auto;
+    max-width: 100%;
+    height: clamp(120px, 16vw, 200px);
+    filter: drop-shadow(0 30px 60px rgba(10, 25, 41, 0.12));
+    transition: transform 0.6s var(--ease-smooth);
+    will-change: transform;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .hero-logo:hover {
+      transform: translate3d(0, -4px, 0);
+    }
   }
 
   .hero-bg-mesh {
