@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
+import TutomateDownloadPage from '../../components/TutomateDownloadPage.astro';
+import { tutomate } from '../../data/tutomate';
+
+const pageTitle = `${tutomate.name} — ${tutomate.tagline} | Taktonlabs`;
+const pageDescription = tutomate.description;
+---
+
+<Base title={pageTitle} description={pageDescription}>
+  <TutomateDownloadPage
+    variant={tutomate}
+    otherVariantHref="/tutomate/q"
+    otherVariantLabel="Q 버전 보기"
+  />
+  <Footer />
+</Base>
