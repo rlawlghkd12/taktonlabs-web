@@ -10,11 +10,11 @@
 }
 
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Geist';
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/InterVariable.woff2') format('woff2-variations');
+  src: url('/fonts/GeistVariable.woff2') format('woff2-variations');
 }
 
 /* ========== 기본 리셋 & 전역 설정 ========== */
@@ -52,7 +52,7 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-feature-settings: 'ss01', 'cv11', 'tnum';
+  font-feature-settings: 'ss01', 'ss02', 'cv11', 'tnum', 'zero';
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.005em;
   line-height: 1.75;
