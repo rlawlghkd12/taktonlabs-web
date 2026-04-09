@@ -130,11 +130,12 @@ test.describe('TutorMate 기본 버전 다운로드 페이지', () => {
     const winHref = await page
       .locator('[data-platform="windows"]')
       .getAttribute('href');
+    // 동적(explicit tag) 또는 fallback(latest) 둘 다 허용
     expect(macHref).toMatch(
-      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-\d+\.\d+\.\d+-universal\.dmg$/
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/(latest\/download|download\/v\d+\.\d+\.\d+)\/TutorMate-\d+\.\d+\.\d+-universal\.dmg$/
     );
     expect(winHref).toMatch(
-      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Setup-\d+\.\d+\.\d+\.exe$/
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/(latest\/download|download\/v\d+\.\d+\.\d+)\/TutorMate-Setup-\d+\.\d+\.\d+\.exe$/
     );
     // Q 파일명이 아님을 확인
     expect(macHref).not.toContain('TutorMate-Q');
@@ -198,11 +199,12 @@ test.describe('TutorMate Q 다운로드 페이지', () => {
     const winHref = await page
       .locator('[data-platform="windows"]')
       .getAttribute('href');
+    // 동적(explicit tag) 또는 fallback(latest) 둘 다 허용
     expect(macHref).toMatch(
-      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Q-\d+\.\d+\.\d+-universal-mac\.dmg$/
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/(latest\/download|download\/v\d+\.\d+\.\d+)\/TutorMate-Q-\d+\.\d+\.\d+-universal-mac\.dmg$/
     );
     expect(winHref).toMatch(
-      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Q-Setup-\d+\.\d+\.\d+\.exe$/
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/(latest\/download|download\/v\d+\.\d+\.\d+)\/TutorMate-Q-Setup-\d+\.\d+\.\d+\.exe$/
     );
   });
 

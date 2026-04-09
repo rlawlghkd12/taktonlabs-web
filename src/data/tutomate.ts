@@ -1,7 +1,11 @@
 /**
  * TutorMate 제품 메타데이터 (regular + Q variant).
- * 새 릴리즈마다 각 variant의 `version` 과 `releaseDate` 만 업데이트하면
- * 다운로드 페이지가 자동으로 최신 버전을 가리킴.
+ *
+ * **정적 fallback 값**. 실제 최신 버전/릴리즈 날짜/다운로드 URL은
+ * TutomateDownloadPage.astro 의 클라이언트 JS가 런타임에 GitHub API 에서 fetch 해서
+ * DOM 을 업데이트함. 재배포 없이 새 릴리즈가 즉시 반영됨.
+ *
+ * 아래 version/releaseDate/*Url 은 API 호출 실패 시나 JS 비활성 시 표시되는 fallback.
  */
 
 export type TutomateSlug = 'regular' | 'q';
@@ -15,6 +19,8 @@ export interface TutomateVariant {
   releaseDate: string;
   githubRepo: string;
   iconSrc: string;
+  macUrl: string;
+  winUrl: string;
   systemRequirements: {
     mac: string;
     windows: string;
@@ -25,16 +31,39 @@ export interface TutomateVariant {
   }>;
 }
 
+// ============ Static base metadata ============
+// 이름/태그라인/설명/아이콘/기능 등은 고정. version/url은 빌드 타임에 덮어씀.
+
+const GITHUB_REPO = 'rlawlghkd12/tutomate';
+const FALLBACK_VERSION = '0.6.0';
+const FALLBACK_DATE = '2026-04-09';
+
+function fallbackRegularUrl(platform: 'mac' | 'windows'): string {
+  const base = `https://github.com/${GITHUB_REPO}/releases/latest/download`;
+  if (platform === 'mac')
+    return `${base}/TutorMate-${FALLBACK_VERSION}-universal.dmg`;
+  return `${base}/TutorMate-Setup-${FALLBACK_VERSION}.exe`;
+}
+
+function fallbackQUrl(platform: 'mac' | 'windows'): string {
+  const base = `https://github.com/${GITHUB_REPO}/releases/latest/download`;
+  if (platform === 'mac')
+    return `${base}/TutorMate-Q-${FALLBACK_VERSION}-universal-mac.dmg`;
+  return `${base}/TutorMate-Q-Setup-${FALLBACK_VERSION}.exe`;
+}
+
 export const tutomate: TutomateVariant = {
   slug: 'regular',
   name: 'TutorMate',
   tagline: '60대 이상 강사를 위한 수강 관리 데스크톱 앱',
   description:
     '수강생 관리, 결제 이력, 대시보드까지 직관적으로. 큰 글씨와 단순한 인터페이스로 누구나 쉽게.',
-  version: '0.6.0',
-  releaseDate: '2026-04-09',
-  githubRepo: 'rlawlghkd12/tutomate',
+  version: FALLBACK_VERSION,
+  releaseDate: FALLBACK_DATE,
+  githubRepo: GITHUB_REPO,
   iconSrc: '/tutomate/app-icon.png',
+  macUrl: fallbackRegularUrl('mac'),
+  winUrl: fallbackRegularUrl('windows'),
   systemRequirements: {
     mac: 'macOS 10.15 (Catalina) 이상 · Intel / Apple Silicon Universal',
     windows: 'Windows 10/11 · 64bit',
@@ -63,10 +92,12 @@ export const tutomateQ: TutomateVariant = {
   tagline: '현대적인 UI를 선호하는 강사를 위한 버전',
   description:
     '더 세련된 인터페이스와 빠른 동작. 익숙한 기능은 그대로, 경험은 한 단계 업그레이드.',
-  version: '0.6.0',
-  releaseDate: '2026-04-09',
-  githubRepo: 'rlawlghkd12/tutomate',
+  version: FALLBACK_VERSION,
+  releaseDate: FALLBACK_DATE,
+  githubRepo: GITHUB_REPO,
   iconSrc: '/tutomate-q/app-icon.png',
+  macUrl: fallbackQUrl('mac'),
+  winUrl: fallbackQUrl('windows'),
   systemRequirements: {
     mac: 'macOS 10.15 (Catalina) 이상 · Intel / Apple Silicon Universal',
     windows: 'Windows 10/11 · 64bit',
@@ -87,23 +118,3 @@ export const tutomateQ: TutomateVariant = {
   ],
 };
 
-/**
- * GitHub Releases의 latest 태그에서 직접 다운로드하는 URL 생성.
- * 파일명에 버전이 포함되므로, version 업데이트 시 URL도 자동 갱신됨.
- */
-export function getDownloadUrl(
-  variant: TutomateVariant,
-  platform: 'mac' | 'windows'
-): string {
-  const base = `https://github.com/${variant.githubRepo}/releases/latest/download`;
-  if (variant.slug === 'q') {
-    if (platform === 'mac') {
-      return `${base}/TutorMate-Q-${variant.version}-universal-mac.dmg`;
-    }
-    return `${base}/TutorMate-Q-Setup-${variant.version}.exe`;
-  }
-  if (platform === 'mac') {
-    return `${base}/TutorMate-${variant.version}-universal.dmg`;
-  }
-  return `${base}/TutorMate-Setup-${variant.version}.exe`;
-}

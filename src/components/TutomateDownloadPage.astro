@@ -1,6 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { getDownloadUrl, type TutomateVariant } from '../data/tutomate';
+import type { TutomateVariant } from '../data/tutomate';
 
 interface Props {
   variant: TutomateVariant;
@@ -9,10 +9,10 @@ interface Props {
 }
 
 const { variant, otherVariantHref, otherVariantLabel } = Astro.props;
-
-const macUrl = getDownloadUrl(variant, 'mac');
-const winUrl = getDownloadUrl(variant, 'windows');
+const { macUrl, winUrl } = variant;
 ---
+
+<div data-variant-slug={variant.slug} data-github-repo={variant.githubRepo} style="display:none;" aria-hidden="true"></div>
 
 <nav class="mini-nav">
   <div class="mini-nav-inner">
@@ -109,7 +109,7 @@ const winUrl = getDownloadUrl(variant, 'windows');
 </main>
 
 <script>
-  // OS 자동 감지 — 사용 OS에 맞는 버튼 강조
+  // ========== OS 자동 감지 — 사용 OS에 맞는 버튼 강조 ==========
   function highlightPlatform() {
     const platform = navigator.platform.toLowerCase();
     const userAgent = navigator.userAgent.toLowerCase();
@@ -134,6 +134,79 @@ const winUrl = getDownloadUrl(variant, 'windows');
   }
 
   highlightPlatform();
+
+  // ========== 런타임 최신 버전 fetch (GitHub API 클라이언트 사이드) ==========
+  // 재배포 없이 새 릴리즈가 올라가면 자동 반영. 실패 시 정적 fallback 유지.
+  interface GitHubAsset {
+    name: string;
+    browser_download_url: string;
+  }
+  interface GitHubRelease {
+    tag_name: string;
+    published_at: string;
+    assets: GitHubAsset[];
+  }
+
+  async function refreshLatestVersion(): Promise<void> {
+    const metaEl = document.querySelector<HTMLElement>('[data-variant-slug]');
+    if (!metaEl) return;
+    const slug = metaEl.dataset.variantSlug;
+    const repo = metaEl.dataset.githubRepo;
+    if (!slug || !repo) return;
+
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${repo}/releases/latest`,
+        {
+          headers: { Accept: 'application/vnd.github+json' },
+        }
+      );
+      if (!res.ok) return; // silent fail → static fallback 유지
+      const release = (await res.json()) as GitHubRelease;
+
+      const version = release.tag_name.replace(/^v/, '');
+      const releaseDate = release.published_at.slice(0, 10);
+
+      // variant 에 맞는 파일명 패턴
+      const macPattern =
+        slug === 'q'
+          ? /^TutorMate-Q-\d+\.\d+\.\d+-universal-mac\.dmg$/
+          : /^TutorMate-\d+\.\d+\.\d+-universal\.dmg$/;
+      const winPattern =
+        slug === 'q'
+          ? /^TutorMate-Q-Setup-\d+\.\d+\.\d+\.exe$/
+          : /^TutorMate-Setup-\d+\.\d+\.\d+\.exe$/;
+
+      const findAsset = (pattern: RegExp): string | undefined =>
+        release.assets.find((a) => pattern.test(a.name))?.browser_download_url;
+
+      const macUrl = findAsset(macPattern);
+      const winUrl = findAsset(winPattern);
+
+      // Mac/Win 둘 다 있어야만 업데이트 (일관성 유지)
+      if (!macUrl || !winUrl) return;
+
+      // DOM 업데이트
+      const versionEl = document.querySelector<HTMLElement>('.version-num');
+      if (versionEl) versionEl.textContent = `v${version}`;
+
+      const dateEl = document.querySelector<HTMLElement>('.version-date');
+      if (dateEl) dateEl.textContent = `${releaseDate} 업데이트`;
+
+      const macBtn = document.querySelector<HTMLAnchorElement>(
+        '[data-platform="mac"]'
+      );
+      const winBtn = document.querySelector<HTMLAnchorElement>(
+        '[data-platform="windows"]'
+      );
+      if (macBtn) macBtn.href = macUrl;
+      if (winBtn) winBtn.href = winUrl;
+    } catch {
+      // 네트워크/CORS 오류 시 silent fail
+    }
+  }
+
+  refreshLatestVersion();
 </script>
 
 <style>
