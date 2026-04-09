@@ -1,0 +1,203 @@
+---
+import ProcessStep from './ProcessStep.astro';
+import { processSteps } from '../data/process';
+---
+
+<section id="process" class="process" aria-labelledby="process-title">
+  <div class="process-inner">
+    <div class="process-header">
+      <p class="label">Process · 어떻게 일하는가</p>
+      <h2 id="process-title" class="title">4 단계 · 차근차근 · 끝까지</h2>
+      <p class="subcopy">
+        이해 → 설계 → 개발 → 운영. 어느 단계에도 지름길은 없습니다.
+      </p>
+    </div>
+
+    <div class="process-body">
+      <!-- Sticky progress rail (desktop only) -->
+      <aside class="process-rail" aria-hidden="true">
+        <div class="rail-line"></div>
+        <div class="rail-markers">
+          {
+            processSteps.map((step) => (
+              <div class="rail-marker" data-rail-marker data-marker-index={step.index}>
+                <span class="marker-num">{step.index}</span>
+                <span class="marker-label">{step.labelKo}</span>
+              </div>
+            ))
+          }
+        </div>
+      </aside>
+
+      <!-- Scrollable content -->
+      <div class="process-steps">
+        {processSteps.map((step) => <ProcessStep step={step} />)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process {
+    background: var(--color-bg-alt);
+    padding: 96px 24px;
+  }
+
+  .process-inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+
+  .process-header {
+    text-align: center;
+    margin-bottom: 56px;
+    max-width: var(--container-narrow);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .label {
+    display: inline-block;
+    font-family: var(--font-display-latin);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0 0 12px;
+  }
+
+  .title {
+    font-size: clamp(26px, 4.2vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+    margin: 0 0 12px;
+    line-height: 1.15;
+  }
+
+  .subcopy {
+    font-size: clamp(15px, 1.3vw, 19px);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* ============ Layout (desktop: sticky rail + content) ============ */
+  .process-body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: var(--container-grid);
+    margin: 0 auto;
+  }
+
+  .process-rail {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .process-body {
+      grid-template-columns: 240px 1fr;
+      gap: 64px;
+    }
+
+    .process-rail {
+      display: block;
+      position: sticky;
+      top: 120px;
+      align-self: start;
+      height: fit-content;
+    }
+
+    .rail-line {
+      position: absolute;
+      left: 18px;
+      top: 18px;
+      bottom: 18px;
+      width: 2px;
+      background: var(--color-border-soft);
+    }
+
+    .rail-markers {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .rail-marker {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding-left: 0;
+      transition:
+        opacity 0.4s var(--ease-in-out),
+        transform 0.4s var(--ease-in-out);
+      opacity: 0.5;
+    }
+
+    .rail-marker[data-active='true'] {
+      opacity: 1;
+      transform: translate3d(2px, 0, 0);
+    }
+
+    .marker-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--color-bg);
+      border: 2px solid var(--color-border-solid);
+      font-family: var(--font-display-latin);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--color-text-tertiary);
+      font-variant-numeric: tabular-nums;
+      transition:
+        background-color 0.4s var(--ease-in-out),
+        border-color 0.4s var(--ease-in-out),
+        color 0.4s var(--ease-in-out);
+    }
+
+    .rail-marker[data-active='true'] .marker-num {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      color: #fff;
+    }
+
+    .marker-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      letter-spacing: -0.005em;
+    }
+
+    .rail-marker[data-active='true'] .marker-label {
+      color: var(--color-text);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .process {
+      padding: 72px 20px;
+    }
+
+    .process-header {
+      margin-bottom: 40px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .process {
+      padding: 160px 32px;
+    }
+
+    .process-body {
+      grid-template-columns: 280px 1fr;
+      gap: 96px;
+    }
+  }
+</style>
