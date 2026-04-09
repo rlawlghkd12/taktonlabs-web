@@ -4,9 +4,12 @@ import tailwindcss from '@tailwindcss/vite';
 import icon from 'astro-icon';
 import sitemap from '@astrojs/sitemap';
 
+import cloudflare from '@astrojs/cloudflare';
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://taktonlabs.com',
+
   integrations: [
     icon({
       include: {
@@ -25,7 +28,10 @@ export default defineConfig({
     }),
     sitemap(),
   ],
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: cloudflare(),
 });
