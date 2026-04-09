@@ -98,3 +98,64 @@ test.describe('Taktonlabs 랜딩 스모크', () => {
     await context.close();
   });
 });
+
+test.describe('TutorMate 다운로드 페이지', () => {
+  test('/tutomate 페이지 로드 & 콘솔 에러 없음', async ({ page }) => {
+    const consoleErrors: string[] = [];
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') consoleErrors.push(msg.text());
+    });
+
+    await page.goto('/tutomate');
+    await expect(page).toHaveTitle(/TutorMate.*Taktonlabs/);
+    await page.waitForLoadState('networkidle');
+
+    expect(consoleErrors).toEqual([]);
+  });
+
+  test('TutorMate 제품명, 태그라인, 다운로드 버튼 렌더링', async ({ page }) => {
+    await page.goto('/tutomate');
+    await expect(page.locator('h1.name')).toContainText('TutorMate');
+    await expect(page.locator('.tagline')).toBeVisible();
+    await expect(page.locator('[data-platform="mac"]')).toBeVisible();
+    await expect(page.locator('[data-platform="windows"]')).toBeVisible();
+  });
+
+  test('다운로드 버튼이 GitHub Releases latest로 연결됨', async ({ page }) => {
+    await page.goto('/tutomate');
+    const macHref = await page
+      .locator('[data-platform="mac"]')
+      .getAttribute('href');
+    const winHref = await page
+      .locator('[data-platform="windows"]')
+      .getAttribute('href');
+    expect(macHref).toMatch(
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-.+-universal\.dmg$/
+    );
+    expect(winHref).toMatch(
+      /^https:\/\/github\.com\/rlawlghkd12\/tutomate\/releases\/latest\/download\/TutorMate-Setup-.+\.exe$/
+    );
+  });
+
+  test('홈 → Products "체험하기" → /tutomate 이동 가능', async ({ page }) => {
+    await page.goto('/');
+    const tutomateLink = page.locator('.product-card a[href="/tutomate"]');
+    await expect(tutomateLink).toContainText('체험하기');
+  });
+
+  test('/tutomate → 홈 back link 동작', async ({ page }) => {
+    await page.goto('/tutomate');
+    const backLink = page.locator('.back-link');
+    await expect(backLink).toHaveAttribute('href', '/');
+    await expect(backLink).toContainText('Taktonlabs');
+  });
+
+  test('시스템 요구사항 섹션 렌더링', async ({ page }) => {
+    await page.goto('/tutomate');
+    await expect(page.locator('.requirements-title')).toContainText(
+      '시스템 요구사항'
+    );
+    await expect(page.locator('.req-item').first()).toContainText('macOS');
+    await expect(page.locator('.req-item').nth(1)).toContainText('Windows');
+  });
+});
