@@ -1,0 +1,35 @@
+---
+// SVG feTurbulence 기반 노이즈 오버레이 (다크 블록에 "손으로 만든" 질감 부여)
+---
+
+<div class="noise-overlay" aria-hidden="true">
+  <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+    <filter id="noise-filter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="5" />
+      <feColorMatrix
+        type="matrix"
+        values="0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 0 1
+                0 0 0 0.5 0"
+      />
+    </filter>
+    <rect width="100%" height="100%" filter="url(#noise-filter)" />
+  </svg>
+</div>
+
+<style>
+  .noise-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    z-index: 0;
+  }
+
+  .noise-overlay svg {
+    width: 100%;
+    height: 100%;
+  }
+</style>

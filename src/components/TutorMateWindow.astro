@@ -1,0 +1,171 @@
+---
+// TutorMate 앱 윈도우 스타일라이즈 목업 (제품 섹션용)
+---
+
+<div class="app-window" data-window>
+  <div class="window-header">
+    <div class="dots">
+      <span class="dot dot-red" data-window-dot></span>
+      <span class="dot dot-yellow" data-window-dot></span>
+      <span class="dot dot-green" data-window-dot></span>
+    </div>
+    <div class="title-bar">TutorMate</div>
+  </div>
+  <div class="window-body">
+    <div class="sidebar" data-window-section>
+      <div class="sidebar-item active"></div>
+      <div class="sidebar-item"></div>
+      <div class="sidebar-item"></div>
+      <div class="sidebar-item"></div>
+    </div>
+    <div class="content" data-window-section>
+      <div class="content-header">
+        <div class="header-text"></div>
+        <div class="header-button"></div>
+      </div>
+      <div class="stats">
+        <div class="stat-card" data-window-card></div>
+        <div class="stat-card" data-window-card></div>
+        <div class="stat-card" data-window-card></div>
+      </div>
+      <div class="list">
+        <div class="list-item" data-window-row></div>
+        <div class="list-item" data-window-row></div>
+        <div class="list-item" data-window-row></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .app-window {
+    background: linear-gradient(135deg, #1a2f4a 0%, #0a1929 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.4);
+    will-change: transform;
+    transform: translate3d(0, 0, 0) scale3d(0.95, 0.95, 1);
+    opacity: 0;
+  }
+
+  .window-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+
+  .title-bar {
+    flex: 1;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  .window-body {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    min-height: 280px;
+  }
+
+  .sidebar {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .sidebar-item {
+    height: 28px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+  }
+
+  .sidebar-item.active {
+    background: rgba(94, 234, 212, 0.15);
+  }
+
+  .content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .header-text {
+    flex: 1;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 4px;
+  }
+
+  .header-button {
+    width: 80px;
+    height: 24px;
+    background: rgba(94, 234, 212, 0.2);
+    border-radius: 6px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .stat-card {
+    height: 56px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .list-item {
+    height: 22px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .window-body {
+      grid-template-columns: 80px 1fr;
+      min-height: 220px;
+    }
+
+    .content {
+      padding: 14px;
+    }
+  }
+</style>

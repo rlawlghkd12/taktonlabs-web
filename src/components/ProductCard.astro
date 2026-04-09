@@ -1,0 +1,132 @@
+---
+import { Icon } from 'astro-icon/components';
+import TutorMateWindow from './TutorMateWindow.astro';
+
+interface Props {
+  label: string;
+  name: string;
+  description: string;
+  tags: string[];
+  ctaHref: string;
+  ctaLabel: string;
+}
+
+const { label, name, description, tags, ctaHref, ctaLabel } = Astro.props;
+---
+
+<article class="product-card">
+  <div class="info">
+    <p class="label" data-reveal>{label}</p>
+    <h3 class="name" data-reveal>{name}</h3>
+    <p class="description" data-reveal>{description}</p>
+    <div class="tags" data-reveal>
+      {tags.map((tag) => <span class="tag" data-tag>{tag}</span>)}
+    </div>
+    <a href={ctaHref} class="cta" data-reveal>
+      <span>{ctaLabel}</span>
+      <Icon name="lucide:arrow-up-right" width={16} height={16} />
+    </a>
+  </div>
+  <div class="visual">
+    <TutorMateWindow />
+  </div>
+</article>
+
+<style>
+  .product-card {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 32px;
+    align-items: center;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(94, 234, 212, 0.15);
+    border-radius: var(--radius-lg);
+    max-width: var(--container-grid);
+    margin: 0 auto;
+  }
+
+  .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent-mint);
+    margin: 0 0 10px;
+  }
+
+  .name {
+    font-size: 28px;
+    font-weight: 900;
+    color: #fff;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .description {
+    font-size: 15px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 20px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .tag {
+    padding: 6px 14px;
+    background: rgba(94, 234, 212, 0.12);
+    color: var(--color-accent-mint);
+    border-radius: var(--radius-xl);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    will-change: transform;
+  }
+
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-accent-mint);
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: gap 0.3s var(--ease-in-out);
+  }
+
+  .cta:hover {
+    gap: 10px;
+  }
+
+  @media (max-width: 900px) {
+    .product-card {
+      grid-template-columns: 1fr;
+      padding: 32px 24px;
+      gap: 24px;
+    }
+
+    .visual {
+      order: 2;
+    }
+
+    .info {
+      order: 1;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .product-card {
+      padding: 56px;
+      gap: 48px;
+    }
+
+    .name {
+      font-size: 32px;
+    }
+  }
+</style>
