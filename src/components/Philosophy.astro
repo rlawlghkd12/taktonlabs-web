@@ -1,0 +1,133 @@
+---
+import PhilosophyCard from './PhilosophyCard.astro';
+import { philosophyValues } from '../data/philosophy';
+---
+
+<section id="philosophy" class="philosophy" aria-labelledby="philosophy-title">
+  <div class="philosophy-inner">
+    <div class="philosophy-header">
+      <p class="label">Philosophy · 세 가지 약속</p>
+      <h2 id="philosophy-title" class="title">빈틈없는 관리의 완성</h2>
+      <p class="subcopy">우리가 일하는 이유이자 기준입니다.</p>
+    </div>
+    <div class="card-grid">
+      {philosophyValues.map((value) => <PhilosophyCard value={value} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .philosophy {
+    background: var(--color-bg);
+    padding: 96px 24px;
+    position: relative;
+  }
+
+  .philosophy::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(8, 145, 178, 0.2),
+      transparent
+    );
+  }
+
+  .philosophy-inner {
+    max-width: var(--container-wide);
+    margin: 0 auto;
+  }
+
+  .philosophy-header {
+    text-align: center;
+    margin-bottom: 56px;
+    max-width: var(--container-narrow);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .label {
+    display: inline-block;
+    font-family: var(--font-display-latin);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--color-accent);
+    margin: 0 0 12px;
+  }
+
+  .title {
+    font-size: clamp(26px, 4.2vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: var(--color-text);
+    margin: 0 0 12px;
+    line-height: 1.15;
+  }
+
+  .subcopy {
+    font-size: clamp(15px, 1.3vw, 19px);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .card-grid {
+    max-width: var(--container-grid);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .card-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .card-grid > :last-child {
+      grid-column: span 2;
+      max-width: calc(50% - 12px);
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .philosophy {
+      padding: 72px 20px;
+    }
+
+    .philosophy-header {
+      margin-bottom: 40px;
+    }
+
+    .card-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .card-grid > :last-child {
+      grid-column: auto;
+      max-width: none;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .philosophy {
+      padding: 160px 32px;
+    }
+
+    .philosophy-header {
+      margin-bottom: 72px;
+    }
+
+    .card-grid {
+      gap: 32px;
+    }
+  }
+</style>

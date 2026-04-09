@@ -1,0 +1,153 @@
+---
+import type { PhilosophyValue } from '../data/philosophy';
+
+interface Props {
+  value: PhilosophyValue;
+}
+
+const { value } = Astro.props;
+
+// 본문에서 highlight 단어를 <span class="highlight">로 감싸기
+function splitWithHighlight(body: string, highlight: string): {
+  before: string;
+  highlight: string;
+  after: string;
+} | null {
+  const idx = body.indexOf(highlight);
+  if (idx === -1) return null;
+  return {
+    before: body.slice(0, idx),
+    highlight,
+    after: body.slice(idx + highlight.length),
+  };
+}
+
+const parts = splitWithHighlight(value.body, value.highlight);
+---
+
+<article class="philosophy-card" data-philosophy-card>
+  <div class="card-label">
+    <span class="label-index">{value.index}</span>
+    <span class="label-latin">{value.labelLatin}</span>
+    <span class="label-sep">·</span>
+    <span class="label-ko">{value.labelKo}</span>
+  </div>
+  <h3 class="card-title">{value.title}</h3>
+  <p class="card-body">
+    {
+      parts ? (
+        <>
+          {parts.before}
+          <span class="highlight" data-philosophy-highlight>
+            {parts.highlight}
+            <span class="underline"></span>
+          </span>
+          {parts.after}
+        </>
+      ) : (
+        value.body
+      )
+    }
+  </p>
+</article>
+
+<style>
+  .philosophy-card {
+    position: relative;
+    padding: 28px 28px 28px 32px;
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-soft);
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+    transition:
+      border-color 0.4s var(--ease-in-out),
+      box-shadow 0.6s var(--ease-smooth),
+      transform 0.6s var(--ease-smooth);
+  }
+
+  .philosophy-card:hover {
+    box-shadow: 0 12px 28px rgba(10, 25, 41, 0.08);
+  }
+
+  .card-label {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--font-display-latin);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: 12px;
+  }
+
+  .label-index {
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .label-latin {
+    font-weight: 700;
+  }
+
+  .label-sep {
+    color: var(--color-text-tertiary);
+  }
+
+  .label-ko {
+    font-family: var(--font-sans);
+    color: var(--color-accent);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .card-title {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    color: var(--color-text);
+    margin: 0 0 12px;
+    line-height: 1.25;
+  }
+
+  .card-body {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  .highlight {
+    position: relative;
+    color: var(--color-text);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .highlight .underline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background: var(--color-accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+    will-change: transform;
+  }
+
+  @media (min-width: 1536px) {
+    .philosophy-card {
+      padding: 36px 36px 36px 40px;
+    }
+
+    .card-title {
+      font-size: 22px;
+    }
+
+    .card-body {
+      font-size: 15px;
+    }
+  }
+</style>
