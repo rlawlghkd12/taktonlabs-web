@@ -5,10 +5,11 @@ interface Props {
   iconName: string;
   title: string;
   description: string;
+  techStack: string[];
   index: number;
 }
 
-const { iconName, title, description, index } = Astro.props;
+const { iconName, title, description, techStack, index } = Astro.props;
 ---
 
 <article class="capability-card" data-card-index={index}>
@@ -17,6 +18,7 @@ const { iconName, title, description, index } = Astro.props;
   </div>
   <h3 class="title">{title}</h3>
   <p class="description">{description}</p>
+  <p class="tech-stack">{techStack.join(' · ')}</p>
 </article>
 
 <style>
@@ -81,6 +83,17 @@ const { iconName, title, description, index } = Astro.props;
     margin: 0;
   }
 
+  .tech-stack {
+    font-family: var(--font-display-latin);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: 0.05em;
+    margin: 12px 0 0;
+    padding-top: 12px;
+    border-top: 1px dashed var(--color-border-soft);
+  }
+
   @media (min-width: 1536px) {
     .capability-card {
       padding: 40px;
@@ -97,6 +110,10 @@ const { iconName, title, description, index } = Astro.props;
 
     .description {
       font-size: 15px;
+    }
+
+    .tech-stack {
+      font-size: 11px;
     }
   }
 </style>
