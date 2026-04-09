@@ -52,7 +52,7 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-feature-settings: 'ss01', 'ss02', 'cv11', 'tnum', 'zero';
+  font-feature-settings: 'ss01', 'ss02', 'tnum', 'zero';
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.005em;
   line-height: 1.75;
