@@ -55,7 +55,7 @@ function fallbackQUrl(platform: 'mac' | 'windows'): string {
 export const tutomate: TutomateVariant = {
   slug: 'regular',
   name: 'TutorMate',
-  tagline: '60대 이상 강사를 위한 수강 관리 데스크톱 앱',
+  tagline: '누구나 쉽게 쓰는 수강 관리 데스크톱 앱',
   description:
     '수강생 관리, 결제 이력, 대시보드까지 직관적으로. 큰 글씨와 단순한 인터페이스로 누구나 쉽게.',
   version: FALLBACK_VERSION,
