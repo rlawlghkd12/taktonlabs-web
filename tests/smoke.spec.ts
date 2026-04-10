@@ -266,3 +266,117 @@ test.describe('TutorMate Q 다운로드 페이지', () => {
     await expect(switchLink).toContainText('기본 버전');
   });
 });
+
+test.describe('v2 신규 섹션', () => {
+  test('Philosophy 섹션 3 카드 렌더링', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#philosophy')).toBeVisible();
+    const cards = page.locator('[data-philosophy-card]');
+    await expect(cards).toHaveCount(3);
+    await expect(cards.nth(0)).toContainText('튼튼한 장부처럼');
+    await expect(cards.nth(1)).toContainText('한눈에 보이는 지표');
+    await expect(cards.nth(2)).toContainText('함께 성장하는 파트너');
+  });
+
+  test('Process 섹션 4 단계 렌더링', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#process')).toBeVisible();
+    const steps = page.locator('[data-process-step]');
+    await expect(steps).toHaveCount(4);
+    await expect(steps.nth(0)).toContainText('이해');
+    await expect(steps.nth(3)).toContainText('출시는 시작입니다');
+  });
+
+  test('Why 섹션 4 카드 렌더링', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#why')).toBeVisible();
+    const cards = page.locator('[data-why-card]');
+    await expect(cards).toHaveCount(4);
+    await expect(cards.nth(0)).toContainText('만든 사람이 끝까지');
+    await expect(cards.nth(3)).toContainText('소스코드 완전 양도');
+  });
+
+  test('FAQ 아코디언 동작', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#faq')).toBeVisible();
+
+    const items = page.locator('[data-faq-item]');
+    await expect(items).toHaveCount(6);
+
+    const firstItem = items.nth(0);
+    const firstTrigger = firstItem.locator('[data-faq-trigger]');
+    const firstAnswer = firstItem.locator('[data-faq-answer]');
+
+    // 초기 닫힘 상태
+    await expect(firstTrigger).toHaveAttribute('aria-expanded', 'false');
+
+    // 클릭 → 열림
+    await firstTrigger.click();
+    await expect(firstTrigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(firstItem).toHaveAttribute('data-open', 'true');
+
+    // 애니메이션 대기 후 max-height 변화 확인
+    await page.waitForTimeout(500);
+    const maxHeight = await firstAnswer.evaluate((el) => (el as HTMLElement).style.maxHeight);
+    expect(maxHeight).not.toBe('0');
+    expect(maxHeight).not.toBe('');
+
+    // 다시 클릭 → 닫힘
+    await firstTrigger.click();
+    await expect(firstTrigger).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  test('FAQ JSON-LD FAQPage schema 존재', async ({ page }) => {
+    await page.goto('/');
+    const jsonLdScripts = await page
+      .locator('script[type="application/ld+json"]')
+      .allTextContents();
+
+    const hasFaqPage = jsonLdScripts.some((content) => {
+      try {
+        const parsed = JSON.parse(content);
+        return parsed['@type'] === 'FAQPage';
+      } catch {
+        return false;
+      }
+    });
+
+    expect(hasFaqPage).toBe(true);
+  });
+
+  test('Product + Service schema 존재', async ({ page }) => {
+    await page.goto('/');
+    const jsonLdScripts = await page
+      .locator('script[type="application/ld+json"]')
+      .allTextContents();
+
+    const types = jsonLdScripts
+      .map((content) => {
+        try {
+          return JSON.parse(content)['@type'];
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
+
+    expect(types).toContain('Organization');
+    expect(types).toContain('SoftwareApplication');
+    expect(types).toContain('ProfessionalService');
+    expect(types).toContain('FAQPage');
+  });
+
+  test('Geist 폰트 로드 확인', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    // document.fonts API 로 Geist family 확인
+    const hasGeist = await page.evaluate(async () => {
+      await document.fonts.ready;
+      const fonts = Array.from(document.fonts);
+      return fonts.some((f) => f.family.includes('Geist'));
+    });
+
+    expect(hasGeist).toBe(true);
+  });
+});
