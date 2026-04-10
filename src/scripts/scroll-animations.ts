@@ -43,6 +43,11 @@ export function initScrollAnimations(): void {
   animateCapabilities();
   animateProductsSection();
   animateContact();
+
+  // v2 신규 섹션
+  animatePhilosophy();
+  animateProcessSection();
+  animateWhy();
 }
 
 /**
@@ -57,6 +62,14 @@ function showAllImmediately(): void {
   gsap.set('[data-mint-line]', { scaleX: 1 });
   // Reveal 대상
   gsap.set('[data-reveal]', { opacity: 1, y: 0 });
+  // v2 신규
+  gsap.set('[data-philosophy-card]', { opacity: 1, y: 0 });
+  gsap.set('[data-philosophy-highlight] .underline', { scaleX: 1 });
+  gsap.set('[data-process-step]', { opacity: 1, y: 0 });
+  gsap.set('[data-why-card]', { opacity: 1, y: 0 });
+  // 첫 번째 rail marker 활성
+  const firstMarker = document.querySelector('[data-rail-marker]');
+  if (firstMarker) firstMarker.setAttribute('data-active', 'true');
 }
 
 /**
@@ -114,7 +127,7 @@ function animateHero(): void {
  */
 function animateSectionHeaders(): void {
   const headers = document.querySelectorAll(
-    '#capabilities .capabilities-header, #products .products-header, #contact .contact-header'
+    '#capabilities .capabilities-header, #products .products-header, #contact .contact-header, #philosophy .philosophy-header, #process .process-header, #why .why-header, #faq .faq-header'
   );
 
   headers.forEach((header) => {
@@ -368,6 +381,117 @@ function animateContact(): void {
     scrollTrigger: {
       trigger: '#contact .contact-grid',
       start: 'top 80%',
+      toggleActions: 'play none none reverse',
+    },
+  });
+}
+
+/**
+ * Philosophy 섹션: 카드 stagger reveal + 핵심 단어 밑줄 draw-in
+ */
+function animatePhilosophy(): void {
+  const cards = document.querySelectorAll('[data-philosophy-card]');
+  if (cards.length === 0) return;
+
+  gsap.from(cards, {
+    y: 24,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.12,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '#philosophy',
+      start: 'top 75%',
+      toggleActions: 'play none none reverse',
+    },
+  });
+
+  // 강조 단어 밑줄 draw-in
+  const highlights = document.querySelectorAll<HTMLElement>(
+    '[data-philosophy-highlight] .underline'
+  );
+  highlights.forEach((underline) => {
+    gsap.to(underline, {
+      scaleX: 1,
+      duration: 0.6,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: underline,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      },
+      delay: 0.3,
+    });
+  });
+}
+
+/**
+ * Process 섹션: 데스크톱은 sticky rail 활성 마커 업데이트,
+ * 모바일은 step stagger reveal.
+ */
+function animateProcessSection(): void {
+  const steps = document.querySelectorAll<HTMLElement>('[data-process-step]');
+  if (steps.length === 0) return;
+
+  if (!isDesktop()) {
+    gsap.from(steps, {
+      y: 32,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.12,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: '#process',
+        start: 'top 75%',
+        toggleActions: 'play none none reverse',
+      },
+    });
+    return;
+  }
+
+  // Desktop: ScrollTrigger 로 각 step 활성화 시 rail marker 하이라이트
+  const markers = document.querySelectorAll<HTMLElement>('[data-rail-marker]');
+
+  steps.forEach((step, i) => {
+    ScrollTrigger.create({
+      trigger: step,
+      start: 'top 60%',
+      end: 'bottom 60%',
+      onEnter: () => activateMarker(i),
+      onEnterBack: () => activateMarker(i),
+    });
+  });
+
+  function activateMarker(index: number): void {
+    markers.forEach((marker, i) => {
+      if (i === index) {
+        marker.setAttribute('data-active', 'true');
+      } else {
+        marker.removeAttribute('data-active');
+      }
+    });
+  }
+
+  // 첫 번째 마커 기본 활성 (페이지 진입 시)
+  if (markers[0]) markers[0].setAttribute('data-active', 'true');
+}
+
+/**
+ * Why 섹션: 카드 stagger reveal
+ */
+function animateWhy(): void {
+  const cards = document.querySelectorAll('[data-why-card]');
+  if (cards.length === 0) return;
+
+  gsap.from(cards, {
+    y: 32,
+    opacity: 0,
+    duration: 0.9,
+    stagger: 0.15,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '#why',
+      start: 'top 75%',
       toggleActions: 'play none none reverse',
     },
   });
