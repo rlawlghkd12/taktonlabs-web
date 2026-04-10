@@ -3,7 +3,7 @@ import { Icon } from 'astro-icon/components';
 
 const productLinks = [
   { label: 'TutorMate', href: '/tutomate', sub: '기본 버전' },
-  { label: 'TutorMate Q', href: '/tutomate/q', sub: 'Q 버전' },
+  { label: 'TutorMate Q', href: '/tutomate/q', sub: 'Q 버전', highlightQ: true },
 ];
 
 const companyLinks = [
@@ -62,7 +62,11 @@ const contactItems = [
             productLinks.map((link) => (
               <li>
                 <a href={link.href}>
-                  <span class="link-main">{link.label}</span>
+                  <span class="link-main">
+                    {link.highlightQ
+                      ? <>TutorMate <span class="q-accent">Q</span></>
+                      : link.label}
+                  </span>
                   {link.sub && <span class="link-sub">{link.sub}</span>}
                 </a>
               </li>
@@ -228,6 +232,10 @@ const contactItems = [
   }
 
   .col-list a:hover {
+    color: var(--color-accent);
+  }
+
+  .q-accent {
     color: var(--color-accent);
   }
 

@@ -42,7 +42,11 @@ const { macUrl, winUrl } = variant;
         />
       </div>
 
-      <h1 class="name">{variant.name}</h1>
+      <h1 class="name">
+        {variant.slug === 'q'
+          ? <>TutorMate <span class="name-q">Q</span></>
+          : variant.name}
+      </h1>
       <p class="tagline">{variant.tagline}</p>
       <p class="description">{variant.description}</p>
 
@@ -335,6 +339,10 @@ const { macUrl, winUrl } = variant;
     line-height: 1.05;
     color: var(--color-text);
     margin: 0 0 16px;
+  }
+
+  .name-q {
+    color: var(--color-accent);
   }
 
   .tagline {
