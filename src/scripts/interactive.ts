@@ -1,11 +1,33 @@
 /**
  * 인터랙티브 마이크로 효과.
+ * - Atropos 3D 패럴럭스 (ProductCard)
  * - 카드 3D 틸트 (마우스 추적)
  * - CTA 버튼 마그네틱
  * - 커서 스포트라이트 (히어로)
  */
 
+import Atropos from 'atropos';
+import 'atropos/css';
 import { hasHover } from './motion-guards';
+
+// ========== Atropos 3D ProductCard ==========
+
+function initProductAtropos(): void {
+  if (!hasHover()) return;
+
+  const el = document.querySelector<HTMLElement>('[data-product-atropos]');
+  if (!el) return;
+
+  Atropos({
+    el,
+    activeOffset: 40,
+    shadowScale: 1.05,
+    rotateXMax: 8,
+    rotateYMax: 8,
+    shadow: true,
+    highlight: true,
+  });
+}
 
 // ========== Card 3D Tilt ==========
 
@@ -96,6 +118,7 @@ function initHeroSpotlight(): void {
 // ========== Export ==========
 
 export function initInteractive(): void {
+  initProductAtropos();
   initCardTilt();
   initMagneticButtons();
   initHeroSpotlight();
