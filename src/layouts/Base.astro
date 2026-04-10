@@ -159,12 +159,14 @@ const serviceSchema = {
       import { initSmoothScroll } from '../scripts/smooth-scroll';
       import { initScrollAnimations } from '../scripts/scroll-animations';
       import { initFaq } from '../scripts/faq';
+      import { initInteractive } from '../scripts/interactive';
 
       // DOM 준비 완료 후 순차 초기화
       function init() {
         initSmoothScroll();
         initScrollAnimations();
         initFaq();
+        initInteractive();
       }
 
       if (document.readyState === 'loading') {

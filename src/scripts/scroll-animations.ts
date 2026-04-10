@@ -61,7 +61,7 @@ export function initScrollAnimations(): void {
  */
 function showAllImmediately(): void {
   // Hero 단어
-  gsap.set('.word', { opacity: 1, y: 0 });
+  gsap.set('.word', { opacity: 1, y: 0, filter: 'blur(0px)' });
   // 앱 윈도우
   gsap.set('[data-window]', { opacity: 1, scale: 1 });
   // 민트 라인
@@ -79,38 +79,41 @@ function showAllImmediately(): void {
 }
 
 /**
- * Hero: 단어 단위 페이드인 + 서브카피/CTA stagger
+ * Hero: 블러 리빌 + 서브카피/CTA stagger (프리미엄 연출)
  */
 function animateHero(): void {
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-  // 단어 stagger
+  // 단어별 블러→선명 리빌
   tl.from('.headline .word', {
-    y: 16,
+    y: 30,
     opacity: 0,
-    duration: 0.9,
-    stagger: 0.08,
+    filter: 'blur(12px)',
+    duration: 1.0,
+    stagger: 0.12,
   });
 
-  // 서브카피
+  // 서브카피 슬라이드업 + 페이드
   tl.from(
     '.subcopy',
     {
-      y: 16,
+      y: 20,
       opacity: 0,
-      duration: 0.8,
+      filter: 'blur(4px)',
+      duration: 0.9,
     },
-    '+=0.2'
+    '-=0.3'
   );
 
-  // CTA 2개
+  // CTA 2개 — 스케일 + 페이드
   tl.from(
     '.ctas .cta',
     {
-      y: 12,
+      y: 16,
       opacity: 0,
-      duration: 0.6,
-      stagger: 0.12,
+      scale: 0.9,
+      duration: 0.7,
+      stagger: 0.15,
     },
     '-=0.4'
   );
