@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { prefersReducedMotion, isDesktop } from './motion-guards';
+import { prefersReducedMotion } from './motion-guards';
 import { getLenis } from './smooth-scroll';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -11,9 +11,15 @@ gsap.defaults({
   duration: 0.8,
 });
 
-// ========== ScrollTrigger 모바일 안정화 ==========
-// iOS Safari 의 browser chrome 숨김/표시 시 refresh 를 방지해 점프 제거
+// ========== ScrollTrigger 설정 ==========
+// iOS Safari browser chrome 변화는 무시하되, 실제 리사이즈 시 위치 재계산
 ScrollTrigger.config({ ignoreMobileResize: true });
+
+let resizeTimer: ReturnType<typeof setTimeout>;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 250);
+});
 
 // Lenis와 ScrollTrigger 동기화
 function syncLenisWithScrollTrigger() {
@@ -146,62 +152,66 @@ function animateSectionHeaders(): void {
 }
 
 /**
- * 핵심 역량: 데스크톱은 pin + 순차 활성화, 모바일은 IntersectionObserver 진입
+ * 핵심 역량: 데스크톱은 pin + 순차 활성화, 모바일은 stagger 진입
+ * matchMedia 로 뷰포트 변경 시 자동 전환
  */
 function animateCapabilities(): void {
   const section = document.querySelector('#capabilities');
   const cards = document.querySelectorAll<HTMLElement>('.capability-card');
   if (!section || cards.length === 0) return;
 
-  if (isDesktop()) {
+  ScrollTrigger.matchMedia({
     // 데스크톱: pin + 스크롤 진행도에 따라 카드 순차 활성화
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'center center',
-        end: '+=150%',
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-      },
-    });
-
-    cards.forEach((card, i) => {
-      tl.call(() => {
-        cards.forEach((c, j) => {
-          if (j === i) {
-            c.setAttribute('data-active', 'true');
-            c.removeAttribute('data-dimmed');
-          } else {
-            c.removeAttribute('data-active');
-            c.setAttribute('data-dimmed', 'true');
-          }
-        });
-      }, [], i * 0.33);
-    });
-
-    // 섹션 끝: 모든 카드 정상 복귀
-    tl.call(() => {
-      cards.forEach((c) => {
-        c.removeAttribute('data-active');
-        c.removeAttribute('data-dimmed');
-      });
-    }, [], 1);
-  } else {
-    // 모바일: IntersectionObserver 진입 애니메이션
-    cards.forEach((card) => {
-      gsap.from(card, {
-        y: 24,
-        opacity: 0,
-        duration: 0.8,
+    '(min-width: 1024px)': () => {
+      const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: card,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse',
+          trigger: section,
+          start: 'center center',
+          end: '+=150%',
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
         },
       });
-    });
-  }
+
+      cards.forEach((card, i) => {
+        tl.call(() => {
+          cards.forEach((c, j) => {
+            if (j === i) {
+              c.setAttribute('data-active', 'true');
+              c.removeAttribute('data-dimmed');
+            } else {
+              c.removeAttribute('data-active');
+              c.setAttribute('data-dimmed', 'true');
+            }
+          });
+        }, [], i * 0.33);
+      });
+
+      tl.call(() => {
+        cards.forEach((c) => {
+          c.removeAttribute('data-active');
+          c.removeAttribute('data-dimmed');
+        });
+      }, [], 1);
+    },
+
+    // 모바일: stagger 진입 애니메이션
+    '(max-width: 1023px)': () => {
+      cards.forEach((card) => {
+        gsap.from(card, {
+          y: 24,
+          opacity: 0,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+          },
+        });
+      });
+    },
+  });
 }
 
 /**
@@ -428,52 +438,56 @@ function animatePhilosophy(): void {
 /**
  * Process 섹션: 데스크톱은 sticky rail 활성 마커 업데이트,
  * 모바일은 step stagger reveal.
+ * matchMedia 로 뷰포트 변경 시 자동 전환
  */
 function animateProcessSection(): void {
   const steps = document.querySelectorAll<HTMLElement>('[data-process-step]');
   if (steps.length === 0) return;
 
-  if (!isDesktop()) {
-    gsap.from(steps, {
-      y: 32,
-      opacity: 0,
-      duration: 0.8,
-      stagger: 0.12,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: '#process',
-        start: 'top 75%',
-        toggleActions: 'play none none reverse',
-      },
-    });
-    return;
-  }
+  ScrollTrigger.matchMedia({
+    // 모바일: step stagger reveal
+    '(max-width: 1023px)': () => {
+      gsap.from(steps, {
+        y: 32,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#process',
+          start: 'top 75%',
+          toggleActions: 'play none none reverse',
+        },
+      });
+    },
 
-  // Desktop: ScrollTrigger 로 각 step 활성화 시 rail marker 하이라이트
-  const markers = document.querySelectorAll<HTMLElement>('[data-rail-marker]');
+    // 데스크톱: ScrollTrigger 로 각 step 활성화 시 rail marker 하이라이트
+    '(min-width: 1024px)': () => {
+      const markers = document.querySelectorAll<HTMLElement>('[data-rail-marker]');
 
-  steps.forEach((step, i) => {
-    ScrollTrigger.create({
-      trigger: step,
-      start: 'top 60%',
-      end: 'bottom 60%',
-      onEnter: () => activateMarker(i),
-      onEnterBack: () => activateMarker(i),
-    });
-  });
+      steps.forEach((step, i) => {
+        ScrollTrigger.create({
+          trigger: step,
+          start: 'top 60%',
+          end: 'bottom 60%',
+          onEnter: () => activateMarker(i),
+          onEnterBack: () => activateMarker(i),
+        });
+      });
 
-  function activateMarker(index: number): void {
-    markers.forEach((marker, i) => {
-      if (i === index) {
-        marker.setAttribute('data-active', 'true');
-      } else {
-        marker.removeAttribute('data-active');
+      function activateMarker(index: number): void {
+        markers.forEach((marker, i) => {
+          if (i === index) {
+            marker.setAttribute('data-active', 'true');
+          } else {
+            marker.removeAttribute('data-active');
+          }
+        });
       }
-    });
-  }
 
-  // 첫 번째 마커 기본 활성 (페이지 진입 시)
-  if (markers[0]) markers[0].setAttribute('data-active', 'true');
+      if (markers[0]) markers[0].setAttribute('data-active', 'true');
+    },
+  });
 }
 
 /**
