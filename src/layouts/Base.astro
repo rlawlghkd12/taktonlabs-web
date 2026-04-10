@@ -16,7 +16,7 @@ const {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = new URL(ogImage, Astro.site);
 
-const jsonLd = {
+const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'Taktonlabs',
@@ -24,6 +24,74 @@ const jsonLd = {
   logo: 'https://taktonlabs.com/favicon.svg',
   description: description,
   sameAs: [],
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'KR',
+    addressRegion: '경상남도',
+    addressLocality: '양산시',
+    streetAddress: '하북면 신평로 18, 1층',
+  },
+};
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'TutorMate',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Windows, macOS',
+  description:
+    '60대 이상 강사의 수강 관리를 쉽게. 수강생 · 결제 · 대시보드까지 직관적으로.',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'KRW',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'Takton Labs',
+  },
+};
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Takton Labs',
+  url: 'https://taktonlabs.com',
+  description: '웹·모바일·데스크톱 소프트웨어 개발 스튜디오',
+  areaServed: {
+    '@type': 'Country',
+    name: 'South Korea',
+  },
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: '소프트웨어 개발 서비스',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: '웹·모바일 제품 개발',
+          description: 'SaaS, 웹앱, 반응형 사이트',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: '데스크톱 앱 개발',
+          description: 'Electron 기반 크로스플랫폼',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'B2B 맞춤 소프트웨어 개발',
+          description: '업무 흐름에 맞춘 맞춤 개발',
+        },
+      },
+    ],
+  },
 };
 ---
 
@@ -38,6 +106,10 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    <meta name="keywords" content="텍톤랩스, Takton Labs, 소프트웨어 스튜디오, 수강 관리 프로그램, TutorMate, 양산 소프트웨어 개발, Electron 데스크톱 앱, B2B 맞춤 개발" />
+    <meta name="author" content="Takton Labs" />
+    <meta name="geo.region" content="KR-48" />
+    <meta name="geo.placename" content="양산" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -74,8 +146,10 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
 
-    <!-- JSON-LD -->
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <!-- JSON-LD: Organization + Product + Service -->
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
   </head>
   <body>
     <a href="#main" class="skip-link">본문으로 건너뛰기</a>
