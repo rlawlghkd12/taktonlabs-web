@@ -67,7 +67,7 @@ function initCardTilt(): void {
 function initMagneticButtons(): void {
   if (!hasHover()) return;
 
-  const buttons = document.querySelectorAll<HTMLElement>('.cta, .faq-trigger');
+  const buttons = document.querySelectorAll<HTMLElement>('.cta');
 
   buttons.forEach((btn) => {
     btn.addEventListener('mousemove', (e) => {
