@@ -28,15 +28,18 @@ import { Icon } from 'astro-icon/components';
       </div>
     </div>
     <div class="hero-visual">
-      <img
-        src="/logo.png"
-        alt="Takton Labs"
-        width="420"
-        height="180"
-        class="hero-logo"
-        decoding="async"
-        fetchpriority="high"
-      />
+      <picture>
+        <source srcset="/app-logo.webp" type="image/webp" />
+        <img
+          src="/app-logo.png"
+          alt="Takton Labs"
+          width="320"
+          height="320"
+          class="hero-logo"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </picture>
     </div>
   </div>
   <div class="hero-bg-mesh" aria-hidden="true"></div>
@@ -147,10 +150,9 @@ import { Icon } from 'astro-icon/components';
   }
 
   .hero-logo {
-    width: auto;
-    max-width: 100%;
-    height: clamp(120px, 16vw, 200px);
-    filter: drop-shadow(0 30px 60px rgba(10, 25, 41, 0.12));
+    width: clamp(180px, 22vw, 320px);
+    height: auto;
+    filter: drop-shadow(0 30px 60px rgba(10, 25, 41, 0.15));
     transition: transform 0.6s var(--ease-smooth);
     will-change: transform;
   }
