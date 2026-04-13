@@ -28,7 +28,15 @@ const { label, name, description, tags, ctaHref, ctaLabel } = Astro.props;
     </a>
   </div>
   <div class="visual">
-    <TutorMateWindow />
+    <div class="atropos product-atropos" data-product-atropos>
+      <div class="atropos-scale">
+        <div class="atropos-rotate">
+          <div class="atropos-inner">
+            <TutorMateWindow />
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </article>
 
@@ -47,7 +55,7 @@ const { label, name, description, tags, ctaHref, ctaLabel } = Astro.props;
   }
 
   .label {
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.15em;
@@ -82,7 +90,7 @@ const { label, name, description, tags, ctaHref, ctaLabel } = Astro.props;
     background: rgba(94, 234, 212, 0.12);
     color: var(--color-accent-mint);
     border-radius: var(--radius-xl);
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.02em;
     will-change: transform;
@@ -93,7 +101,7 @@ const { label, name, description, tags, ctaHref, ctaLabel } = Astro.props;
     align-items: center;
     gap: 6px;
     color: var(--color-accent-mint);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     text-decoration: none;
     transition: gap 0.3s var(--ease-in-out);

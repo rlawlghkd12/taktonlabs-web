@@ -10,11 +10,11 @@
 }
 
 @font-face {
-  font-family: 'Inter Variable';
+  font-family: 'Geist';
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-  src: url('/fonts/InterVariable.woff2') format('woff2-variations');
+  src: url('/fonts/GeistVariable.woff2') format('woff2-variations');
 }
 
 /* ========== 기본 리셋 & 전역 설정 ========== */
@@ -23,21 +23,52 @@
 }
 
 html {
-  scroll-behavior: smooth; /* Lenis 비활성 시 폴백 */
+  scroll-behavior: smooth; /* Lenis 비활성 시 폴백 (모바일/reduced-motion) */
+}
+
+/* ========== Lenis 공식 CSS (scroll-behavior 충돌 방지) ========== */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+html.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+html.lenis.lenis-smooth iframe {
+  pointer-events: none;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-feature-settings: 'ss01', 'cv11', 'tnum';
+  font-feature-settings: 'ss01', 'ss02', 'tnum', 'zero';
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.005em;
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   margin: 0;
-  overflow-x: hidden;
+  /* `clip` 은 `hidden` 과 달리 새 containing block 을 만들지 않아서
+     position: sticky 가 모바일 Safari 에서 정상 동작함. Safari 16+ 지원. */
+  overflow-x: clip;
+}
+
+/* Safari 16 이전 fallback */
+@supports not (overflow-x: clip) {
+  body {
+    overflow-x: hidden;
+  }
 }
 
 *,

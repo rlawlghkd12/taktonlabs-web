@@ -35,8 +35,9 @@
   --radius-xl: 24px;
 
   /* ========== 폰트 ========== */
-  --font-sans: 'Pretendard Variable', Pretendard, 'Inter Variable', Inter,
+  --font-sans: 'Pretendard Variable', Pretendard, 'Geist', 'Geist Variable',
     -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display-latin: 'Geist', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, monospace;
 
   /* ========== 컨테이너 ========== */

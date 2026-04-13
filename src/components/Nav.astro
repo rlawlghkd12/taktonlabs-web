@@ -1,12 +1,17 @@
 ---
-import HexagonLogo from './HexagonLogo.astro';
 ---
 
 <nav class="nav">
   <div class="nav-inner">
-    <a href="#hero" class="brand">
-      <HexagonLogo size={28} variant="mini" />
-      <span class="wordmark">TAKTONLABS</span>
+    <a href="/" class="brand" aria-label="텍톤랩스 홈으로">
+      <img
+        src="/logo.png"
+        alt="Takton Labs"
+        width="112"
+        height="48"
+        class="brand-logo"
+        decoding="async"
+      />
     </a>
     <ul class="links">
       <li><a href="#capabilities">역량</a></li>
@@ -54,15 +59,14 @@ import HexagonLogo from './HexagonLogo.astro';
   .brand {
     display: flex;
     align-items: center;
-    gap: 10px;
     text-decoration: none;
     color: var(--color-text);
   }
 
-  .wordmark {
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    font-size: 14px;
+  .brand-logo {
+    height: 32px;
+    width: auto;
+    display: block;
   }
 
   .links {
@@ -91,13 +95,13 @@ import HexagonLogo from './HexagonLogo.astro';
       gap: 16px;
     }
 
-    .wordmark {
-      font-size: 12px;
+    .brand-logo {
+      height: 26px;
     }
 
     .links {
       gap: 18px;
-      font-size: 12px;
+      font-size: 14px;
     }
   }
 

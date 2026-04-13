@@ -1,0 +1,103 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { FaqItem as FaqItemType } from '../data/faq';
+
+interface Props {
+  item: FaqItemType;
+  index: number;
+}
+
+const { item, index } = Astro.props;
+const answerId = `faq-answer-${index}`;
+---
+
+<li class="faq-item" data-faq-item>
+  <button
+    type="button"
+    class="faq-trigger"
+    data-faq-trigger
+    aria-expanded="false"
+    aria-controls={answerId}
+  >
+    <span class="faq-question">{item.question}</span>
+    <span class="faq-chevron" aria-hidden="true">
+      <Icon name="lucide:chevron-down" width={20} height={20} />
+    </span>
+  </button>
+  <div class="faq-answer" id={answerId} data-faq-answer role="region">
+    <p>{item.answer}</p>
+  </div>
+</li>
+
+<style>
+  .faq-item {
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .faq-item:first-child {
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .faq-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 24px 0;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    color: var(--color-text);
+    transition: color 0.3s var(--ease-in-out);
+  }
+
+  .faq-trigger:hover {
+    color: var(--color-accent);
+  }
+
+  .faq-question {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+  }
+
+  .faq-chevron {
+    flex-shrink: 0;
+    display: inline-flex;
+    color: var(--color-text-tertiary);
+    transition: transform 0.4s var(--ease-in-out), color 0.3s var(--ease-in-out);
+  }
+
+  .faq-item[data-open='true'] .faq-chevron {
+    transform: rotate(180deg);
+    color: var(--color-accent);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s var(--ease-in-out);
+  }
+
+  .faq-answer p {
+    margin: 0 0 24px;
+    padding-right: 44px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+  }
+
+  @media (min-width: 1536px) {
+    .faq-question {
+      font-size: 18px;
+    }
+
+    .faq-answer p {
+      font-size: 15px;
+    }
+  }
+</style>

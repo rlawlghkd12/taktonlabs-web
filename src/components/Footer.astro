@@ -1,114 +1,311 @@
 ---
-import HexagonLogo from './HexagonLogo.astro';
+import { Icon } from 'astro-icon/components';
+
+const productLinks = [
+  { label: 'TutorMate', href: '/tutomate', sub: '기본 버전' },
+  { label: 'TutorMate Q', href: '/tutomate/q', sub: 'Q 버전', highlightQ: true },
+];
+
+const companyLinks = [
+  { label: '핵심 역량', href: '/#capabilities' },
+  { label: '제품', href: '/#products' },
+  { label: '문의하기', href: '/#contact' },
+  { label: '이용약관', href: '/terms' },
+  { label: '개인정보처리방침', href: '/privacy' },
+];
+
+const contactItems = [
+  {
+    icon: 'lucide:mail',
+    label: 'hello@taktonlabs.com',
+    href: 'mailto:hello@taktonlabs.com',
+  },
+  {
+    icon: 'lucide:mail',
+    label: 'support@taktonlabs.com',
+    href: 'mailto:support@taktonlabs.com',
+  },
+];
 ---
 
 <footer class="footer">
   <div class="footer-inner">
-    <div class="footer-top">
-      <div class="brand">
-        <HexagonLogo size={20} variant="mini" />
-        <span class="wordmark">TAKTONLABS</span>
-      </div>
-      <p class="mission">쓰이는 소프트웨어를 끝까지 만듭니다</p>
-      <div class="contact">
-        <a href="mailto:hello@taktonlabs.com">hello@taktonlabs.com</a>
-        <span class="sep">·</span>
-        <a href="/">taktonlabs.com</a>
-      </div>
+    <!-- Single-row: 4 columns (legal + 3 link cols) -->
+    <div class="footer-cols">
+      <!-- Col 1: 사업자 정보 -->
+      <section class="col legal-col">
+        <h3 class="col-title">사업자 정보</h3>
+        <dl class="legal-list">
+          <div class="legal-row">
+            <dt>상호</dt>
+            <dd>텍톤랩스 (Takton Labs)</dd>
+          </div>
+          <div class="legal-row">
+            <dt>대표</dt>
+            <dd>김상철</dd>
+          </div>
+          <div class="legal-row">
+            <dt>사업자등록번호</dt>
+            <dd>325-10-03297</dd>
+          </div>
+          <div class="legal-row">
+            <dt>주소</dt>
+            <dd>경상남도 양산시 하북면 신평로 18, 1층</dd>
+          </div>
+        </dl>
+        <p class="copyright">© 2026 Takton Labs. All rights reserved.</p>
+      </section>
+
+      <!-- Col 2: 제품 -->
+      <section class="col">
+        <h3 class="col-title">제품</h3>
+        <ul class="col-list">
+          {
+            productLinks.map((link) => (
+              <li>
+                <a href={link.href}>
+                  <span class="link-main">
+                    {link.highlightQ
+                      ? <>TutorMate <span class="q-accent">Q</span></>
+                      : link.label}
+                  </span>
+                  {link.sub && <span class="link-sub">{link.sub}</span>}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Col 3: 회사 -->
+      <section class="col">
+        <h3 class="col-title">회사</h3>
+        <ul class="col-list">
+          {
+            companyLinks.map((link) => (
+              <li>
+                <a href={link.href}>
+                  <span class="link-main">{link.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- Col 4: 연락처 -->
+      <section class="col">
+        <h3 class="col-title">연락처</h3>
+        <ul class="col-list">
+          {
+            contactItems.map((item) => (
+              <li>
+                <a href={item.href} class="contact-link">
+                  <Icon name={item.icon} width={14} height={14} />
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
     </div>
-    <div class="footer-bottom">
-      <span>© 2026 Taktonlabs</span>
-      <span class="legal">
-        <!-- 사업자 정보 placeholder: 대표자 · 사업자 등록번호 · 주소 표기 자리 -->
-      </span>
-    </div>
+
   </div>
 </footer>
 
 <style>
   .footer {
+    position: relative;
     background: var(--color-bg-alt);
     border-top: 1px solid var(--color-border-soft);
+  }
+
+  .footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(8, 145, 178, 0.25),
+      transparent
+    );
+    pointer-events: none;
   }
 
   .footer-inner {
     max-width: var(--container-wide);
     margin: 0 auto;
-    padding: 48px 24px;
+    padding: 72px 24px 56px;
   }
 
-  .footer-top {
+  /* ============ 4 column single row ============ */
+  .footer-cols {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 24px;
-    align-items: center;
-    padding-bottom: 32px;
-    border-bottom: 1px solid var(--color-border-soft);
+    grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    gap: 48px;
   }
 
-  .brand {
+  .col {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    flex-direction: column;
+    min-width: 0;
   }
 
-  .wordmark {
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    font-size: 13px;
-    color: var(--color-text);
+  .col-title {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin: 0 0 8px;
+    line-height: 1.1;
   }
 
-  .mission {
-    color: var(--color-text-secondary);
-    font-size: 13px;
+  /* ============ Col 1: Legal list (color toned down, sizes kept) ============ */
+  .legal-col .col-title {
+    color: var(--color-text-tertiary);
+  }
+
+  .legal-list {
     margin: 0;
-    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
   }
 
-  .contact {
-    font-size: 13px;
-    color: var(--color-text-secondary);
+  .legal-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 0;
+    line-height: 1.15;
   }
 
-  .contact a {
-    color: var(--color-text);
-    text-decoration: none;
+  .legal-row dt {
+    font-size: 14px;
     font-weight: 600;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+
+  .legal-row dd {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.005em;
+    line-height: 1.25;
+  }
+
+  /* ============ Col 2-4: Link lists ============ */
+  .col-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.2;
+  }
+
+  .col-list li {
+    line-height: 1.2;
+  }
+
+  .col-list a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
     transition: color 0.3s var(--ease-in-out);
   }
 
-  .contact a:hover {
+  .col-list a:hover {
     color: var(--color-accent);
   }
 
-  .contact .sep {
-    margin: 0 8px;
-    color: var(--color-text-tertiary);
+  .q-accent {
+    color: var(--color-accent);
   }
 
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 24px;
-    font-size: 12px;
+  .link-sub {
+    font-size: 14px;
+    font-weight: 400;
     color: var(--color-text-tertiary);
+    letter-spacing: 0.02em;
   }
 
-  @media (max-width: 768px) {
-    .footer-top {
+  .contact-link {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .contact-link svg {
+    flex-shrink: 0;
+    color: var(--color-text-tertiary);
+    transition: color 0.3s var(--ease-in-out);
+    transform: translateY(1px);
+  }
+
+  .contact-link:hover svg {
+    color: var(--color-accent);
+  }
+
+  /* ============ Copyright (under 사업자 정보) ============ */
+  .copyright {
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+  }
+
+  /* ============ Responsive ============ */
+  @media (max-width: 1024px) {
+    .footer-cols {
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 32px;
+    }
+
+    .legal-col {
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .footer-inner {
+      padding: 56px 20px 40px;
+    }
+
+    .footer-cols {
       grid-template-columns: 1fr;
-      text-align: center;
+      gap: 32px;
     }
 
-    .mission {
-      text-align: center;
+    .legal-col {
+      grid-column: auto;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .footer-inner {
+      padding: 96px 32px 72px;
     }
 
-    .footer-bottom {
-      flex-direction: column;
-      gap: 8px;
-      text-align: center;
+    .footer-cols {
+      gap: 72px;
     }
   }
 </style>

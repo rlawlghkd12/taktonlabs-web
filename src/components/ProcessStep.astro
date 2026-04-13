@@ -1,0 +1,128 @@
+---
+import type { ProcessStep as ProcessStepType } from '../data/process';
+
+interface Props {
+  step: ProcessStepType;
+}
+
+const { step } = Astro.props;
+---
+
+<article class="process-step" data-process-step data-step-index={step.index}>
+  <div class="step-header">
+    <div class="step-label">
+      <span class="step-num">{step.index}</span>
+      <span class="step-latin">{step.labelLatin}</span>
+      <span class="step-sep">·</span>
+      <span class="step-ko">{step.labelKo}</span>
+    </div>
+    <h3 class="step-subtitle">{step.subtitle}</h3>
+  </div>
+  <p class="step-body">{step.body}</p>
+  <ul class="step-principles">
+    {step.principles.map((p) => <li>{p}</li>)}
+  </ul>
+</article>
+
+<style>
+  .process-step {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .process-step:last-child {
+    border-bottom: none;
+  }
+
+  .step-header {
+    margin-bottom: 18px;
+  }
+
+  .step-label {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: var(--font-display-latin);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-accent);
+    margin-bottom: 14px;
+  }
+
+  .step-num {
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .step-sep {
+    color: var(--color-text-tertiary);
+  }
+
+  .step-ko {
+    font-family: var(--font-sans);
+    color: var(--color-accent);
+    letter-spacing: 0.02em;
+  }
+
+  .step-subtitle {
+    font-size: clamp(22px, 3.4vw, 32px);
+    font-weight: 800;
+    letter-spacing: -0.022em;
+    color: var(--color-text);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .step-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-secondary);
+    margin: 0 0 20px;
+    max-width: 560px;
+  }
+
+  .step-principles {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .step-principles li {
+    position: relative;
+    padding-left: 22px;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .step-principles li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 12px;
+    height: 2px;
+    background: var(--color-accent);
+  }
+
+  @media (min-width: 1024px) {
+    .process-step {
+      padding: 56px 0;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .step-body {
+      font-size: 16px;
+    }
+
+    .step-principles li {
+      font-size: 14px;
+    }
+  }
+</style>

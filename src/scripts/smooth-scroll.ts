@@ -1,11 +1,24 @@
 import Lenis from 'lenis';
-import { prefersReducedMotion } from './motion-guards';
+import { prefersReducedMotion, hasHover } from './motion-guards';
 
 let lenisInstance: Lenis | null = null;
 
+/**
+ * Lenis 스무스 스크롤 초기화.
+ *
+ * 활성화 조건:
+ * - prefers-reduced-motion 이 아닐 것
+ * - hover 디바이스일 것 (모바일/터치 제외)
+ *
+ * 모바일/터치는 iOS Safari · Android Chrome 의 네이티브 momentum scroll 을
+ * 그대로 사용. Lenis 의 touch 동기화는 네이티브 감각을 해치고 ScrollTrigger
+ * 와의 timing 이 불안정해짐.
+ *
+ * 주의: rAF 루프는 여기서 만들지 않는다. scroll-animations.ts 의 gsap.ticker
+ * 가 lenis.raf() 를 드라이브한다 (단일 루프).
+ */
 export function initSmoothScroll(): Lenis | null {
-  // 접근성: reduced-motion 시 네이티브 스크롤 사용
-  if (prefersReducedMotion()) {
+  if (prefersReducedMotion() || !hasHover()) {
     return null;
   }
 
@@ -15,14 +28,7 @@ export function initSmoothScroll(): Lenis | null {
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
-    touchMultiplier: 2,
   });
-
-  function raf(time: number) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
 
   // Nav 앵커 클릭 Lenis에 위임
   document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((link) => {
