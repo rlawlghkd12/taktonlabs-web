@@ -15,15 +15,22 @@ import { processSteps } from '../data/process';
 
     <div class="process-body">
       <!-- Sticky progress rail (desktop only) -->
-      <aside class="process-rail" aria-hidden="true">
+      <aside class="process-rail">
         <div class="rail-line"></div>
         <div class="rail-markers">
           {
             processSteps.map((step) => (
-              <div class="rail-marker" data-rail-marker data-marker-index={step.index}>
+              <button
+                type="button"
+                class="rail-marker"
+                data-rail-marker
+                data-marker-index={step.index}
+                data-target-step={step.index}
+                aria-label={`${step.labelKo} 단계로 이동`}
+              >
                 <span class="marker-num">{step.index}</span>
                 <span class="marker-label">{step.labelKo}</span>
-              </div>
+              </button>
             ))
           }
         </div>
@@ -130,7 +137,11 @@ import { processSteps } from '../data/process';
       display: flex;
       align-items: center;
       gap: 16px;
-      padding-left: 0;
+      padding: 0;
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
       transition:
         opacity 0.4s var(--ease-in-out),
         transform 0.4s var(--ease-in-out);
