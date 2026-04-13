@@ -24,6 +24,7 @@ export default defineConfig({
           'unlock',
           'receipt',
           'package',
+          'headphones',
         ],
       },
     }),

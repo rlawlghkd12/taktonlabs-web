@@ -32,8 +32,8 @@ export const whyPromises: WhyPromise[] = [
   },
   {
     index: '04',
-    iconName: 'lucide:package',
-    title: '소스코드 완전 양도',
-    body: 'GitHub 프라이빗 레포 전체를 이관해드립니다. 다른 개발사에 맡기고 싶을 때, 내부 개발팀이 생겼을 때, 자유롭게 선택할 수 있습니다.',
+    iconName: 'lucide:headphones',
+    title: '물어볼 곳이 있다는 안심',
+    body: '사용 중 궁금한 점이 생기면 바로 연락할 수 있습니다. 매뉴얼만 던져주고 끝나는 게 아니라, 익숙해질 때까지 함께합니다.',
   },
 ];
