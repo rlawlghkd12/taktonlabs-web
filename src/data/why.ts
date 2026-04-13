@@ -22,13 +22,13 @@ export const whyPromises: WhyPromise[] = [
     index: '02',
     iconName: 'lucide:unlock',
     title: '데이터는 완전히 당신의 것',
-    body: 'Excel, CSV, SQL 덤프. 언제든 원하는 형식으로 내보낼 수 있습니다. 특정 플랫폼에 잠기지 않도록 설계부터 신경 씁니다.',
+    body: '엑셀, CSV 등 원하는 형식으로 언제든 내보낼 수 있습니다. 특정 플랫폼에 잠기지 않도록 설계부터 신경 씁니다.',
   },
   {
     index: '03',
     iconName: 'lucide:receipt',
-    title: '숨겨진 비용 없는 유지보수',
-    body: '월 정액 유지보수 옵션. 작은 수정도, 긴급 장애 대응도 추가 비용 없이. 큰 기능 추가만 별도 견적입니다.',
+    title: '투명한 비용, 명확한 기준',
+    body: '유지보수 방식과 비용은 프로젝트에 맞게 상담 후 결정합니다. 숨겨진 비용 없이, 사전에 합의한 범위 안에서 진행합니다.',
   },
   {
     index: '04',
