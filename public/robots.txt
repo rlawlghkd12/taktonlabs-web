@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://taktonlabs.com/sitemap-index.xml

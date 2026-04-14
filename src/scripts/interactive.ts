@@ -10,6 +10,24 @@ import Atropos from 'atropos';
 import 'atropos/css';
 import { hasHover } from './motion-guards';
 
+// ========== rAF Throttle ==========
+
+function onMousemoveRAF(el: HTMLElement, handler: (e: MouseEvent) => void): void {
+  let ticking = false;
+  let lastEvent: MouseEvent | null = null;
+
+  el.addEventListener('mousemove', (e) => {
+    lastEvent = e;
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (lastEvent) handler(lastEvent);
+        ticking = false;
+      });
+    }
+  });
+}
+
 // ========== Atropos 3D ProductCard ==========
 
 function initProductAtropos(): void {
@@ -39,7 +57,7 @@ function initCardTilt(): void {
   );
 
   cards.forEach((card) => {
-    card.addEventListener('mousemove', (e) => {
+    onMousemoveRAF(card, (e) => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
@@ -70,7 +88,7 @@ function initMagneticButtons(): void {
   const buttons = document.querySelectorAll<HTMLElement>('.cta');
 
   buttons.forEach((btn) => {
-    btn.addEventListener('mousemove', (e) => {
+    onMousemoveRAF(btn, (e) => {
       const rect = btn.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
@@ -99,7 +117,7 @@ function initHeroSpotlight(): void {
   const section = document.querySelector<HTMLElement>('#hero');
   if (!section) return;
 
-  section.addEventListener('mousemove', (e) => {
+  onMousemoveRAF(section, (e) => {
     const rect = section.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
