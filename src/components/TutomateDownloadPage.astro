@@ -187,8 +187,8 @@ const { macUrl, winUrl } = variant;
       const macUrl = findAsset(macPattern);
       const winUrl = findAsset(winPattern);
 
-      // Mac/Win 둘 다 있어야만 업데이트 (일관성 유지)
-      if (!macUrl || !winUrl) return;
+      // 하나라도 있으면 업데이트
+      if (!macUrl && !winUrl) return;
 
       // DOM 업데이트
       const versionEl = document.querySelector<HTMLElement>('.version-num');
@@ -203,8 +203,8 @@ const { macUrl, winUrl } = variant;
       const winBtn = document.querySelector<HTMLAnchorElement>(
         '[data-platform="windows"]'
       );
-      if (macBtn) macBtn.href = macUrl;
-      if (winBtn) winBtn.href = winUrl;
+      if (macBtn && macUrl) macBtn.href = macUrl;
+      if (winBtn && winUrl) winBtn.href = winUrl;
     } catch {
       // 네트워크/CORS 오류 시 silent fail
     }
