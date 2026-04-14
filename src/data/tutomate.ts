@@ -35,21 +35,19 @@ export interface TutomateVariant {
 // 이름/태그라인/설명/아이콘/기능 등은 고정. version/url은 빌드 타임에 덮어씀.
 
 const GITHUB_REPO = 'rlawlghkd12/tutomate';
-const FALLBACK_VERSION = '0.6.0';
+const FALLBACK_VERSION = '0.6.1';
 const FALLBACK_DATE = '2026-04-09';
 
-function fallbackRegularUrl(platform: 'mac' | 'windows'): string {
-  const base = `https://github.com/${GITHUB_REPO}/releases/latest/download`;
-  if (platform === 'mac')
-    return `${base}/TutorMate-${FALLBACK_VERSION}-universal.dmg`;
-  return `${base}/TutorMate-Setup-${FALLBACK_VERSION}.exe`;
+// JS가 GitHub API로 실제 다운로드 URL을 교체함.
+// fallback은 릴리즈 페이지로 연결 (버전 불일치 시 GitHub 페이지 뜨는 문제 방지).
+const RELEASES_PAGE = `https://github.com/${GITHUB_REPO}/releases/latest`;
+
+function fallbackRegularUrl(_platform: 'mac' | 'windows'): string {
+  return RELEASES_PAGE;
 }
 
-function fallbackQUrl(platform: 'mac' | 'windows'): string {
-  const base = `https://github.com/${GITHUB_REPO}/releases/latest/download`;
-  if (platform === 'mac')
-    return `${base}/TutorMate-Q-${FALLBACK_VERSION}-universal-mac.dmg`;
-  return `${base}/TutorMate-Q-Setup-${FALLBACK_VERSION}.exe`;
+function fallbackQUrl(_platform: 'mac' | 'windows'): string {
+  return RELEASES_PAGE;
 }
 
 export const tutomate: TutomateVariant = {
