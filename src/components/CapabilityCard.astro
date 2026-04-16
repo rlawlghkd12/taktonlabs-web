@@ -1,121 +1,137 @@
 ---
-import { Icon } from 'astro-icon/components';
-
-interface Props {
-  iconName: string;
-  title: string;
-  description: string;
-  techStack: string[];
-  index: number;
-}
-
-const { iconName, title, description, techStack, index } = Astro.props;
+import type { Capability } from '../data/capabilities';
+interface Props { capability: Capability; index: number; }
+const { capability: c, index } = Astro.props;
 ---
-
-<article class="capability-card" data-card-index={index}>
-  {iconName && (
-    <div class="icon-wrap">
-      <Icon name={iconName} width={24} height={24} />
+<article class="cc" data-cap-card data-index={index}>
+  <div class="cc-left">
+    <div class="cc-num">{c.index}</div>
+    <h3 class="cc-title">{c.title}</h3>
+    <p class="cc-desc">{c.description}</p>
+    <div class="cc-principles">
+      {c.principles.map((p) => <span>— {p}</span>)}
     </div>
-  )}
-  <h3 class="title">{title}</h3>
-  <p class="description">{description}</p>
-  <p class="tech-stack">{techStack.join(' · ')}</p>
+  </div>
+  <div class="cc-right">
+    {c.proofType === 'browser' && (
+      <div class="proof proof-browser" data-proof="browser">
+        <div class="browser-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="browser-url">example.com</span>
+        </div>
+        <div class="browser-body">
+          <div class="browser-main">
+            <div class="line-heading"></div>
+            <div class="line"></div>
+            <div class="line short"></div>
+            <div class="browser-btn"></div>
+          </div>
+          <div class="browser-side"></div>
+        </div>
+      </div>
+    )}
+    {c.proofType === 'native-window' && (
+      <div class="proof proof-native" data-proof="native-window">
+        <div class="native-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        </div>
+        <div class="native-body">
+          <div class="native-sidebar">
+            <span class="item"></span><span class="item"></span>
+            <span class="item active"></span>
+            <span class="item"></span>
+          </div>
+          <div class="native-main">
+            <div class="micro-date">2026 · 4월</div>
+            <div class="micro-amount">₩ 18,420,000</div>
+            <div class="micro-delta">전월 대비 ▲ 12.4%</div>
+            <div class="bar-chart">
+              <div style="height:40%"></div>
+              <div style="height:60%"></div>
+              <div style="height:50%"></div>
+              <div style="height:75%"></div>
+              <div style="height:68%"></div>
+              <div style="height:92%; background:#0a0a0a"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    {c.proofType === 'dashboard-tiles' && (
+      <div class="proof proof-tiles" data-proof="dashboard-tiles">
+        <div class="tile"><div class="t-label">월 매출</div><div class="t-value">+12.4%</div></div>
+        <div class="tile"><div class="t-label">미수금</div><div class="t-value">₩ 2.1M</div></div>
+        <div class="tile dark"><div class="t-label">결제</div><div class="t-value">142</div></div>
+        <div class="tile"><div class="t-label">활성</div><div class="t-value">89</div></div>
+      </div>
+    )}
+  </div>
 </article>
-
 <style>
-  .capability-card {
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-lg);
-    padding: 32px;
-    box-shadow: 0 1px 2px rgba(10, 25, 41, 0.04);
-    transition:
-      border-color 0.4s var(--ease-in-out),
-      box-shadow 0.6s var(--ease-smooth),
-      transform 0.6s var(--ease-smooth),
-      opacity 0.4s var(--ease-in-out);
-    will-change: transform, box-shadow;
-  }
-
-  .capability-card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 12px 28px rgba(10, 25, 41, 0.1);
-  }
-
-  .icon-wrap {
-    display: inline-flex;
+  .cc {
+    position: absolute; inset: 0;
+    display: grid; grid-template-columns: 1fr 300px; gap: 48px;
     align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: rgba(8, 145, 178, 0.08);
-    border-radius: var(--radius-md);
-    margin-bottom: 20px;
-    color: var(--color-accent);
-    transition: background-color 0.4s var(--ease-in-out);
+    padding: 28px 32px;
+    background: #fff; border: 1px solid rgba(10,10,10,0.08); border-radius: 14px;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.18);
+    will-change: transform, width, height, top, left;
   }
-
-  .capability-card[data-active='true'] {
-    border-color: var(--color-accent);
-    box-shadow: 0 20px 48px rgba(10, 25, 41, 0.12);
-    transform: translate3d(0, 0, 0) scale3d(1.02, 1.02, 1);
+  .cc[data-index='1'], .cc[data-index='2'] { opacity: 0; }   /* 초기 01만 보임 */
+  .cc-left { min-width: 0; }
+  .cc-num {
+    font-size: 110px; font-weight: 700; letter-spacing: -0.05em;
+    line-height: 0.85; font-variant-numeric: tabular-nums;
+    color: transparent; -webkit-text-stroke: 1.6px rgba(10,10,10,0.88);
+    background: linear-gradient(180deg, #0a0a0a 0%, #0a0a0a 38%, transparent 38%);
+    -webkit-background-clip: text; background-clip: text;
+    margin-bottom: 14px;
   }
+  .cc-title { font-size: 30px; font-weight: 600; letter-spacing: -0.025em; margin: 0 0 10px; }
+  .cc-desc { font-size: 13px; line-height: 1.7; color: var(--text-secondary); margin: 0 0 14px; max-width: 460px; }
+  .cc-principles { font-size: 12px; color: var(--text-secondary); display: flex; gap: 10px; flex-wrap: wrap; }
+  .cc-principles span { white-space: nowrap; }
 
-  .capability-card[data-active='true'] .icon-wrap {
-    background: rgba(8, 145, 178, 0.15);
-  }
+  /* ===== Proof: Browser ===== */
+  .proof-browser { background: #fff; border: 1px solid var(--hairline); border-radius: 10px; padding: 8px; }
+  .browser-bar { display: flex; gap: 4px; align-items: center; margin-bottom: 6px; }
+  .browser-bar .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+  .browser-url { flex: 1; margin-left: 8px; height: 14px; background: #f4f4ef; border-radius: 4px; padding: 0 8px; display: flex; align-items: center; font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); }
+  .browser-body { background: #f4f4ef; border-radius: 6px; height: 150px; display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; padding: 12px; }
+  .browser-main { display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+  .line-heading { height: 12px; width: 65%; background: #0a0a0a; opacity: 0.88; border-radius: 2px; }
+  .line { height: 5px; background: rgba(10,10,10,0.3); border-radius: 1px; width: 90%; }
+  .line.short { width: 70%; }
+  .browser-btn { margin-top: 6px; width: 60px; height: 20px; background: #0a0a0a; border-radius: 12px; }
+  .browser-side { background: #fff; border-radius: 4px; border: 1px solid var(--hairline-soft); }
 
-  .capability-card[data-dimmed='true'] {
-    opacity: 0.4;
-  }
+  /* ===== Proof: Native ===== */
+  .proof-native { background: linear-gradient(180deg, #fff, #f8f8f5); border: 1px solid var(--hairline); border-radius: 12px; padding: 10px; box-shadow: 0 20px 40px -20px rgba(0,0,0,0.18); }
+  .native-bar { display: flex; gap: 5px; margin-bottom: 8px; }
+  .native-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .native-body { background: #f4f4ef; border-radius: 8px; padding: 10px; min-height: 180px; display: grid; grid-template-columns: 60px 1fr; gap: 6px; }
+  .native-sidebar { background: #fff; border-radius: 4px; padding: 6px; display: flex; flex-direction: column; gap: 5px; }
+  .native-sidebar .item { height: 4px; background: rgba(10,10,10,0.2); border-radius: 1px; }
+  .native-sidebar .item.active { background: #0a0a0a; }
+  .native-main { background: #fff; border-radius: 4px; padding: 10px; }
+  .micro-date { font-family: var(--font-mono); font-size: 8px; color: var(--text-muted); }
+  .micro-amount { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; margin-top: 2px; }
+  .micro-delta { font-size: 9px; color: var(--text-muted); margin-top: 1px; }
+  .bar-chart { margin-top: 10px; display: flex; gap: 2px; align-items: flex-end; height: 32px; }
+  .bar-chart > div { flex: 1; background: #e5e3dc; border-radius: 1px; }
 
-  .title {
-    font-size: 19px;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    color: var(--color-text);
-    margin: 0 0 10px;
-  }
+  /* ===== Proof: Tiles ===== */
+  .proof-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .tile { background: #fff; border: 1px solid var(--hairline); border-radius: 6px; padding: 10px; min-height: 50px; }
+  .tile.dark { background: #0a0a0a; color: var(--bg-primary); }
+  .t-label { font-size: 8px; color: var(--text-muted); }
+  .tile.dark .t-label { color: rgba(255,255,255,0.55); }
+  .t-value { font-size: 14px; font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; }
 
-  .description {
-    font-size: 14px;
-    line-height: 1.65;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  .tech-stack {
-    font-family: var(--font-display-latin);
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-accent);
-    letter-spacing: 0.05em;
-    margin: 12px 0 0;
-    padding-top: 12px;
-    border-top: 1px dashed var(--color-border-soft);
-  }
-
-  @media (min-width: 1536px) {
-    .capability-card {
-      padding: 40px;
-    }
-
-    .icon-wrap {
-      width: 56px;
-      height: 56px;
-    }
-
-    .title {
-      font-size: 21px;
-    }
-
-    .description {
-      font-size: 15px;
-    }
-
-    .tech-stack {
-      font-size: 14px;
-    }
+  @media (max-width: 768px) {
+    .cc { position: relative; inset: auto; opacity: 1 !important; grid-template-columns: 1fr; gap: 20px; }
+    .cc[data-index] { opacity: 1 !important; }
+    .cc-right .proof { max-width: 480px; }
   }
 </style>

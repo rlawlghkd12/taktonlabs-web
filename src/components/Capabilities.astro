@@ -2,114 +2,75 @@
 import CapabilityCard from './CapabilityCard.astro';
 import { capabilities } from '../data/capabilities';
 ---
-
-<section id="capabilities" class="capabilities">
-  <div class="capabilities-inner">
-    <div class="capabilities-header">
-      <p class="label">핵심 역량</p>
-      <h2 class="title">세 가지 영역에서 끝까지 만듭니다</h2>
-      <p class="subcopy">
-        하나를 만들어도 처음부터 끝까지 직접 합니다.
-      </p>
+<section id="capabilities" class="cap">
+  <div class="cap-pin">
+    <div class="cap-head">
+      <div class="cap-eyebrow" data-cap-eyebrow>
+        CAPABILITIES &nbsp;/&nbsp; <span data-cap-active-title>01 · 웹 · 모바일 제품</span>
+      </div>
+      <div class="cap-progress" data-cap-progress>
+        <div class="cap-progress-seg" data-seg="0"></div>
+        <div class="cap-progress-seg" data-seg="1"></div>
+        <div class="cap-progress-seg" data-seg="2"></div>
+      </div>
     </div>
-    <div class="card-grid">
+
+    <h2 class="cap-headline" data-cap-headline>
+      세 가지로 만듭니다.
+    </h2>
+
+    <!-- dock bar: 3 docked slots (초기엔 hidden, 카드가 이동하며 채움) -->
+    <div class="cap-dock-bar">
       {capabilities.map((c, i) => (
-        <CapabilityCard
-          iconName={''}
-          title={c.title}
-          description={c.description}
-          techStack={c.principles}
-          index={i}
-        />
+        <div class="cap-dock" data-cap-dock data-index={i}>
+          <span class="dock-num">{c.index}</span>
+          <span class="dock-title">{c.title}</span>
+          <span class="dock-check">✓</span>
+        </div>
+      ))}
+    </div>
+
+    <!-- BIG 카드 stage: 3 카드가 absolute 겹쳐있음 -->
+    <div class="cap-stage" data-cap-stage>
+      {capabilities.map((c, i) => (
+        <CapabilityCard capability={c} index={i} />
       ))}
     </div>
   </div>
 </section>
-
 <style>
-  .capabilities {
-    background: var(--color-bg-alt);
-    padding: 96px 24px;
+  .cap { position: relative; background: var(--bg-primary); color: var(--text-primary); }
+  .cap-pin { padding: 40px var(--section-pad-x); min-height: 100vh; display: flex; flex-direction: column; }
+  .cap-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .cap-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--tracking-eyebrow); color: var(--text-muted); }
+  .cap-eyebrow [data-cap-active-title] { color: var(--text-primary); }
+  .cap-progress { display: flex; gap: 3px; width: 120px; }
+  .cap-progress-seg { flex: 1; height: 2px; background: var(--hairline); position: relative; overflow: hidden; }
+  .cap-progress-seg::after { content: ''; position: absolute; inset: 0; background: var(--text-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-expo); }
+  .cap-progress-seg[data-filled='true']::after { transform: scaleX(1); }
+  .cap-headline { font-size: clamp(40px, 6vw, 64px); font-weight: 600; letter-spacing: -0.04em; margin: 0 0 48px; line-height: 1; }
+  .cap-dock-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-bottom: 48px; min-height: 54px; }
+  .cap-dock {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px;
+    background: #fff; border: 1px solid var(--hairline); border-radius: 10px;
+    opacity: 0;                  /* 초기 hidden, 타임라인에서 띄움 */
+    transition: opacity 0.3s var(--ease-smooth);
   }
-
-  .capabilities-inner {
-    max-width: var(--container-wide);
-    margin: 0 auto;
-  }
-
-  .capabilities-header {
-    text-align: center;
-    margin-bottom: 64px;
-    max-width: var(--container-narrow);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .label {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
-    margin: 0 0 12px;
-  }
-
-  .title {
-    font-size: clamp(24px, 4vw, 42px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--color-text);
-    margin: 0 0 12px;
-    line-height: 1.2;
-  }
-
-  .subcopy {
-    font-size: clamp(15px, 1.3vw, 19px);
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  .card-grid {
-    max-width: var(--container-grid);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
+  .dock-num { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+  .dock-title { font-size: 13px; font-weight: 600; flex: 1; }
+  .dock-check { font-size: 11px; color: var(--text-muted); opacity: 0.5; }
+  .cap-stage { position: relative; flex: 1; min-height: 340px; }
 
   @media (max-width: 768px) {
-    .capabilities {
-      padding: 72px 20px;
-    }
-
-    .capabilities-header {
-      margin-bottom: 40px;
-    }
-
-    .card-grid {
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .capabilities {
-      padding: 160px 32px;
-    }
-
-    .card-grid {
-      gap: 32px;
-    }
-  }
-
-  @media (min-width: 1920px) {
-    .capabilities {
-      padding: 192px 48px;
-    }
-
-    .card-grid {
-      gap: 48px;
-    }
+    .cap-pin { padding: 48px var(--section-pad-x-sm); min-height: auto; }
+    .cap-headline { font-size: 32px; margin-bottom: 32px; }
+    .cap-dock-bar { display: none; }
+    .cap-stage { min-height: auto; display: flex; flex-direction: column; gap: 16px; }
   }
 </style>
+
+<script>
+  import { initCapabilitiesMorph } from '../scripts/sections/capabilities-morph';
+  initCapabilitiesMorph();
+</script>

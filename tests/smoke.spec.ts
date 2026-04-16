@@ -287,6 +287,49 @@ test.describe('TutorMate Q 다운로드 페이지', () => {
   });
 });
 
+test.describe('Capabilities', () => {
+  test('Capabilities 정적 구조 — DOM 준비', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#capabilities');
+    await expect(section).toBeVisible();
+    await expect(section.locator('[data-cap-eyebrow]')).toContainText('CAPABILITIES');
+    await expect(section.locator('[data-cap-headline]')).toContainText('세 가지로 만듭니다');
+    await expect(section.locator('[data-cap-progress] > *')).toHaveCount(3);
+    await expect(section.locator('[data-cap-card]')).toHaveCount(3);
+    await expect(section.locator('[data-cap-dock]')).toHaveCount(3);
+    // BIG 카드 내부 구조
+    const firstCard = section.locator('[data-cap-card]').first();
+    await expect(firstCard).toContainText('01');
+    await expect(firstCard).toContainText('웹 · 모바일 제품');
+    await expect(firstCard.locator('[data-proof="browser"]')).toBeVisible();
+  });
+
+  test('Capabilities 모바일은 pin 해제 + 3카드 세로 스택', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 800 } });
+    const page = await context.newPage();
+    await page.goto('/');
+    const cards = page.locator('[data-cap-card]');
+    await expect(cards).toHaveCount(3);
+    // 모든 카드가 동시에 보여야 함 (세로 스택)
+    for (let i = 0; i < 3; i++) {
+      await expect(cards.nth(i)).toBeVisible();
+    }
+    await context.close();
+  });
+
+  test('Capabilities reduced-motion — 3카드 즉시 노출', async ({ browser }) => {
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage();
+    await page.goto('/');
+    const cards = page.locator('[data-cap-card]');
+    for (let i = 0; i < 3; i++) {
+      const op = await cards.nth(i).evaluate((el) => window.getComputedStyle(el).opacity);
+      expect(parseFloat(op)).toBe(1);
+    }
+    await context.close();
+  });
+});
+
 test.describe('v2 신규 섹션', () => {
   test('Philosophy 재디자인 렌더링', async ({ page }) => {
     await page.goto('/');
