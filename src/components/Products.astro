@@ -1,111 +1,240 @@
 ---
-import ProductCard from './ProductCard.astro';
-import NoiseOverlay from './NoiseOverlay.astro';
+const screens = [
+  { index: '01', tag: 'DASHBOARD', caption: '한눈에 보이는 하루.', body: '오늘 수업, 결제 건수, 미납 안내, 학생 알림. 복잡한 학원 운영이 한 화면에.', principles: ['실시간 오늘 일정', '수업 1-클릭 출석', '미납 자동 리마인드'] },
+  { index: '02', tag: 'STUDENTS', caption: '수강생, 놓치지 않게.', body: '신규 등록부터 재등록, 휴원, 수강권 종료 예정까지. 한 명도 놓치지 않는 시스템.', principles: ['수강권 잔여 자동 표시', '종료 예정 자동 알림', '휴원/재등록 이력 관리'] },
+  { index: '03', tag: 'REVENUE', caption: '숫자가 먼저 말합니다.', body: '월간 매출, 미수금, 결제 수단 분포까지 한눈에. 엑셀 없이도 회계가 보입니다.', principles: ['월별 매출 자동 집계', '결제 수단 분석', '정산 리포트'] },
+];
 ---
-
-<section id="products" class="products">
-  <div class="mint-line" data-mint-line></div>
-  <NoiseOverlay />
-  <div class="products-inner">
-    <div class="products-header">
-      <p class="label">제품</p>
-      <h2 class="title">이론이 아닙니다. 우리가 직접 쓰고, 매주 업데이트합니다.</h2>
-      <p class="subcopy">현재 출시 · 운영 중인 제품</p>
+<section id="products" class="prod">
+  <div class="prod-pin">
+    <div class="prod-head">
+      <div class="prod-eyebrow">06 &nbsp;/&nbsp; OUR PRODUCT &nbsp;·&nbsp; <span>TutorMate</span></div>
+      <div class="prod-progress" data-prod-progress>
+        <div class="seg"></div><div class="seg"></div><div class="seg"></div>
+      </div>
     </div>
-    <ProductCard
-      label="주력 제품"
-      name="TutorMate"
-      description="복잡한 수강 관리를 누구나 쉽게. 수강생 · 결제 · 대시보드까지 직관적으로."
-      tags={['Electron', 'Win · Mac', '자동 업데이트']}
-      ctaHref="/tutomate"
-      ctaLabel="체험하기"
-    />
+
+    <h2 class="prod-headline">
+      이론이 아닙니다.<br /><span class="muted">매일 쓰고, 매주 고칩니다.</span>
+    </h2>
+
+    <div class="prod-stage">
+      <div class="prod-caption-col">
+        {screens.map((s, i) => (
+          <div class="prod-caption" data-prod-caption data-index={i} style={i === 0 ? '' : 'opacity:0'}>
+            <div class="caption-tag">{s.index} · {s.tag}</div>
+            <div class="caption-title">{s.caption}</div>
+            <div class="caption-body">{s.body}</div>
+            <div class="caption-princ">— {s.principles.join('  — ')}</div>
+          </div>
+        ))}
+      </div>
+
+      <div class="prod-window">
+        <div class="window-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="window-title" data-prod-window-title>TutorMate — 대시보드</span>
+        </div>
+        <div class="window-body">
+          {screens.map((s, i) => (
+            <div class="prod-screen" data-prod-screen data-index={i} style={i === 0 ? '' : 'opacity:0;position:absolute;inset:10px'}>
+              {i === 0 && (
+                <div class="screen-dashboard">
+                  <aside class="screen-side">
+                    <span class="item active"></span>
+                    <span class="item"></span><span class="item"></span>
+                    <span class="item"></span><span class="item"></span>
+                  </aside>
+                  <div class="screen-main">
+                    <div class="stat-row">
+                      <div class="stat"><div class="sl">오늘 수업</div><div class="sv">14</div></div>
+                      <div class="stat"><div class="sl">출석률</div><div class="sv">94%</div></div>
+                      <div class="stat dark"><div class="sl">미납 알림</div><div class="sv">3건</div></div>
+                    </div>
+                    <div class="today-list">
+                      <div class="today-date">2026 · 4 · 17 &nbsp; 오늘 일정</div>
+                      <div class="today-row"><span>09:00</span><span class="bar"></span></div>
+                      <div class="today-row"><span>10:30</span><span class="bar active"></span></div>
+                      <div class="today-row"><span>14:00</span><span class="bar"></span></div>
+                      <div class="today-row"><span>16:00</span><span class="bar"></span></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {i === 1 && (
+                <div class="screen-students">
+                  <aside class="screen-side">
+                    <span class="item"></span>
+                    <span class="item active"></span>
+                    <span class="item"></span><span class="item"></span>
+                  </aside>
+                  <div class="screen-main">
+                    <div class="student-header"><span>이름</span><span>수강권</span><span>잔여</span><span>상태</span></div>
+                    <div class="student-row"><span>김○○</span><span>주 3회 · 월</span><span>8회</span><span class="pill blue">진행</span></div>
+                    <div class="student-row"><span>이○○</span><span>주 2회 · 분기</span><span class="red">2회</span><span class="pill red">종료 예정</span></div>
+                    <div class="student-row"><span>박○○</span><span>주 1회 · 월</span><span>4회</span><span class="pill blue">진행</span></div>
+                    <div class="student-row muted"><span>최○○</span><span>휴원</span><span>—</span><span class="pill gray">휴원</span></div>
+                  </div>
+                </div>
+              )}
+              {i === 2 && (
+                <div class="screen-revenue">
+                  <div class="rev-header">2026 · 4월 / ₩ 18,420,000 / ▲ 12.4%</div>
+                  <div class="rev-chart">
+                    <div style="height:40%"></div>
+                    <div style="height:60%"></div>
+                    <div style="height:55%"></div>
+                    <div style="height:72%"></div>
+                    <div style="height:68%"></div>
+                    <div style="height:92%" class="accent"></div>
+                  </div>
+                  <div class="rev-foot">최근 결제 142건</div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <ol class="prod-indicators">
+        {screens.map((s, i) => (
+          <li data-prod-indicator data-index={i} data-active={i === 0}>
+            <span class="ind-line"></span><span class="ind-num">{s.index}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+
+  <!-- CTA 스트립: pin 바깥 -->
+  <div class="prod-cta">
+    <div class="cta-left">
+      <div class="cta-eyebrow">SHIPPING NOW</div>
+      <div class="cta-headline">지금 쓸 수 있습니다.</div>
+    </div>
+    <div class="cta-right">
+      <a href="/tutomate" class="prod-cta-download">다운로드 →</a>
+      <a href="/tutomate" class="prod-cta-learn">자세히 알아보기</a>
+    </div>
+  </div>
+  <div class="prod-tags">
+    <span>Windows · macOS</span>
+    <span>자동 업데이트</span>
+    <span>오프라인 동작</span>
+    <span>무료 체험</span>
   </div>
 </section>
-
 <style>
-  .products {
+  .prod {
     position: relative;
-    background: linear-gradient(180deg, var(--color-bg-dark) 0%, var(--color-bg-dark-end) 100%);
-    padding: 120px 24px;
-    overflow: hidden;
+    background: var(--bg-dark);
+    color: var(--dark-text-primary);
+    padding: 0 var(--section-pad-x) 64px;
   }
+  .prod-pin { padding-top: 72px; padding-bottom: 72px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+  .prod-pin::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255,255,255,0.04), transparent 60%); pointer-events: none; }
+  .prod-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; position: relative; }
+  .prod-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--tracking-eyebrow); color: rgba(255,255,255,0.55); }
+  .prod-eyebrow span { color: var(--dark-text-primary); }
+  .prod-progress { display: flex; gap: 3px; width: 100px; }
+  .prod-progress .seg { flex: 1; height: 2px; background: rgba(255,255,255,0.15); position: relative; overflow: hidden; }
+  .prod-progress .seg::after { content: ''; position: absolute; inset: 0; background: var(--dark-text-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-expo); }
+  .prod-progress .seg[data-filled='true']::after { transform: scaleX(1); }
+  .prod-headline { font-size: clamp(44px, 5.5vw, 68px); font-weight: 600; letter-spacing: -0.045em; line-height: 1; margin: 0 0 56px; max-width: 900px; position: relative; }
+  .prod-headline .muted { opacity: 0.4; }
+  .prod-stage { display: grid; grid-template-columns: 340px 1fr 80px; gap: 48px; align-items: center; flex: 1; position: relative; }
 
-  .mint-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(94, 234, 212, 0.4),
-      transparent
-    );
-    transform-origin: left center;
-    will-change: transform;
+  .prod-caption-col { position: relative; min-height: 200px; }
+  .prod-caption { position: absolute; inset: 0; transition: opacity 0.4s var(--ease-smooth); }
+  .caption-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--tracking-mono-label); color: rgba(255,255,255,0.55); margin-bottom: 18px; }
+  .caption-title { font-size: 36px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 18px; }
+  .caption-body { font-size: 14.5px; line-height: 1.75; color: var(--dark-text-secondary); max-width: 320px; margin-bottom: 18px; }
+  .caption-princ { font-size: 12px; line-height: 1.9; color: rgba(255,255,255,0.7); }
+
+  .prod-window {
+    background: linear-gradient(180deg, #fafaf7, #f0ede5);
+    border-radius: 14px; padding: 12px;
+    box-shadow: 0 60px 120px -30px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08) inset;
+    color: var(--text-primary);
   }
+  .window-bar { display: flex; gap: 6px; margin-bottom: 10px; align-items: center; }
+  .window-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .window-bar .dot.r { background: #ff5f57; }
+  .window-bar .dot.y { background: #febc2e; }
+  .window-bar .dot.g { background: #28c840; }
+  .window-title { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+  .window-body { position: relative; background: #f4f4ef; border-radius: 10px; padding: 10px; min-height: 320px; }
+  .prod-screen { width: 100%; }
 
-  .products-inner {
-    position: relative;
-    max-width: var(--container-wide);
-    margin: 0 auto;
-    z-index: 1;
+  /* dashboard */
+  .screen-dashboard { display: grid; grid-template-columns: 120px 1fr; gap: 10px; }
+  .screen-side { background: #fff; border-radius: 6px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .screen-side .item { height: 20px; background: rgba(10,10,10,0.1); border-radius: 4px; }
+  .screen-side .item.active { background: #0a0a0a; }
+  .screen-main { display: flex; flex-direction: column; gap: 8px; }
+  .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .stat { background: #fff; border-radius: 6px; padding: 12px; }
+  .stat.dark { background: #0a0a0a; color: var(--bg-primary); }
+  .sl { font-size: 9px; color: var(--text-muted); }
+  .stat.dark .sl { color: rgba(255,255,255,0.55); }
+  .sv { font-size: 20px; font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; }
+  .today-list { background: #fff; border-radius: 6px; padding: 12px; flex: 1; }
+  .today-date { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); margin-bottom: 8px; }
+  .today-row { display: flex; gap: 8px; align-items: center; font-size: 10px; margin-bottom: 6px; }
+  .today-row > span:first-child { font-family: var(--font-mono); color: var(--text-muted); }
+  .today-row .bar { flex: 1; height: 8px; background: #e5e3dc; border-radius: 2px; }
+  .today-row .bar.active { background: #0a0a0a; }
+
+  /* students */
+  .screen-students { display: grid; grid-template-columns: 120px 1fr; gap: 10px; }
+  .student-header, .student-row { display: grid; grid-template-columns: 2fr 1.3fr 1fr 60px; gap: 8px; padding: 8px 10px; font-size: 10px; }
+  .student-header { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); border-bottom: 1px solid var(--hairline); }
+  .student-row { background: #fff; border-bottom: 1px solid #f4f4ef; align-items: center; }
+  .student-row.muted { opacity: 0.5; }
+  .student-row .red { color: #c44; font-weight: 600; }
+  .pill { padding: 2px 6px; border-radius: 10px; font-size: 8px; text-align: center; }
+  .pill.blue { background: #e8f0ff; color: #0055cc; }
+  .pill.red { background: #fff2e8; color: #c44; }
+  .pill.gray { background: #f0f0ed; }
+
+  /* revenue */
+  .screen-revenue { padding: 16px; }
+  .rev-header { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-bottom: 16px; }
+  .rev-chart { display: flex; gap: 4px; align-items: flex-end; height: 120px; }
+  .rev-chart > div { flex: 1; background: #e5e3dc; border-radius: 2px; }
+  .rev-chart > div.accent { background: #0a0a0a; }
+  .rev-foot { font-size: 10px; color: var(--text-muted); margin-top: 10px; }
+
+  .prod-indicators { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 24px; }
+  .prod-indicators li { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; opacity: 0.4; transition: opacity 0.3s; }
+  .prod-indicators li[data-active='true'] { opacity: 1; }
+  .ind-line { width: 2px; height: 14px; background: rgba(255,255,255,0.3); }
+  .prod-indicators li[data-active='true'] .ind-line { background: var(--dark-text-primary); }
+
+  /* CTA 스트립 */
+  .prod-cta { display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; margin-top: 40px; padding-top: 40px; }
+  .cta-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--tracking-mono-label); color: rgba(255,255,255,0.55); margin-bottom: 14px; }
+  .cta-headline { font-size: clamp(32px, 4vw, 40px); font-weight: 600; letter-spacing: -0.035em; }
+  .cta-right { display: flex; gap: 10px; }
+  .prod-cta-download { background: var(--dark-text-primary); color: var(--bg-dark); padding: 14px 22px; border-radius: 999px; text-decoration: none; font-weight: 500; font-size: 14px; }
+  .prod-cta-learn { color: var(--dark-text-primary); border: 1px solid rgba(255,255,255,0.25); padding: 14px 22px; border-radius: 999px; text-decoration: none; font-size: 14px; }
+  .prod-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--dark-hairline); }
+  .prod-tags span { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; border: 1px solid rgba(255,255,255,0.25); padding: 6px 12px; border-radius: 999px; opacity: 0.85; }
+
+  @media (max-width: 900px) {
+    .prod-stage { grid-template-columns: 1fr; gap: 32px; }
+    .prod-caption-col { min-height: auto; }
+    .prod-indicators { flex-direction: row; gap: 16px; }
   }
-
-  .products-header {
-    text-align: center;
-    margin-bottom: 64px;
-    max-width: var(--container-narrow);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .label {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent-mint);
-    margin: 0 0 12px;
-  }
-
-  .title {
-    font-size: clamp(24px, 4vw, 42px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: #fff;
-    margin: 0 0 12px;
-    line-height: 1.2;
-  }
-
-  .subcopy {
-    font-size: clamp(15px, 1.3vw, 19px);
-    color: rgba(255, 255, 255, 0.55);
-    margin: 0;
-  }
-
   @media (max-width: 768px) {
-    .products {
-      padding: 72px 20px;
-    }
-
-    .products-header {
-      margin-bottom: 40px;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .products {
-      padding: 160px 32px;
-    }
-  }
-
-  @media (min-width: 1920px) {
-    .products {
-      padding: 192px 48px;
-    }
+    .prod { padding: 0 var(--section-pad-x-sm) 48px; }
+    .prod-pin { padding-top: 56px; min-height: auto; }
+    .prod-headline { font-size: 36px; margin-bottom: 40px; }
+    .prod-cta { grid-template-columns: 1fr; gap: 20px; }
   }
 </style>
+
+<script>
+  import { initProductsScrub } from '../scripts/sections/products-scrub';
+  initProductsScrub();
+</script>

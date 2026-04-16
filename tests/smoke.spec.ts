@@ -212,10 +212,11 @@ test.describe('TutorMate 기본 버전 다운로드 페이지', () => {
     expect(winHref).not.toContain('TutorMate-Q');
   });
 
-  test('홈 → Products "체험하기" → /tutomate 이동 가능', async ({ page }) => {
+  test('홈 → Products CTA → /tutomate 이동 가능', async ({ page }) => {
     await page.goto('/');
-    const tutomateLink = page.locator('.product-card a[href="/tutomate"]');
-    await expect(tutomateLink).toContainText('체험하기');
+    const downloadLink = page.locator('.prod-cta-download');
+    await expect(downloadLink).toContainText('다운로드');
+    await expect(downloadLink).toHaveAttribute('href', '/tutomate');
   });
 
   test('/tutomate → 홈 back link 동작', async ({ page }) => {
@@ -324,6 +325,34 @@ test.describe('Capabilities', () => {
     const cards = page.locator('[data-cap-card]');
     for (let i = 0; i < 3; i++) {
       const op = await cards.nth(i).evaluate((el) => window.getComputedStyle(el).opacity);
+      expect(parseFloat(op)).toBe(1);
+    }
+    await context.close();
+  });
+});
+
+test.describe('Products', () => {
+  test('Products 정적 구조 — 딥 블랙 + 3 화면', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#products');
+    await expect(section).toBeVisible();
+    await expect(section.locator('.prod-headline')).toContainText('매일 쓰고');
+    await expect(section.locator('[data-prod-screen]')).toHaveCount(3);
+    await expect(section.locator('[data-prod-caption]')).toHaveCount(3);
+    // 다크 배경
+    const bg = await section.evaluate((el) => window.getComputedStyle(el).backgroundColor);
+    expect(bg).toMatch(/rgb\(10,\s*10,\s*10\)/);
+    // CTA 스트립
+    await expect(section.locator('.prod-cta-download')).toContainText('다운로드');
+  });
+
+  test('Products 모바일 — 3 화면 세로 스택', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 800 } });
+    const page = await context.newPage();
+    await page.goto('/');
+    const screens = page.locator('[data-prod-screen]');
+    for (let i = 0; i < 3; i++) {
+      const op = await screens.nth(i).evaluate((el) => window.getComputedStyle(el).opacity);
       expect(parseFloat(op)).toBe(1);
     }
     await context.close();
