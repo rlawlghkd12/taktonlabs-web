@@ -133,24 +133,6 @@ function initHeroSpotlight(): void {
   });
 }
 
-// ========== Process Rail Click Navigation ==========
-
-function initProcessRailNav(): void {
-  const markers = document.querySelectorAll<HTMLButtonElement>('[data-target-step]');
-
-  markers.forEach((marker) => {
-    marker.addEventListener('click', () => {
-      const stepIndex = marker.getAttribute('data-target-step');
-      const target = document.querySelector<HTMLElement>(
-        `[data-process-step][data-step-index="${stepIndex}"]`
-      );
-      if (!target) return;
-
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
-  });
-}
-
 // ========== Export ==========
 
 export function initInteractive(): void {
@@ -158,5 +140,4 @@ export function initInteractive(): void {
   initCardTilt();
   initMagneticButtons();
   initHeroSpotlight();
-  initProcessRailNav();
 }

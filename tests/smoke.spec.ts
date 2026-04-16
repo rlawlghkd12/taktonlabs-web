@@ -302,13 +302,17 @@ test.describe('v2 신규 섹션', () => {
     await expect(principles.nth(2)).toContainText('NO FRICTION LEFT');
   });
 
-  test('Process 섹션 4 단계 렌더링', async ({ page }) => {
+  test('Process 재디자인 — 세로 타임라인', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#process')).toBeVisible();
-    const steps = page.locator('[data-process-step]');
-    await expect(steps).toHaveCount(4);
-    await expect(steps.nth(0)).toContainText('이해');
-    await expect(steps.nth(3)).toContainText('출시는 시작입니다');
+    const section = page.locator('#process');
+    await expect(section).toBeVisible();
+    await expect(section.locator('.proc-headline')).toContainText('지름길은 없습니다');
+    const rows = section.locator('[data-process-step]');
+    await expect(rows).toHaveCount(4);
+    await expect(rows.nth(0)).toContainText('DISCOVER');
+    await expect(rows.nth(3)).toContainText('OPERATE');
+    // 가로 스크롤 트랙 제거 확인
+    await expect(section.locator('.hscroll-track')).toHaveCount(0);
   });
 
   test('Why 섹션 4 카드 렌더링', async ({ page }) => {

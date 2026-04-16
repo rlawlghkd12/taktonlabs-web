@@ -75,9 +75,6 @@ function showAllImmediately(): void {
   gsap.set('[data-phil-principle]', { opacity: 1, y: 0 });
   gsap.set('[data-process-step]', { opacity: 1, y: 0 });
   gsap.set('[data-why-card]', { opacity: 1, y: 0 });
-  // 첫 번째 rail marker 활성
-  const firstMarker = document.querySelector('[data-rail-marker]');
-  if (firstMarker) firstMarker.setAttribute('data-active', 'true');
 }
 
 /**
@@ -389,56 +386,22 @@ function animatePhilosophy(): void {
 }
 
 /**
- * Process 섹션: 데스크톱은 sticky rail 활성 마커 업데이트,
- * 모바일은 step stagger reveal.
- * matchMedia 로 뷰포트 변경 시 자동 전환
+ * Process 섹션: step stagger reveal (세로 타임라인)
  */
 function animateProcessSection(): void {
   const steps = document.querySelectorAll<HTMLElement>('[data-process-step]');
   if (steps.length === 0) return;
 
-  ScrollTrigger.matchMedia({
-    // 모바일: step stagger reveal
-    '(max-width: 1023px)': () => {
-      gsap.from(steps, {
-        y: 32,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '#process',
-          start: 'top 75%',
-          toggleActions: 'play none none reverse',
-        },
-      });
-    },
-
-    // 데스크톱: ScrollTrigger 로 각 step 활성화 시 rail marker 하이라이트
-    '(min-width: 1024px)': () => {
-      const markers = document.querySelectorAll<HTMLElement>('[data-rail-marker]');
-
-      steps.forEach((step, i) => {
-        ScrollTrigger.create({
-          trigger: step,
-          start: 'top 60%',
-          end: 'bottom 60%',
-          onEnter: () => activateMarker(i),
-          onEnterBack: () => activateMarker(i),
-        });
-      });
-
-      function activateMarker(index: number): void {
-        markers.forEach((marker, i) => {
-          if (i === index) {
-            marker.setAttribute('data-active', 'true');
-          } else {
-            marker.removeAttribute('data-active');
-          }
-        });
-      }
-
-      if (markers[0]) markers[0].setAttribute('data-active', 'true');
+  gsap.from(steps, {
+    y: 32,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.12,
+    ease: 'power3.out',
+    scrollTrigger: {
+      trigger: '#process',
+      start: 'top 75%',
+      toggleActions: 'play none none reverse',
     },
   });
 }
