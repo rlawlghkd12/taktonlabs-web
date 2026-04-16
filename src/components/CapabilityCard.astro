@@ -134,4 +134,56 @@ const { capability: c, index } = Astro.props;
     .cc[data-index] { opacity: 1 !important; }
     .cc-right .proof { max-width: 480px; }
   }
+
+  /* Docked state — card takes on dock-slot inline layout */
+  .cc[data-docked='true'] {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 0 16px !important;
+    grid-template-columns: none !important;
+  }
+  .cc[data-docked='true'] .cc-left {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  .cc[data-docked='true'] .cc-num {
+    margin: 0 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    color: var(--text-muted) !important;
+    -webkit-text-stroke: 0 !important;
+    letter-spacing: 0.05em !important;
+    font-family: var(--font-mono) !important;
+  }
+  .cc[data-docked='true'] .cc-title {
+    margin: 0 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.01em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .cc[data-docked='true'] .cc-desc,
+  .cc[data-docked='true'] .cc-principles,
+  .cc[data-docked='true'] .cc-right {
+    display: none !important;
+  }
+  .cc[data-docked='true']::after {
+    content: '✓';
+    font-size: 11px;
+    color: var(--text-muted);
+    opacity: 0.5;
+    flex-shrink: 0;
+  }
 </style>

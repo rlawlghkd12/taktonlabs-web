@@ -52,6 +52,7 @@ export async function initCapabilitiesMorph(): Promise<void> {
   gsap.set(cards[1], { opacity: 0, y: 20 });
   gsap.set(cards[2], { opacity: 0, y: 20 });
   gsap.set(docks, { opacity: 0 });
+  cards.forEach((c) => { c.dataset.docked = 'false'; });
 
   // pin 섹션 높이 설정
   section.style.height = '300vh';
@@ -114,11 +115,18 @@ export async function initCapabilitiesMorph(): Promise<void> {
       undefined,
       bigEnd,
     );
-    // 내부 요소 축소 — font-size 보간
-    tl.to(card.querySelector('.cc-num'), { fontSize: 16, duration: shrinkEnd - bigEnd, ease: EASE.expo }, bigEnd);
-    tl.to(card.querySelector('.cc-title'), { fontSize: 13, duration: shrinkEnd - bigEnd, ease: EASE.expo }, bigEnd);
-    // 설명/프루프 먼저 접힘
-    tl.to(card.querySelectorAll('.cc-desc, .cc-principles, .cc-right'), { opacity: 0, maxHeight: 0, duration: (shrinkEnd - bigEnd) * 0.6, ease: EASE.detail }, bigEnd - 0.02);
+    // 설명·프루프 먼저 페이드 (박스 모프보다 약간 선행)
+    tl.to(
+      card.querySelectorAll('.cc-desc, .cc-principles, .cc-right'),
+      { opacity: 0, duration: (shrinkEnd - bigEnd) * 0.5, ease: EASE.detail },
+      bigEnd - 0.02,
+    );
+    // 착지 시점에 docked 상태로 전환 / 되돌릴 때 해제
+    tl.to({}, {
+      duration: 0.01,
+      onStart: () => { card.dataset.docked = 'true'; },
+      onReverseComplete: () => { card.dataset.docked = 'false'; },
+    }, shrinkEnd);
     // dock slot 표시 (완료 직후)
     tl.to(docks[idx], { opacity: 1, duration: 0.15, ease: EASE.smooth }, shrinkEnd);
   }
