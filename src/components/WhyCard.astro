@@ -1,5 +1,4 @@
 ---
-import { Icon } from 'astro-icon/components';
 import type { WhyPromise } from '../data/why';
 
 interface Props {
@@ -11,9 +10,6 @@ const { promise } = Astro.props;
 
 <article class="why-card" data-why-card>
   <div class="card-header">
-    <div class="icon-wrap">
-      <Icon name={promise.iconName} width={22} height={22} />
-    </div>
     <span class="card-index">{promise.index}</span>
   </div>
   <h3 class="card-title">{promise.title}</h3>
@@ -39,11 +35,6 @@ const { promise } = Astro.props;
       box-shadow: 0 16px 32px rgba(10, 25, 41, 0.1);
       transform: translate3d(0, -4px, 0);
     }
-
-    .why-card:hover .icon-wrap {
-      background: var(--color-accent);
-      color: #fff;
-    }
   }
 
   .card-header {
@@ -51,20 +42,6 @@ const { promise } = Astro.props;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-  }
-
-  .icon-wrap {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: rgba(8, 145, 178, 0.08);
-    color: var(--color-accent);
-    border-radius: var(--radius-md);
-    transition:
-      background-color 0.4s var(--ease-in-out),
-      color 0.4s var(--ease-in-out);
   }
 
   .card-index {
