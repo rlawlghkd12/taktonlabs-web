@@ -2,95 +2,31 @@
 import WhyCard from './WhyCard.astro';
 import { whyPromises } from '../data/why';
 ---
-
 <section id="why" class="why" aria-labelledby="why-title">
   <div class="why-inner">
-    <div class="why-header">
-      <p class="label">Why Takton Labs · 왜 우리인가</p>
-      <h2 id="why-title" class="title">네 가지 약속</h2>
-      <p class="subcopy">외주가 무서웠던 분들을 위한 준비된 답변입니다.</p>
-    </div>
-    <div class="card-grid">
+    <div class="why-eyebrow">05 &nbsp;&nbsp; WHY TAKTON</div>
+    <h2 id="why-title" class="why-headline">네 가지 약속.</h2>
+    <p class="why-subcopy">우리가 반드시 지키는 네 가지.</p>
+    <div class="why-grid">
       {whyPromises.map((promise) => <WhyCard promise={promise} />)}
     </div>
+    <p class="why-closing">네 가지가 같이 지켜질 때만 "외주가 성공"이라 말할 수 있습니다.</p>
   </div>
 </section>
-
 <style>
-  .why {
-    background: var(--color-bg);
-    padding: 96px 24px;
+  .why { padding: var(--section-pad-y) var(--section-pad-x); background: var(--bg-primary); color: var(--text-primary); }
+  .why-inner { max-width: var(--container-wide); margin: 0 auto; }
+  .why-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: var(--tracking-eyebrow); color: var(--text-muted); margin-bottom: 24px; }
+  .why-headline { font-size: clamp(40px, 5vw, 56px); font-weight: 600; letter-spacing: -0.04em; line-height: 1; margin: 0 0 12px; }
+  .why-subcopy { font-size: 15px; line-height: 1.7; color: var(--text-secondary); margin: 0 0 56px; max-width: 540px; }
+  .why-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border-top: 1px solid var(--hairline-strong);
+    border-bottom: 1px solid var(--hairline-strong);
   }
-
-  .why-inner {
-    max-width: var(--container-wide);
-    margin: 0 auto;
-  }
-
-  .why-header {
-    text-align: center;
-    margin-bottom: 56px;
-    max-width: var(--container-narrow);
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .label {
-    display: inline-block;
-    font-family: var(--font-display-latin);
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
-    margin: 0 0 12px;
-  }
-
-  .title {
-    font-size: clamp(26px, 4.2vw, 44px);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--color-text);
-    margin: 0 0 12px;
-    line-height: 1.15;
-  }
-
-  .subcopy {
-    font-size: clamp(15px, 1.3vw, 19px);
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  .card-grid {
-    max-width: var(--container-grid);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-
-  @media (max-width: 640px) {
-    .why {
-      padding: 72px 20px;
-    }
-
-    .why-header {
-      margin-bottom: 40px;
-    }
-
-    .card-grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .why {
-      padding: 160px 32px;
-    }
-
-    .card-grid {
-      gap: 32px;
-    }
+  .why-closing { margin-top: 40px; font-size: 15px; color: var(--text-secondary); max-width: 600px; }
+  @media (max-width: 768px) {
+    .why { padding: 72px var(--section-pad-x-sm); }
+    .why-grid { grid-template-columns: 1fr; }
   }
 </style>

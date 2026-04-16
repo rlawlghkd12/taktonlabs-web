@@ -1,85 +1,36 @@
 ---
 import type { WhyPromise } from '../data/why';
-
-interface Props {
-  promise: WhyPromise;
-}
-
+interface Props { promise: WhyPromise; }
 const { promise } = Astro.props;
+const oddIndex = ['01', '03'].includes(promise.index);
 ---
-
-<article class="why-card" data-why-card>
-  <div class="card-header">
-    <span class="card-index">{promise.index}</span>
+<div class="why-card" data-why-card data-position={oddIndex ? 'left' : 'right'}>
+  <div class="why-card-top">
+    <div class="why-card-tag">{promise.index} · {promise.category}</div>
+    <div class="why-card-arrow" aria-hidden="true">↗</div>
   </div>
-  <h3 class="card-title">{promise.title}</h3>
-  <p class="card-body">{promise.body}</p>
-</article>
-
+  <h3 class="why-card-title">{promise.title}.</h3>
+  <p class="why-card-body">{promise.body}</p>
+</div>
 <style>
   .why-card {
-    padding: 32px;
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-lg);
-    transition:
-      border-color 0.4s var(--ease-in-out),
-      box-shadow 0.6s var(--ease-smooth),
-      transform 0.6s var(--ease-smooth);
-    will-change: transform;
+    padding: 48px 40px 48px 0;
+    border-bottom: 1px solid var(--hairline);
+    transition: transform 0.25s var(--ease-smooth);
   }
-
-  @media (hover: hover) and (pointer: fine) {
-    .why-card:hover {
-      border-color: var(--color-accent);
-      box-shadow: 0 16px 32px rgba(10, 25, 41, 0.1);
-      transform: translate3d(0, -4px, 0);
-    }
-  }
-
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-
-  .card-index {
-    font-family: var(--font-display-latin);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-text-tertiary);
-    letter-spacing: 0.1em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .card-title {
-    font-size: 19px;
-    font-weight: 800;
-    letter-spacing: -0.015em;
-    color: var(--color-text);
-    margin: 0 0 12px;
-    line-height: 1.3;
-  }
-
-  .card-body {
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  @media (min-width: 1536px) {
-    .why-card {
-      padding: 40px;
-    }
-
-    .card-title {
-      font-size: 21px;
-    }
-
-    .card-body {
-      font-size: 15px;
-    }
+  .why-card[data-position='right'] { padding: 48px 0 48px 40px; }
+  .why-card[data-position='left'] { border-right: 1px solid var(--hairline); }
+  .why-card:nth-last-child(-n+2) { border-bottom: none; }
+  .why-card:hover { transform: translateY(-2px); }
+  .why-card-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+  .why-card-tag { font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); }
+  .why-card-arrow { font-size: 16px; color: var(--text-muted); opacity: 0.5; transition: opacity 0.25s; }
+  .why-card:hover .why-card-arrow { opacity: 0.9; }
+  .why-card-title { font-size: 28px; font-weight: 600; letter-spacing: -0.025em; line-height: 1.2; margin: 0 0 18px; }
+  .why-card-body { font-size: 14px; line-height: 1.75; color: var(--text-secondary); margin: 0; }
+  @media (max-width: 768px) {
+    .why-card, .why-card[data-position='right'] { padding: 36px 0; }
+    .why-card[data-position='left'] { border-right: none; }
+    .why-card-title { font-size: 24px; }
   }
 </style>

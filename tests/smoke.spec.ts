@@ -315,13 +315,19 @@ test.describe('v2 신규 섹션', () => {
     await expect(section.locator('.hscroll-track')).toHaveCount(0);
   });
 
-  test('Why 섹션 4 카드 렌더링', async ({ page }) => {
+  test('Why 재디자인 — 2×2 그리드', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#why')).toBeVisible();
-    const cards = page.locator('[data-why-card]');
+    const section = page.locator('#why');
+    await expect(section).toBeVisible();
+    await expect(section.locator('.why-headline')).toContainText('네 가지 약속.');
+    await expect(section.locator('.why-subcopy')).toContainText('우리가 반드시 지키는 네 가지');
+    const cards = section.locator('[data-why-card]');
     await expect(cards).toHaveCount(4);
+    await expect(cards.nth(0)).toContainText('지속성');
     await expect(cards.nth(0)).toContainText('만든 사람이 끝까지');
-    await expect(cards.nth(3)).toContainText('물어볼 곳이 있다는 안심');
+    await expect(cards.nth(1)).toContainText('개방성');
+    await expect(cards.nth(2)).toContainText('투명성');
+    await expect(cards.nth(3)).toContainText('접근성');
   });
 
   test('FAQ 아코디언 동작', async ({ page }) => {
