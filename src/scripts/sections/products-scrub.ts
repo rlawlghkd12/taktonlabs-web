@@ -6,13 +6,30 @@ export async function initProductsScrub(): Promise<void> {
   if (!section) return;
 
   if (prefersReducedMotion() || !isDesktopViewport()) {
-    // 모바일 / reduced-motion: 3 화면 모두 세로로 펼치기
+    const pin = section.querySelector<HTMLElement>('.prod-pin');
+    if (pin) {
+      pin.style.position = 'static';
+      pin.style.height = 'auto';
+      pin.style.minHeight = 'auto';
+    }
+    // 모든 화면·캡션 펼치기
     section.querySelectorAll<HTMLElement>('[data-prod-screen]').forEach((el) => {
-      el.style.opacity = '1';
       el.style.position = 'relative';
       el.style.inset = 'auto';
+      el.style.opacity = '1';
+      el.style.transform = 'none';
     });
-    section.querySelectorAll<HTMLElement>('[data-prod-caption]').forEach((el) => { el.style.opacity = '1'; el.style.position = 'relative'; });
+    section.querySelectorAll<HTMLElement>('[data-prod-caption]').forEach((el) => {
+      el.style.position = 'relative';
+      el.style.inset = 'auto';
+      el.style.opacity = '1';
+    });
+    // 인디케이터·progress bar 숨김
+    const indicators = section.querySelector<HTMLElement>('.prod-indicators');
+    if (indicators) indicators.style.display = 'none';
+    section.querySelectorAll<HTMLElement>('.prod-progress .seg').forEach((el) => {
+      el.dataset.filled = 'true';
+    });
     return;
   }
 

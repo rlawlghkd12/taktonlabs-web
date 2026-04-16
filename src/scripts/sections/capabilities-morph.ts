@@ -8,12 +8,34 @@ export async function initCapabilitiesMorph(): Promise<void> {
   if (!section) return;
 
   if (prefersReducedMotion() || !isDesktopViewport()) {
-    // 최종 상태로 즉시 노출 — 3 카드 모두 보이고 docked
+    // Fallback: sticky pin 해제, dock bar 숨김, 3 카드를 세로 스택으로 자연스럽게 노출
+    const pin = section.querySelector<HTMLElement>('.cap-pin');
+    if (pin) {
+      pin.style.position = 'static';
+      pin.style.height = 'auto';
+      pin.style.minHeight = 'auto';
+    }
+    const dockBar = section.querySelector<HTMLElement>('.cap-dock-bar');
+    if (dockBar) dockBar.style.display = 'none';
+
+    const stage = section.querySelector<HTMLElement>('[data-cap-stage]');
+    if (stage) {
+      stage.style.position = 'static';
+      stage.style.display = 'flex';
+      stage.style.flexDirection = 'column';
+      stage.style.gap = '24px';
+      stage.style.minHeight = 'auto';
+    }
+
     section.querySelectorAll<HTMLElement>('[data-cap-card]').forEach((el) => {
-      el.style.opacity = '1';
       el.style.position = 'relative';
+      el.style.inset = 'auto';
+      el.style.opacity = '1';
+      el.style.top = 'auto';
+      el.style.left = 'auto';
+      el.style.width = 'auto';
+      el.style.height = 'auto';
     });
-    section.querySelectorAll<HTMLElement>('[data-cap-dock]').forEach((el) => el.style.opacity = '1');
     return;
   }
 
@@ -24,6 +46,12 @@ export async function initCapabilitiesMorph(): Promise<void> {
   const progressSegs = Array.from(section.querySelectorAll<HTMLElement>('.cap-progress-seg'));
   const activeTitleEl = section.querySelector<HTMLElement>('[data-cap-active-title]');
   const titles = ['01 · 웹 · 모바일 제품', '02 · 데스크톱 앱', '03 · B2B 맞춤 개발'];
+
+  // Initial state lock — 01 visible, 02/03 hidden, docks hidden
+  gsap.set(cards[0], { opacity: 1, top: 0, left: 0, width: '100%', height: 'auto' });
+  gsap.set(cards[1], { opacity: 0, y: 20 });
+  gsap.set(cards[2], { opacity: 0, y: 20 });
+  gsap.set(docks, { opacity: 0 });
 
   // pin 섹션 높이 설정
   section.style.height = '300vh';
