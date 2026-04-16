@@ -397,6 +397,24 @@ test.describe('v2 신규 섹션', () => {
     expect(types).toContain('FAQPage');
   });
 
+  test('Footer 재디자인 — 3칼럼 + 법적 한 줄', async ({ page }) => {
+    await page.goto('/');
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+    // 3 cols
+    await expect(footer.locator('.footer-col')).toHaveCount(3);
+    await expect(footer).toContainText('TutorMate');
+    await expect(footer).toContainText('핵심 역량');
+    await expect(footer).toContainText('hello@taktonlabs.com');
+    // 법적 한 줄
+    await expect(footer.locator('.footer-legal')).toContainText('325-10-03297');
+    await expect(footer.locator('.footer-legal')).toContainText('경남 양산');
+    // 대형 워드마크 없음
+    await expect(footer.locator('.footer-wordmark')).toHaveCount(0);
+    // 카피라이트
+    await expect(footer).toContainText('© 2026 Takton Labs');
+  });
+
   test('Geist 폰트 로드 확인', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');

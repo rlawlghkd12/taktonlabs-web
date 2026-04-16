@@ -1,311 +1,105 @@
 ---
-import { Icon } from 'astro-icon/components';
-
-const productLinks = [
+const products = [
   { label: 'TutorMate', href: '/tutomate', sub: '기본 버전' },
   { label: 'TutorMate Q', href: '/tutomate/q', sub: 'Q 버전', highlightQ: true },
 ];
-
-const companyLinks = [
+const site = [
   { label: '핵심 역량', href: '/#capabilities' },
   { label: '제품', href: '/#products' },
   { label: '문의하기', href: '/#contact' },
   { label: '이용약관', href: '/terms' },
   { label: '개인정보처리방침', href: '/privacy' },
 ];
-
-const contactItems = [
-  {
-    icon: 'lucide:mail',
-    label: 'hello@taktonlabs.com',
-    href: 'mailto:hello@taktonlabs.com',
-  },
-  {
-    icon: 'lucide:mail',
-    label: 'support@taktonlabs.com',
-    href: 'mailto:support@taktonlabs.com',
-  },
+const contacts = [
+  { tag: 'GENERAL', label: 'hello@taktonlabs.com', href: 'mailto:hello@taktonlabs.com' },
+  { tag: 'SUPPORT', label: 'support@taktonlabs.com', href: 'mailto:support@taktonlabs.com' },
+  { tag: 'KAKAO', label: '@taktonlabs', href: '#' },
 ];
 ---
-
 <footer class="footer">
   <div class="footer-inner">
-    <!-- Single-row: 4 columns (legal + 3 link cols) -->
     <div class="footer-cols">
-      <!-- Col 1: 사업자 정보 -->
-      <section class="col legal-col">
-        <h3 class="col-title">사업자 정보</h3>
-        <dl class="legal-list">
-          <div class="legal-row">
-            <dt>상호</dt>
-            <dd>텍톤랩스 (Takton Labs)</dd>
-          </div>
-          <div class="legal-row">
-            <dt>대표</dt>
-            <dd>김상철</dd>
-          </div>
-          <div class="legal-row">
-            <dt>사업자등록번호</dt>
-            <dd>325-10-03297</dd>
-          </div>
-          <div class="legal-row">
-            <dt>주소</dt>
-            <dd>경상남도 양산시 하북면 신평로 18, 1층</dd>
-          </div>
-        </dl>
-        <p class="copyright">© 2026 Takton Labs. All rights reserved.</p>
-      </section>
-
-      <!-- Col 2: 제품 -->
-      <section class="col">
-        <h3 class="col-title">제품</h3>
-        <ul class="col-list">
-          {
-            productLinks.map((link) => (
-              <li>
-                <a href={link.href}>
-                  <span class="link-main">
-                    {link.highlightQ
-                      ? <>TutorMate <span class="q-accent">Q</span></>
-                      : link.label}
-                  </span>
-                  {link.sub && <span class="link-sub">{link.sub}</span>}
-                </a>
-              </li>
-            ))
-          }
+      <section class="footer-col">
+        <div class="footer-col-tag">PRODUCTS · 제품</div>
+        <ul>
+          {products.map((p) => (
+            <li>
+              <a href={p.href}>
+                <span class="main">
+                  {p.highlightQ ? <>TutorMate <span class="q">Q</span></> : p.label}
+                </span>
+                {p.sub && <span class="sub">{p.sub}</span>}
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
-
-      <!-- Col 3: 회사 -->
-      <section class="col">
-        <h3 class="col-title">회사</h3>
-        <ul class="col-list">
-          {
-            companyLinks.map((link) => (
-              <li>
-                <a href={link.href}>
-                  <span class="link-main">{link.label}</span>
-                </a>
-              </li>
-            ))
-          }
+      <section class="footer-col">
+        <div class="footer-col-tag">SITE · 바로가기</div>
+        <ul>
+          {site.map((s) => <li><a href={s.href}>{s.label}</a></li>)}
         </ul>
       </section>
-
-      <!-- Col 4: 연락처 -->
-      <section class="col">
-        <h3 class="col-title">연락처</h3>
-        <ul class="col-list">
-          {
-            contactItems.map((item) => (
-              <li>
-                <a href={item.href} class="contact-link">
-                  <Icon name={item.icon} width={14} height={14} />
-                  <span>{item.label}</span>
-                </a>
-              </li>
-            ))
-          }
+      <section class="footer-col">
+        <div class="footer-col-tag">CONTACT · 연락</div>
+        <ul>
+          {contacts.map((c) => (
+            <li>
+              <div class="contact-tag">{c.tag}</div>
+              <a href={c.href} class="contact-link">{c.label}</a>
+            </li>
+          ))}
         </ul>
       </section>
     </div>
-
+    <div class="footer-legal">
+      텍톤랩스 &nbsp;·&nbsp; 대표 김상철 &nbsp;·&nbsp; 사업자등록번호 325-10-03297 &nbsp;·&nbsp; 경남 양산시 하북면 신평로 18, 1층
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 Takton Labs. All rights reserved.</div>
+      <div class="footer-bottom-right">
+        <span>제품을 만듭니다. 끝까지.</span>
+        <span class="mono">EST. 2024</span>
+      </div>
+    </div>
   </div>
 </footer>
-
 <style>
-  .footer {
-    position: relative;
-    background: var(--color-bg-alt);
-    border-top: 1px solid var(--color-border-soft);
-  }
-
-  .footer::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(8, 145, 178, 0.25),
-      transparent
-    );
-    pointer-events: none;
-  }
-
-  .footer-inner {
-    max-width: var(--container-wide);
-    margin: 0 auto;
-    padding: 72px 24px 56px;
-  }
-
-  /* ============ 4 column single row ============ */
-  .footer-cols {
-    display: grid;
-    grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
-    gap: 48px;
-  }
-
-  .col {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .col-title {
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--color-accent);
-    margin: 0 0 8px;
-    line-height: 1.1;
-  }
-
-  /* ============ Col 1: Legal list (color toned down, sizes kept) ============ */
-  .legal-col .col-title {
-    color: var(--color-text-tertiary);
-  }
-
-  .legal-list {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .legal-row {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin: 0;
-    line-height: 1.15;
-  }
-
-  .legal-row dt {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-text-tertiary);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    line-height: 1.2;
-  }
-
-  .legal-row dd {
-    margin: 0;
-    font-size: 14px;
-    color: var(--color-text-secondary);
-    font-weight: 400;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: -0.005em;
-    line-height: 1.25;
-  }
-
-  /* ============ Col 2-4: Link lists ============ */
-  .col-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    line-height: 1.2;
-  }
-
-  .col-list li {
-    line-height: 1.2;
-  }
-
-  .col-list a {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 8px;
-    color: var(--color-text);
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    line-height: 1.2;
-    transition: color 0.3s var(--ease-in-out);
-  }
-
-  .col-list a:hover {
-    color: var(--color-accent);
-  }
-
-  .q-accent {
-    color: var(--color-accent);
-  }
-
-  .link-sub {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--color-text-tertiary);
+  .footer { padding: 72px var(--section-pad-x) 32px; background: var(--bg-primary); color: var(--text-primary); }
+  .footer-inner { max-width: var(--container-wide); margin: 0 auto; }
+  .footer-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 48px; padding-bottom: 40px; border-bottom: 1px solid var(--hairline); }
+  .footer-col-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: var(--tracking-mono-label); color: var(--text-muted); margin-bottom: 20px; }
+  .footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+  .footer-col a { color: var(--text-primary); text-decoration: none; opacity: 0.78; transition: opacity 0.2s; }
+  .footer-col a:hover { opacity: 1; }
+  .footer-col .main { font-size: 15px; font-weight: 500; letter-spacing: -0.01em; display: block; }
+  .footer-col .main .q { color: var(--accent-q-blue); }
+  .footer-col .sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; display: block; }
+  .contact-tag { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
+  .contact-link { font-size: 13px; border-bottom: 1px solid var(--hairline); padding-bottom: 1px; display: inline-block; }
+  .footer-legal {
+    padding: 20px 0 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
     letter-spacing: 0.02em;
+    color: var(--text-secondary);
+    opacity: 0.6;
+    line-height: 1.8;
   }
-
-  .contact-link {
-    font-variant-numeric: tabular-nums;
+  .footer-bottom {
+    padding-top: 16px;
+    border-top: 1px solid var(--hairline-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--text-muted);
   }
-
-  .contact-link svg {
-    flex-shrink: 0;
-    color: var(--color-text-tertiary);
-    transition: color 0.3s var(--ease-in-out);
-    transform: translateY(1px);
-  }
-
-  .contact-link:hover svg {
-    color: var(--color-accent);
-  }
-
-  /* ============ Copyright (under 사업자 정보) ============ */
-  .copyright {
-    margin: 12px 0 0;
-    font-size: 14px;
-    color: var(--color-text-tertiary);
-    letter-spacing: 0.01em;
-    line-height: 1.2;
-  }
-
-  /* ============ Responsive ============ */
-  @media (max-width: 1024px) {
-    .footer-cols {
-      grid-template-columns: 1fr 1fr;
-      gap: 40px 32px;
-    }
-
-    .legal-col {
-      grid-column: span 2;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .footer-inner {
-      padding: 56px 20px 40px;
-    }
-
-    .footer-cols {
-      grid-template-columns: 1fr;
-      gap: 32px;
-    }
-
-    .legal-col {
-      grid-column: auto;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .footer-inner {
-      padding: 96px 32px 72px;
-    }
-
-    .footer-cols {
-      gap: 72px;
-    }
+  .footer-bottom-right { display: flex; gap: 16px; }
+  .footer-bottom-right .mono { font-family: var(--font-mono); }
+  @media (max-width: 768px) {
+    .footer { padding: 56px var(--section-pad-x-sm) 24px; }
+    .footer-cols { grid-template-columns: 1fr; gap: 32px; }
+    .footer-bottom { flex-direction: column; gap: 8px; align-items: flex-start; }
   }
 </style>
