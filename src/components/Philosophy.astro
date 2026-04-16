@@ -1,133 +1,55 @@
 ---
-import PhilosophyCard from './PhilosophyCard.astro';
-import { philosophyValues } from '../data/philosophy';
+const principles = [
+  { tag: '01 · ONE TEAM', line1: '설계·개발·운영을', line2: '한 팀이 전담합니다.' },
+  { tag: '02 · IN THE FIELD', line1: '쓰이는 장면을', line2: '직접 보고 고칩니다.' },
+  { tag: '03 · NO FRICTION LEFT', line1: '작은 마찰까지 오래', line2: '남겨두지 않습니다.' },
+];
 ---
-
-<section id="philosophy" class="philosophy" aria-labelledby="philosophy-title">
-  <div class="philosophy-inner">
-    <div class="philosophy-header">
-      <p class="label">Philosophy · 세 가지 약속</p>
-      <h2 id="philosophy-title" class="title">빈틈없는 소프트웨어의 기준</h2>
-      <p class="subcopy">우리가 일하는 이유이자 기준입니다.</p>
-    </div>
-    <div class="card-grid">
-      {philosophyValues.map((value) => <PhilosophyCard value={value} />)}
+<section id="philosophy" class="phil">
+  <div class="phil-inner">
+    <div class="phil-eyebrow">02 &nbsp;&nbsp; PHILOSOPHY</div>
+    <h2 class="phil-headline">
+      <span>쓰이는 소프트웨어가</span>
+      <span class="highlight">오래 쓰이는</span>
+      <span>소프트웨어입니다.</span>
+    </h2>
+    <div class="phil-grid">
+      {principles.map((p) => (
+        <div class="phil-principle" data-phil-principle>
+          <div class="phil-principle-tag">{p.tag}</div>
+          <div class="phil-principle-line">{p.line1}<br />{p.line2}</div>
+        </div>
+      ))}
     </div>
   </div>
 </section>
-
 <style>
-  .philosophy {
-    background: var(--color-bg);
-    padding: 96px 24px;
-    position: relative;
+  .phil { padding: var(--section-pad-y) var(--section-pad-x); background: var(--bg-primary); color: var(--text-primary); }
+  .phil-inner { max-width: var(--container-wide); margin: 0 auto; }
+  .phil-eyebrow {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: var(--tracking-eyebrow); color: var(--text-muted);
+    margin-bottom: 32px;
   }
-
-  .philosophy::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(8, 145, 178, 0.2),
-      transparent
-    );
+  .phil-headline {
+    font-size: clamp(44px, 7vw, 80px); font-weight: 600;
+    letter-spacing: var(--tracking-headline); line-height: 1.02;
+    max-width: 1100px; margin: 0 0 72px;
   }
-
-  .philosophy-inner {
-    max-width: var(--container-wide);
-    margin: 0 auto;
+  .phil-headline .highlight {
+    background: linear-gradient(180deg, transparent 68%, var(--accent-highlight) 68%, var(--accent-highlight) 92%, transparent 92%);
+    padding: 0 6px;
   }
-
-  .philosophy-header {
-    text-align: center;
-    margin-bottom: 56px;
-    max-width: var(--container-narrow);
-    margin-left: auto;
-    margin-right: auto;
+  .phil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding-top: 28px; border-top: 1px solid var(--hairline-strong); }
+  .phil-principle-tag {
+    font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: var(--tracking-mono-label); color: var(--text-muted);
+    margin-bottom: 10px;
   }
-
-  .label {
-    display: inline-block;
-    font-family: var(--font-display-latin);
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
-    margin: 0 0 12px;
-  }
-
-  .title {
-    font-size: clamp(26px, 4.2vw, 44px);
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--color-text);
-    margin: 0 0 12px;
-    line-height: 1.15;
-  }
-
-  .subcopy {
-    font-size: clamp(15px, 1.3vw, 19px);
-    color: var(--color-text-secondary);
-    margin: 0;
-  }
-
-  .card-grid {
-    max-width: var(--container-grid);
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  @media (max-width: 1024px) {
-    .card-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .card-grid > :last-child {
-      grid-column: span 2;
-      max-width: calc(50% - 12px);
-      margin: 0 auto;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .philosophy {
-      padding: 72px 20px;
-    }
-
-    .philosophy-header {
-      margin-bottom: 40px;
-    }
-
-    .card-grid {
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-
-    .card-grid > :last-child {
-      grid-column: auto;
-      max-width: none;
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .philosophy {
-      padding: 160px 32px;
-    }
-
-    .philosophy-header {
-      margin-bottom: 72px;
-    }
-
-    .card-grid {
-      gap: 32px;
-    }
+  .phil-principle-line { font-size: 14px; line-height: 1.65; color: var(--text-primary); }
+  @media (max-width: 768px) {
+    .phil { padding: 72px var(--section-pad-x-sm); }
+    .phil-headline { font-size: 38px; margin-bottom: 48px; }
+    .phil-grid { grid-template-columns: 1fr; gap: 24px; }
   }
 </style>

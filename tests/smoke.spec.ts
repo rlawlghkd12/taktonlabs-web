@@ -288,14 +288,18 @@ test.describe('TutorMate Q 다운로드 페이지', () => {
 });
 
 test.describe('v2 신규 섹션', () => {
-  test('Philosophy 섹션 3 카드 렌더링', async ({ page }) => {
+  test('Philosophy 재디자인 렌더링', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#philosophy')).toBeVisible();
-    const cards = page.locator('[data-philosophy-card]');
-    await expect(cards).toHaveCount(3);
-    await expect(cards.nth(0)).toContainText('튼튼한 장부처럼');
-    await expect(cards.nth(1)).toContainText('한눈에 보이는 지표');
-    await expect(cards.nth(2)).toContainText('함께 성장하는 파트너');
+    const section = page.locator('#philosophy');
+    await expect(section).toBeVisible();
+    await expect(section.locator('.phil-eyebrow')).toContainText('PHILOSOPHY');
+    await expect(section.locator('.phil-headline')).toContainText('쓰이는 소프트웨어');
+    await expect(section.locator('.phil-headline .highlight')).toContainText('오래 쓰이는');
+    const principles = section.locator('[data-phil-principle]');
+    await expect(principles).toHaveCount(3);
+    await expect(principles.nth(0)).toContainText('ONE TEAM');
+    await expect(principles.nth(1)).toContainText('IN THE FIELD');
+    await expect(principles.nth(2)).toContainText('NO FRICTION LEFT');
   });
 
   test('Process 섹션 4 단계 렌더링', async ({ page }) => {

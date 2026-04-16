@@ -72,8 +72,7 @@ function showAllImmediately(): void {
   // Reveal 대상
   gsap.set('[data-reveal]', { opacity: 1, y: 0 });
   // v2 신규
-  gsap.set('[data-philosophy-card]', { opacity: 1, y: 0 });
-  gsap.set('[data-philosophy-highlight] .underline', { scaleX: 1 });
+  gsap.set('[data-phil-principle]', { opacity: 1, y: 0 });
   gsap.set('[data-process-step]', { opacity: 1, y: 0 });
   gsap.set('[data-why-card]', { opacity: 1, y: 0 });
   // 첫 번째 rail marker 활성
@@ -369,13 +368,13 @@ function animateContact(): void {
 }
 
 /**
- * Philosophy 섹션: 카드 stagger reveal + 핵심 단어 밑줄 draw-in
+ * Philosophy 섹션: 원칙 stagger reveal
  */
 function animatePhilosophy(): void {
-  const cards = document.querySelectorAll('[data-philosophy-card]');
-  if (cards.length === 0) return;
+  const principles = document.querySelectorAll('[data-phil-principle]');
+  if (principles.length === 0) return;
 
-  gsap.from(cards, {
+  gsap.from(principles, {
     y: 24,
     opacity: 0,
     duration: 0.8,
@@ -386,24 +385,6 @@ function animatePhilosophy(): void {
       start: 'top 75%',
       toggleActions: 'play none none reverse',
     },
-  });
-
-  // 강조 단어 밑줄 draw-in
-  const highlights = document.querySelectorAll<HTMLElement>(
-    '[data-philosophy-highlight] .underline'
-  );
-  highlights.forEach((underline) => {
-    gsap.to(underline, {
-      scaleX: 1,
-      duration: 0.6,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: underline,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
-      },
-      delay: 0.3,
-    });
   });
 }
 

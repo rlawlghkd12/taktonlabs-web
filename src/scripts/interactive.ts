@@ -53,7 +53,7 @@ function initCardTilt(): void {
   if (!hasHover()) return;
 
   const cards = document.querySelectorAll<HTMLElement>(
-    '[data-philosophy-card], [data-why-card], .capability-card'
+    '[data-why-card], .capability-card'
   );
 
   cards.forEach((card) => {
