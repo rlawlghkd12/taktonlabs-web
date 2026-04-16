@@ -321,7 +321,7 @@ test.describe('v2 신규 섹션', () => {
     const cards = page.locator('[data-why-card]');
     await expect(cards).toHaveCount(4);
     await expect(cards.nth(0)).toContainText('만든 사람이 끝까지');
-    await expect(cards.nth(3)).toContainText('소스코드 완전 양도');
+    await expect(cards.nth(3)).toContainText('물어볼 곳이 있다는 안심');
   });
 
   test('FAQ 아코디언 동작', async ({ page }) => {
@@ -329,7 +329,7 @@ test.describe('v2 신규 섹션', () => {
     await expect(page.locator('#faq')).toBeVisible();
 
     const items = page.locator('[data-faq-item]');
-    await expect(items).toHaveCount(6);
+    await expect(items).toHaveCount(5);
 
     const firstItem = items.nth(0);
     const firstTrigger = firstItem.locator('[data-faq-trigger]');
