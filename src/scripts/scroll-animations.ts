@@ -60,8 +60,11 @@ export function initScrollAnimations(): void {
  * reduced-motion 폴백: 숨겨진 요소들을 즉시 표시.
  */
 function showAllImmediately(): void {
-  // Hero 단어
-  gsap.set('.word', { opacity: 1, y: 0, filter: 'blur(0px)' });
+  // Hero 단어 (word-muted는 CSS opacity: 0.3 유지)
+  document.querySelectorAll<HTMLElement>('#hero .word').forEach((el) => {
+    el.style.opacity = '';
+    el.style.transform = '';
+  });
   // 앱 윈도우
   gsap.set('[data-window]', { opacity: 1, scale: 1 });
   // 민트 라인
@@ -79,56 +82,22 @@ function showAllImmediately(): void {
 }
 
 /**
- * Hero: 블러 리빌 + 서브카피/CTA stagger (프리미엄 연출)
+ * Hero: 단어별 0.08s stagger 페이드업
  */
 function animateHero(): void {
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-  // 단어별 블러→선명 리빌
-  tl.from('.headline .word', {
-    y: 30,
-    opacity: 0,
-    filter: 'blur(12px)',
-    duration: 1.0,
-    stagger: 0.12,
+  const words = document.querySelectorAll('#hero .word');
+  words.forEach((el, i) => {
+    (el as HTMLElement).style.opacity = '0';
+    (el as HTMLElement).style.transform = 'translateY(8px)';
+    (el as HTMLElement).style.transition =
+      `opacity 0.55s var(--ease-expo) ${i * 0.08}s, transform 0.55s var(--ease-expo) ${i * 0.08}s`;
   });
-
-  // 서브카피 슬라이드업 + 페이드
-  tl.from(
-    '.subcopy',
-    {
-      y: 20,
-      opacity: 0,
-      filter: 'blur(4px)',
-      duration: 0.9,
-    },
-    '-=0.3'
-  );
-
-  // CTA 2개 — 스케일 + 페이드
-  tl.from(
-    '.ctas .cta',
-    {
-      y: 16,
-      opacity: 0,
-      scale: 0.9,
-      duration: 0.7,
-      stagger: 0.15,
-    },
-    '-=0.4'
-  );
-
-  // 로고 (등장)
-  tl.from(
-    '.hero-logo',
-    {
-      opacity: 0,
-      scale: 1.1,
-      duration: 1.2,
-      ease: 'power2.out',
-    },
-    0.1
-  );
+  requestAnimationFrame(() => {
+    words.forEach((el) => {
+      (el as HTMLElement).style.opacity = '';  // word-muted는 CSS 0.3 유지
+      (el as HTMLElement).style.transform = 'translateY(0)';
+    });
+  });
 }
 
 /**

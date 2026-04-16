@@ -26,12 +26,32 @@ test.describe('Taktonlabs 랜딩 스모크', () => {
     await expect(page.locator('footer')).toBeVisible();
   });
 
-  test('헤드라인이 올바르게 표시됨', async ({ page }) => {
+  test('Hero 재디자인 렌더링', async ({ page }) => {
     await page.goto('/');
-    const headline = page.locator('.headline');
-    await expect(headline).toContainText('제품을');
-    await expect(headline).toContainText('만듭니다');
-    await expect(headline).toContainText('끝까지');
+    const hero = page.locator('#hero');
+    await expect(hero).toBeVisible();
+    await expect(hero.locator('.headline')).toContainText('제품을 만듭니다.');
+    await expect(hero.locator('.headline')).toContainText('끝까지');
+    await expect(hero.locator('.hero-wordmark')).toBeVisible();
+    await expect(hero.locator('.hero-wordmark')).toContainText('TAKTON');
+    await expect(hero.locator('.cta-primary')).toContainText('제품 둘러보기');
+    await expect(hero.locator('.hero-est')).toContainText('EST. 2024');
+    // 구버전 글로우 오브 제거 확인
+    await expect(hero.locator('.glow-orb')).toHaveCount(0);
+  });
+
+  test('Now shipping 마이크로 링크 → Products로 스크롤', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.click('.hero-now-shipping');
+    await page.waitForFunction(
+      () => {
+        const products = document.querySelector('#products');
+        if (!products) return false;
+        return products.getBoundingClientRect().top < 200;
+      },
+      { timeout: 5000 }
+    );
   });
 
   test('Nav 앵커 클릭 → 해당 섹션으로 스크롤', async ({ page }) => {
