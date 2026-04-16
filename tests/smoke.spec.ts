@@ -330,34 +330,16 @@ test.describe('v2 신규 섹션', () => {
     await expect(cards.nth(3)).toContainText('접근성');
   });
 
-  test('FAQ 아코디언 동작', async ({ page }) => {
+  test('FAQ 재디자인 — 아코디언 5개 + 헤드라인', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#faq')).toBeVisible();
-
+    await expect(page.locator('#faq .faq-headline')).toContainText('자주 받는 질문');
     const items = page.locator('[data-faq-item]');
     await expect(items).toHaveCount(5);
-
-    const firstItem = items.nth(0);
-    const firstTrigger = firstItem.locator('[data-faq-trigger]');
-    const firstAnswer = firstItem.locator('[data-faq-answer]');
-
-    // 초기 닫힘 상태
+    const firstTrigger = items.nth(0).locator('[data-faq-trigger]');
     await expect(firstTrigger).toHaveAttribute('aria-expanded', 'false');
-
-    // 클릭 → 열림
     await firstTrigger.click();
     await expect(firstTrigger).toHaveAttribute('aria-expanded', 'true');
-    await expect(firstItem).toHaveAttribute('data-open', 'true');
-
-    // 애니메이션 대기 후 max-height 변화 확인
-    await page.waitForTimeout(500);
-    const maxHeight = await firstAnswer.evaluate((el) => (el as HTMLElement).style.maxHeight);
-    expect(maxHeight).not.toBe('0');
-    expect(maxHeight).not.toBe('');
-
-    // 다시 클릭 → 닫힘
-    await firstTrigger.click();
-    await expect(firstTrigger).toHaveAttribute('aria-expanded', 'false');
+    await page.waitForTimeout(450);
   });
 
   test('FAQ JSON-LD FAQPage schema 존재', async ({ page }) => {

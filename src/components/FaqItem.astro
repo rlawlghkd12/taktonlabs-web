@@ -1,103 +1,54 @@
 ---
-import { Icon } from 'astro-icon/components';
-import type { FaqItem as FaqItemType } from '../data/faq';
-
-interface Props {
-  item: FaqItemType;
-  index: number;
-}
-
+import type { FaqItem as Item } from '../data/faq';
+interface Props { item: Item; index: string; }
 const { item, index } = Astro.props;
-const answerId = `faq-answer-${index}`;
+const id = `faq-${index}`;
 ---
-
-<li class="faq-item" data-faq-item>
+<div class="faqi" data-faq-item data-open="false">
   <button
     type="button"
-    class="faq-trigger"
+    class="faqi-trigger"
     data-faq-trigger
     aria-expanded="false"
-    aria-controls={answerId}
+    aria-controls={id}
   >
-    <span class="faq-question">{item.question}</span>
-    <span class="faq-chevron" aria-hidden="true">
-      <Icon name="lucide:chevron-down" width={20} height={20} />
-    </span>
+    <span class="faqi-index">{index}</span>
+    <span class="faqi-question">{item.question}</span>
+    <span class="faqi-sign" aria-hidden="true">+</span>
+    <span class="faqi-underline" aria-hidden="true"></span>
   </button>
-  <div class="faq-answer" id={answerId} data-faq-answer role="region">
-    <p>{item.answer}</p>
+  <div id={id} class="faqi-answer" data-faq-answer role="region">
+    <div class="faqi-answer-inner">{item.answer}</div>
   </div>
-</li>
-
+</div>
 <style>
-  .faq-item {
-    border-bottom: 1px solid var(--color-border-soft);
+  .faqi { border-bottom: 1px solid var(--hairline); }
+  .faqi-trigger {
+    position: relative;
+    width: 100%; background: none; border: none; cursor: pointer;
+    padding: 32px 0; display: grid; grid-template-columns: 48px 1fr 40px; gap: 20px;
+    align-items: center; text-align: left; color: var(--text-primary);
   }
-
-  .faq-item:first-child {
-    border-top: 1px solid var(--color-border-soft);
+  .faqi-index { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+  .faqi-question { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -0.02em; position: relative; }
+  .faqi-underline {
+    position: absolute; left: 48px; right: 60px;
+    bottom: calc(50% - 20px); height: 1px; background: var(--text-primary);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s var(--ease-expo);
+    pointer-events: none;
   }
-
-  .faq-trigger {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 24px 0;
-    background: transparent;
-    border: none;
-    font-family: inherit;
-    text-align: left;
-    cursor: pointer;
-    color: var(--color-text);
-    transition: color 0.3s var(--ease-in-out);
+  .faqi-sign { font-size: 20px; font-weight: 300; color: var(--text-muted); text-align: right; transition: transform 0.3s var(--ease-smooth); }
+  .faqi[data-open='true'] .faqi-sign { transform: rotate(45deg); }
+  .faqi[data-open='true'] .faqi-underline { transform: scaleX(1); }
+  .faqi-answer { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.35s var(--ease-detail), opacity 0.35s var(--ease-detail); }
+  .faqi-answer-inner {
+    padding: 8px 60px 32px 68px;
+    font-size: 14.5px; line-height: 1.8; color: var(--text-secondary);
   }
-
-  .faq-trigger:hover {
-    color: var(--color-accent);
-  }
-
-  .faq-question {
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1.5;
-  }
-
-  .faq-chevron {
-    flex-shrink: 0;
-    display: inline-flex;
-    color: var(--color-text-tertiary);
-    transition: transform 0.4s var(--ease-in-out), color 0.3s var(--ease-in-out);
-  }
-
-  .faq-item[data-open='true'] .faq-chevron {
-    transform: rotate(180deg);
-    color: var(--color-accent);
-  }
-
-  .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s var(--ease-in-out);
-  }
-
-  .faq-answer p {
-    margin: 0 0 24px;
-    padding-right: 44px;
-    font-size: 14px;
-    line-height: 1.75;
-    color: var(--color-text-secondary);
-  }
-
-  @media (min-width: 1536px) {
-    .faq-question {
-      font-size: 18px;
-    }
-
-    .faq-answer p {
-      font-size: 15px;
-    }
+  .faqi[data-open='true'] .faqi-answer { opacity: 1; }
+  @media (max-width: 768px) {
+    .faqi-trigger { grid-template-columns: 32px 1fr 28px; gap: 12px; padding: 24px 0; }
+    .faqi-answer-inner { padding: 8px 0 24px 44px; }
   }
 </style>
