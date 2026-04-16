@@ -342,6 +342,21 @@ test.describe('v2 신규 섹션', () => {
     await page.waitForTimeout(450);
   });
 
+  test('Contact 재디자인 — 초대 + Direct 채널', async ({ page }) => {
+    await page.goto('/');
+    const section = page.locator('#contact');
+    await expect(section).toBeVisible();
+    await expect(section.locator('.contact-headline')).toContainText('프로젝트 이야기하러');
+    await expect(section.locator('.contact-direct')).toContainText('hello@taktonlabs.com');
+    await expect(section.locator('.contact-direct')).toContainText('@taktonlabs');
+    await expect(section.locator('.contact-direct')).toContainText('양산');
+    await expect(section.locator('.contact-direct')).toContainText('24h');
+    // 폼
+    await expect(section.locator('#contact-name')).toBeVisible();
+    await expect(section.locator('#contact-email')).toBeVisible();
+    await expect(section.locator('#contact-message')).toBeVisible();
+  });
+
   test('FAQ JSON-LD FAQPage schema 존재', async ({ page }) => {
     await page.goto('/');
     const jsonLdScripts = await page
