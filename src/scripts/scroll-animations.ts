@@ -426,3 +426,40 @@ function animateWhy(): void {
     },
   });
 }
+
+/**
+ * 섹션 진입 스크롤 reveal — IntersectionObserver 기반 stagger fade-up.
+ * Hero(자체 word-stagger)와 pinned 섹션(GSAP ScrollTrigger)은 제외.
+ */
+export function initScrollReveals(): void {
+  if (prefersReducedMotion()) return;
+
+  const selectors = [
+    '.phil-eyebrow', '.phil-headline', '.phil-grid',
+    '.proc-eyebrow', '.proc-headline', '.proc-list',
+    '.why-eyebrow', '.why-headline', '.why-grid',
+    '.faq-eyebrow', '.faq-headline', '.faq-list',
+    '.contact-eyebrow', '.contact-headline', '.contact-grid',
+  ];
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          (e.target as HTMLElement).dataset.revealed = 'true';
+          io.unobserve(e.target);
+        }
+      });
+    },
+    { rootMargin: '-10% 0px' }
+  );
+
+  selectors.forEach((sel, i) => {
+    document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      el.style.transition = `opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${(i % 3) * 0.08}s, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${(i % 3) * 0.08}s`;
+      io.observe(el);
+    });
+  });
+}

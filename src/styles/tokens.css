@@ -45,3 +45,6 @@
 
   --container-wide: 1400px;
 }
+
+/* ===== 스크롤 reveal 완료 상태 ===== */
+[data-revealed='true'] { opacity: 1 !important; transform: none !important; }

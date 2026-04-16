@@ -160,7 +160,7 @@ const serviceSchema = {
 
     <script>
       import { initSmoothScroll } from '../scripts/smooth-scroll';
-      import { initScrollAnimations } from '../scripts/scroll-animations';
+      import { initScrollAnimations, initScrollReveals } from '../scripts/scroll-animations';
       import { initFaq } from '../scripts/faq';
       import { initInteractive } from '../scripts/interactive';
 
@@ -168,6 +168,7 @@ const serviceSchema = {
       function init() {
         initSmoothScroll();
         initScrollAnimations();
+        initScrollReveals();
         initFaq();
         initInteractive();
       }
