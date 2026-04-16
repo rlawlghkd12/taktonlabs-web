@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 
 test.describe('Taktonlabs 랜딩 스모크', () => {
   test('페이지 로드 & 콘솔 에러 없음', async ({ page }) => {
@@ -499,5 +500,14 @@ test.describe('v2 신규 섹션', () => {
     });
 
     expect(hasGeist).toBe(true);
+  });
+});
+
+test.describe('접근성', () => {
+  test('홈 페이지 접근성 위반 없음 (axe)', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
   });
 });
