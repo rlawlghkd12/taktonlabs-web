@@ -1,29 +1,6 @@
 ---
 import CapabilityCard from './CapabilityCard.astro';
-
-const cards = [
-  {
-    iconName: 'lucide:layout-grid',
-    title: '웹·모바일 제품',
-    description:
-      '홈페이지, 예약 시스템, 관리 페이지. 기획부터 디자인, 개발, 배포까지 한 팀에서. PC·태블릿·스마트폰 어디서든 쓸 수 있게 만듭니다.',
-    techStack: ['PC · 태블릿 · 모바일', '모든 브라우저 지원'],
-  },
-  {
-    iconName: 'lucide:app-window',
-    title: '데스크톱 앱',
-    description:
-      'Windows와 macOS에서 동시에 작동하는 프로그램. 자동 업데이트로 항상 최신 상태를 유지하고, 인터넷 없이도 사용 가능합니다. TutorMate가 이 방식으로 운영 중입니다.',
-    techStack: ['Windows · macOS 동시 지원', '자동 업데이트'],
-  },
-  {
-    iconName: 'lucide:blocks',
-    title: 'B2B 맞춤 개발',
-    description:
-      '업무 흐름을 직접 보고 관찰한 뒤 만듭니다. 엑셀로 반복하던 작업을 한눈에 보이는 화면으로, 수작업을 자동으로. 실제로 쓰이는 도구를 만듭니다.',
-    techStack: ['기존 데이터 연동', '맞춤 대시보드'],
-  },
-];
+import { capabilities } from '../data/capabilities';
 ---
 
 <section id="capabilities" class="capabilities">
@@ -36,7 +13,15 @@ const cards = [
       </p>
     </div>
     <div class="card-grid">
-      {cards.map((card, i) => <CapabilityCard {...card} index={i} />)}
+      {capabilities.map((c, i) => (
+        <CapabilityCard
+          iconName={''}
+          title={c.title}
+          description={c.description}
+          techStack={c.principles}
+          index={i}
+        />
+      ))}
     </div>
   </div>
 </section>

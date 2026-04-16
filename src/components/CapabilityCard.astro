@@ -13,9 +13,11 @@ const { iconName, title, description, techStack, index } = Astro.props;
 ---
 
 <article class="capability-card" data-card-index={index}>
-  <div class="icon-wrap">
-    <Icon name={iconName} width={24} height={24} />
-  </div>
+  {iconName && (
+    <div class="icon-wrap">
+      <Icon name={iconName} width={24} height={24} />
+    </div>
+  )}
   <h3 class="title">{title}</h3>
   <p class="description">{description}</p>
   <p class="tech-stack">{techStack.join(' · ')}</p>
