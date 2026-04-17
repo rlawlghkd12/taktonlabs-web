@@ -151,25 +151,26 @@ export async function initCapabilitiesMorph(): Promise<void> {
     tl.to(docks[idx], { opacity: 1, duration: 0.2, ease: EASE.smooth }, shrinkEnd - 0.05);
   }
 
-  addCardLifecycle(0, 0, 0.22, 0.38);
-  addCardLifecycle(1, 0.25, 0.56, 0.74);
-  addCardLifecycle(2, 0.60, 0.88, 1.00);
+  // 카드 간 전환 길게 — shrink 각 22%, BIG dwell 짧게
+  addCardLifecycle(0, 0,    0.10, 0.32);  // 01 BIG 10% → shrink 22%
+  addCardLifecycle(1, 0.13, 0.48, 0.70);  // enter 0.13~0.28, BIG 0.32~0.48, shrink 22%
+  addCardLifecycle(2, 0.51, 0.82, 1.00);  // enter 0.51~0.66, BIG 0.70~0.82, shrink 18%
 
   // eyebrow title crossfade — 3개 span을 스크럽으로 opacity 전환 (부드러운 크로스페이드)
   if (titleItems.length === 3) {
     gsap.set(titleItems[0], { opacity: 1 });
     gsap.set(titleItems[1], { opacity: 0 });
     gsap.set(titleItems[2], { opacity: 0 });
-    // 01 → 02 transition: 0.34 ~ 0.42
-    tl.to(titleItems[0], { opacity: 0, ease: EASE.smooth, duration: 0.08 }, 0.34);
-    tl.to(titleItems[1], { opacity: 1, ease: EASE.smooth, duration: 0.08 }, 0.34);
-    // 02 → 03 transition: 0.70 ~ 0.78
-    tl.to(titleItems[1], { opacity: 0, ease: EASE.smooth, duration: 0.08 }, 0.70);
-    tl.to(titleItems[2], { opacity: 1, ease: EASE.smooth, duration: 0.08 }, 0.70);
+    // 01 → 02 transition: 카드 0 shrink 후반 ~ 카드 1 BIG 초반
+    tl.to(titleItems[0], { opacity: 0, ease: EASE.smooth, duration: 0.14 }, 0.22);
+    tl.to(titleItems[1], { opacity: 1, ease: EASE.smooth, duration: 0.14 }, 0.22);
+    // 02 → 03 transition: 카드 1 shrink 후반 ~ 카드 2 BIG 초반
+    tl.to(titleItems[1], { opacity: 0, ease: EASE.smooth, duration: 0.14 }, 0.60);
+    tl.to(titleItems[2], { opacity: 1, ease: EASE.smooth, duration: 0.14 }, 0.60);
   }
 
-  // Progress segments — scrubbed fill (use data-filled with onStart/onReverseComplete)
-  const segMilestones = [0.22, 0.56, 0.88];
+  // Progress segments — 각 카드 shrink 완료 시점에 채움
+  const segMilestones = [0.32, 0.70, 1.00];
   segMilestones.forEach((at, i) => {
     tl.to({}, {
       duration: 0.01,
