@@ -23,11 +23,13 @@ export function initSmoothScroll(): Lenis | null {
   }
 
   const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t: number) => 1 - Math.pow(1 - t, 3), // 3차 감속 (부드러움 축)
+    duration: 1.4,
+    lerp: 0.08,
+    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo-out — standard Lenis ease
     orientation: 'vertical',
     gestureOrientation: 'vertical',
     smoothWheel: true,
+    smoothTouch: false,
   });
 
   // Nav 앵커 클릭 Lenis에 위임

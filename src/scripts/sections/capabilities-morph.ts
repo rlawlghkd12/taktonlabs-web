@@ -1,8 +1,6 @@
 // src/scripts/sections/capabilities-morph.ts
 import { EASE, prefersReducedMotion, isDesktopViewport, loadGsap } from '../../lib/motion';
 
-interface DockTarget { top: number; left: number; width: number; height: number; }
-
 export async function initCapabilitiesMorph(): Promise<void> {
   const section = document.querySelector<HTMLElement>('#capabilities');
   if (!section) return;
@@ -47,13 +45,6 @@ export async function initCapabilitiesMorph(): Promise<void> {
   const activeTitleEl = section.querySelector<HTMLElement>('[data-cap-active-title]');
   const titles = ['01 · 웹 · 모바일 제품', '02 · 데스크톱 앱', '03 · B2B 맞춤 개발'];
 
-  // Initial state lock — 01 visible, 02/03 hidden, docks hidden
-  gsap.set(cards[0], { opacity: 1, top: 0, left: 0, width: '100%', height: 'auto' });
-  gsap.set(cards[1], { opacity: 0, y: 20 });
-  gsap.set(cards[2], { opacity: 0, y: 20 });
-  gsap.set(docks, { opacity: 0 });
-  cards.forEach((c) => { c.dataset.docked = 'false'; });
-
   // pin 섹션 높이 설정
   section.style.height = '300vh';
   const pinEl = section.querySelector<HTMLElement>('.cap-pin')!;
@@ -61,92 +52,104 @@ export async function initCapabilitiesMorph(): Promise<void> {
   pinEl.style.top = '0';
   pinEl.style.height = '100vh';
 
-  // dock 슬롯의 타깃 좌표 측정 (stage 기준 상대좌표)
   const stage = section.querySelector<HTMLElement>('[data-cap-stage]')!;
-  function getDockTarget(idx: number): DockTarget {
-    const dock = docks[idx];
+
+  // Precompute dock positions on every ScrollTrigger refresh (handles resize)
+  const dockTargets: { top: number; left: number; width: number; height: number }[] = [0, 1, 2].map(() => ({ top: 0, left: 0, width: 0, height: 0 }));
+  function measureDockTargets() {
     const stageRect = stage.getBoundingClientRect();
-    const dockRect = dock.getBoundingClientRect();
-    return {
-      top: dockRect.top - stageRect.top,
-      left: dockRect.left - stageRect.left,
-      width: dockRect.width,
-      height: dockRect.height,
-    };
+    docks.forEach((dock, i) => {
+      const r = dock.getBoundingClientRect();
+      dockTargets[i] = {
+        top: r.top - stageRect.top,
+        left: r.left - stageRect.left,
+        width: r.width,
+        height: r.height,
+      };
+    });
   }
 
-  // 타임라인
+  // Initial state lock
+  gsap.set(cards[0], { opacity: 1, top: 0, left: 0, width: '100%', height: 'auto' });
+  gsap.set(cards[1], { opacity: 0, y: 20 });
+  gsap.set(cards[2], { opacity: 0, y: 20 });
+  gsap.set(docks, { opacity: 0 });
+  cards.forEach((c) => { c.dataset.docked = 'false'; });
+
+  // Build timeline using scrubbed tweens
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: section,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 1,
+      scrub: 1.2,                // slightly looser than 1 for buttery feel
       invalidateOnRefresh: true,
+      onRefreshInit: measureDockTargets,
+      onRefresh: measureDockTargets,
     },
   });
 
-  // 각 카드 life-cycle
-  // 01: BIG 0~0.22 → shrink 0.22~0.38 → stay docked
-  // 02: enter 0.25~0.40 → BIG 0.40~0.56 → shrink 0.56~0.74
-  // 03: enter 0.60~0.76 → BIG 0.76~0.88 → shrink 0.88~1.00
-
   function addCardLifecycle(idx: number, enterFrom: number, bigEnd: number, shrinkEnd: number) {
     const card = cards[idx];
-    // 진입: 02, 03만 enterFrom 구간에서 opacity 0 → 1, y 20 → 0
+    const morphDur = shrinkEnd - bigEnd;
+
+    // Enter (for idx 1, 2)
     if (idx > 0) {
-      gsap.set(card, { opacity: 0, y: 20 });
       tl.to(card, { opacity: 1, y: 0, ease: EASE.expo, duration: 1 }, enterFrom);
     }
-    // shrink: bigEnd ~ shrinkEnd 구간에서 dock 좌표로 morph
-    tl.call(
-      () => {
-        const target = getDockTarget(idx);
-        gsap.to(card, {
-          top: target.top,
-          left: target.left,
-          width: target.width,
-          height: target.height,
-          ease: EASE.expo,
-          overwrite: true,
-          scrollTrigger: undefined,
-        });
-      },
-      undefined,
-      bigEnd,
-    );
-    // 설명·프루프 먼저 페이드 (박스 모프보다 약간 선행)
+
+    // Collapse details BEFORE box morph (slightly earlier, shorter)
     tl.to(
       card.querySelectorAll('.cc-desc, .cc-principles, .cc-right'),
-      { opacity: 0, duration: (shrinkEnd - bigEnd) * 0.5, ease: EASE.detail },
+      { opacity: 0, ease: EASE.detail, duration: morphDur * 0.55 },
       bigEnd - 0.02,
     );
-    // 착지 시점에 docked 상태로 전환 / 되돌릴 때 해제
+
+    // SCRUBBED box morph — use function refs so dockTargets is always current
+    tl.to(card, {
+      top: () => dockTargets[idx].top,
+      left: () => dockTargets[idx].left,
+      width: () => dockTargets[idx].width,
+      height: () => dockTargets[idx].height,
+      ease: EASE.expo,
+      duration: morphDur,
+    }, bigEnd);
+
+    // Docked state flip (onStart / onReverseComplete via dummy tween)
     tl.to({}, {
       duration: 0.01,
       onStart: () => { card.dataset.docked = 'true'; },
       onReverseComplete: () => { card.dataset.docked = 'false'; },
     }, shrinkEnd);
-    // dock slot 표시 (완료 직후)
-    tl.to(docks[idx], { opacity: 1, duration: 0.15, ease: EASE.smooth }, shrinkEnd);
+
+    // Dock slot reveal
+    tl.to(docks[idx], { opacity: 1, duration: 0.2, ease: EASE.smooth }, shrinkEnd - 0.05);
   }
 
   addCardLifecycle(0, 0, 0.22, 0.38);
   addCardLifecycle(1, 0.25, 0.56, 0.74);
   addCardLifecycle(2, 0.60, 0.88, 1.00);
 
-  // eyebrow 활성 타이틀 교체
-  const titleSwap = [
-    { at: 0.38, text: titles[1] },
-    { at: 0.74, text: titles[2] },
+  // eyebrow title swap — use dummy tween with onStart/onReverseComplete for scrub-reversible behavior
+  const titleSwaps = [
+    { at: 0.38, forward: titles[1], back: titles[0] },
+    { at: 0.74, forward: titles[2], back: titles[1] },
   ];
-  titleSwap.forEach((t) => {
-    tl.call(() => { if (activeTitleEl) activeTitleEl.textContent = t.text; }, undefined, t.at);
+  titleSwaps.forEach((t) => {
+    tl.to({}, {
+      duration: 0.01,
+      onStart: () => { if (activeTitleEl) activeTitleEl.textContent = t.forward; },
+      onReverseComplete: () => { if (activeTitleEl) activeTitleEl.textContent = t.back; },
+    }, t.at);
   });
 
-  // progress segments
+  // Progress segments — scrubbed fill (use data-filled with onStart/onReverseComplete)
   const segMilestones = [0.22, 0.56, 0.88];
   segMilestones.forEach((at, i) => {
-    tl.call(() => { progressSegs[i].dataset.filled = 'true'; }, undefined, at);
+    tl.to({}, {
+      duration: 0.01,
+      onStart: () => { progressSegs[i].dataset.filled = 'true'; },
+      onReverseComplete: () => { progressSegs[i].dataset.filled = 'false'; },
+    }, at);
   });
 }

@@ -84,9 +84,9 @@ function animateHero(): void {
   const words = document.querySelectorAll('#hero .word');
   words.forEach((el, i) => {
     (el as HTMLElement).style.opacity = '0';
-    (el as HTMLElement).style.transform = 'translateY(8px)';
+    (el as HTMLElement).style.transform = 'translateY(12px)';
     (el as HTMLElement).style.transition =
-      `opacity 0.55s var(--ease-expo) ${i * 0.08}s, transform 0.55s var(--ease-expo) ${i * 0.08}s`;
+      `opacity 0.75s var(--ease-expo) ${i * 0.12}s, transform 0.75s var(--ease-expo) ${i * 0.12}s`;
   });
   requestAnimationFrame(() => {
     words.forEach((el) => {
@@ -457,8 +457,8 @@ export function initScrollReveals(): void {
   selectors.forEach((sel, i) => {
     document.querySelectorAll<HTMLElement>(sel).forEach((el) => {
       el.style.opacity = '0';
-      el.style.transform = 'translateY(16px)';
-      el.style.transition = `opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${(i % 3) * 0.08}s, transform 0.65s cubic-bezier(0.16, 1, 0.3, 1) ${(i % 3) * 0.08}s`;
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = `opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${(i % 3) * 0.12}s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${(i % 3) * 0.12}s`;
       io.observe(el);
     });
   });

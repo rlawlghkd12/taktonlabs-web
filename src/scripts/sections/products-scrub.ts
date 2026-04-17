@@ -55,16 +55,16 @@ export async function initProductsScrub(): Promise<void> {
   // section.style.height 설정 제거 — rail + CTA + tags가 자연 flow로 쌓임
 
   const tl = gsap.timeline({
-    scrollTrigger: { trigger: rail, start: 'top top', end: 'bottom bottom', scrub: 0.8 },
+    scrollTrigger: { trigger: rail, start: 'top top', end: 'bottom bottom', scrub: 1.2 },
   });
 
   function switchTo(idx: number, at: number) {
     // 현재 활성화된 것만 opacity 1, 나머지는 0
     screens.forEach((s, i) => {
-      tl.to(s, { opacity: i === idx ? 1 : 0, scale: i === idx ? 1 : 1.02, duration: 0.4, ease: EASE.expo }, at);
+      tl.to(s, { opacity: i === idx ? 1 : 0, scale: i === idx ? 1 : 1.04, duration: 0.7, ease: EASE.expo }, at);
     });
     captions.forEach((c, i) => {
-      tl.to(c, { opacity: i === idx ? 1 : 0, y: i === idx ? 0 : 8, duration: 0.4, ease: EASE.smooth }, at - 0.03);
+      tl.to(c, { opacity: i === idx ? 1 : 0, y: i === idx ? 0 : 12, duration: 0.6, ease: EASE.smooth }, at - 0.03);
     });
     indicators.forEach((el, i) => {
       tl.call(() => { el.dataset.active = String(i === idx); }, undefined, at);
