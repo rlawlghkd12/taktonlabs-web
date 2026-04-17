@@ -106,6 +106,14 @@ export async function initCapabilitiesMorph(): Promise<void> {
       bigEnd - 0.02,
     );
 
+    // Grid의 우측 컬럼 접기 — cc-left가 morph 중에 클리핑되지 않도록 공간 확보
+    tl.to(card, {
+      gridTemplateColumns: '1fr 0px',
+      gap: 0,
+      ease: EASE.expo,
+      duration: morphDur * 0.7,
+    }, bigEnd);
+
     // SCRUBBED box morph — use function refs so dockTargets is always current
     tl.to(card, {
       top: () => dockTargets[idx].top,
