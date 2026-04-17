@@ -91,6 +91,8 @@ export async function initCapabilitiesMorph(): Promise<void> {
   function addCardLifecycle(idx: number, enterFrom: number, bigEnd: number, shrinkEnd: number) {
     const card = cards[idx];
     const morphDur = shrinkEnd - bigEnd;
+    const numEl = card.querySelector<HTMLElement>('.cc-num');
+    const titleEl = card.querySelector<HTMLElement>('.cc-title');
 
     // Enter (for idx 1, 2)
     if (idx > 0) {
@@ -110,16 +112,49 @@ export async function initCapabilitiesMorph(): Promise<void> {
       left: () => dockTargets[idx].left,
       width: () => dockTargets[idx].width,
       height: () => dockTargets[idx].height,
+      padding: 16,
+      borderRadius: 10,
       ease: EASE.expo,
       duration: morphDur,
     }, bigEnd);
 
-    // Docked state flip (onStart / onReverseComplete via dummy tween)
+    // Content font-size / margin 연속 보간 — box morph와 동기
+    if (numEl) {
+      tl.to(numEl, {
+        fontSize: 14,
+        marginBottom: 0,
+        lineHeight: 1.4,
+        webkitTextStrokeWidth: 0,
+        ease: EASE.expo,
+        duration: morphDur,
+      }, bigEnd);
+    }
+    if (titleEl) {
+      tl.to(titleEl, {
+        fontSize: 14,
+        marginBottom: 0,
+        ease: EASE.expo,
+        duration: morphDur,
+      }, bigEnd);
+    }
+
+    // layout flip을 숨기기 위한 짧은 페이드 — cc-left가 순간적으로 투명해지는 동안 display 전환
+    const leftEl = card.querySelector<HTMLElement>('.cc-left');
+    if (leftEl) {
+      tl.to(leftEl, { opacity: 0, duration: 0.04, ease: EASE.detail }, shrinkEnd - 0.04);
+    }
+
+    // Docked state flip — cc-left가 invisible한 순간에 grid→flex row 전환
     tl.to({}, {
       duration: 0.01,
       onStart: () => { card.dataset.docked = 'true'; },
       onReverseComplete: () => { card.dataset.docked = 'false'; },
     }, shrinkEnd);
+
+    // 페이드 복귀 — 이제 flex row layout
+    if (leftEl) {
+      tl.to(leftEl, { opacity: 1, duration: 0.08, ease: EASE.smooth }, shrinkEnd + 0.005);
+    }
 
     // Dock slot reveal
     tl.to(docks[idx], { opacity: 1, duration: 0.2, ease: EASE.smooth }, shrinkEnd - 0.05);
