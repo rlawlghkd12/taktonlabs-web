@@ -29,7 +29,7 @@ const id = `faq-${index}`;
     padding: 32px 0; display: grid; grid-template-columns: 48px 1fr 40px; gap: 20px;
     align-items: center; text-align: left; color: var(--text-primary);
   }
-  .faqi-index { font-family: var(--font-mono); font-size: 13px; color: var(--text-muted); }
+  .faqi-index { font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); }
   .faqi-question { font-size: clamp(18px, 2vw, 24px); font-weight: 500; letter-spacing: -0.02em; position: relative; }
   .faqi-underline {
     position: absolute; left: 48px; right: 60px;
@@ -44,7 +44,7 @@ const id = `faq-${index}`;
   .faqi-answer { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.35s var(--ease-detail), opacity 0.35s var(--ease-detail); }
   .faqi-answer-inner {
     padding: 8px 60px 32px 68px;
-    font-size: 14.5px; line-height: 1.8; color: var(--text-secondary);
+    font-size: 16px; line-height: 1.8; color: var(--text-secondary);
   }
   .faqi[data-open='true'] .faqi-answer { opacity: 1; }
   @media (max-width: 768px) {
