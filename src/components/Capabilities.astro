@@ -30,7 +30,7 @@ import { capabilities } from '../data/capabilities';
         <div class="cap-dock" data-cap-dock data-index={i}>
           <span class="dock-num">{c.index}</span>
           <span class="dock-title">{c.title}</span>
-          <span class="dock-tagline">{c.principles.join(' · ')}</span>
+          <span class="dock-tagline">— {c.principles.join(' — ')}</span>
           <span class="dock-check">✓</span>
         </div>
       ))}
@@ -95,11 +95,9 @@ import { capabilities } from '../data/capabilities';
     line-height: 1.3;
   }
   .dock-tagline {
-    font-family: var(--font-mono);
     font-size: 14px;
     line-height: 1.5;
     color: var(--text-muted);
-    letter-spacing: 0.01em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

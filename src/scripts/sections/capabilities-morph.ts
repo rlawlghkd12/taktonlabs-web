@@ -99,9 +99,9 @@ export async function initCapabilitiesMorph(): Promise<void> {
       tl.to(card, { opacity: 1, y: 0, ease: EASE.expo, duration: 0.15 }, enterFrom);
     }
 
-    // Collapse details BEFORE box morph (slightly earlier, shorter)
+    // Collapse description + proof frame — 설명/프루프만 숨김 (principles는 dock state까지 유지)
     tl.to(
-      card.querySelectorAll('.cc-desc, .cc-principles, .cc-right'),
+      card.querySelectorAll('.cc-desc, .cc-right'),
       { opacity: 0, ease: EASE.detail, duration: morphDur * 0.55 },
       bigEnd - 0.02,
     );
@@ -119,10 +119,9 @@ export async function initCapabilitiesMorph(): Promise<void> {
       duration: morphDur,
     }, bigEnd);
 
-    // Accent bar + check mark + tagline 연속 fade-in — morph 후반에 등장
+    // Accent bar + check mark 연속 fade-in — morph 후반에 등장
     const accent = card.querySelector<HTMLElement>('[data-cc-accent]');
     const check = card.querySelector<HTMLElement>('[data-cc-check]');
-    const tagline = card.querySelector<HTMLElement>('[data-cc-tagline]');
     if (accent) {
       tl.to(accent, {
         opacity: 0.85,
@@ -130,13 +129,6 @@ export async function initCapabilitiesMorph(): Promise<void> {
         ease: EASE.expo,
         duration: morphDur * 0.6,
       }, bigEnd + morphDur * 0.4);
-    }
-    if (tagline) {
-      tl.to(tagline, {
-        opacity: 1,
-        ease: EASE.smooth,
-        duration: morphDur * 0.4,
-      }, bigEnd + morphDur * 0.55);
     }
     if (check) {
       tl.to(check, {

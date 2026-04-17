@@ -10,10 +10,9 @@ const { capability: c, index } = Astro.props;
     <div class="cc-num">{c.index}</div>
     <h3 class="cc-title">{c.title}</h3>
     <p class="cc-desc">{c.description}</p>
-    <div class="cc-principles">
+    <div class="cc-principles" data-cc-principles>
       {c.principles.map((p) => <span>— {p}</span>)}
     </div>
-    <div class="cc-tagline" data-cc-tagline>{c.principles.join(' · ')}</div>
   </div>
   <div class="cc-right">
     {c.proofType === 'browser' && (
@@ -111,20 +110,17 @@ const { capability: c, index } = Astro.props;
   }
   .cc-title { font-size: 30px; font-weight: 600; letter-spacing: -0.025em; margin: 0 0 10px; }
   .cc-desc { font-size: 16px; line-height: 1.7; color: var(--text-secondary); margin: 0 0 14px; max-width: 460px; }
-  .cc-principles { font-size: 14px; color: var(--text-secondary); display: flex; gap: 10px; flex-wrap: wrap; }
-  .cc-principles span { white-space: nowrap; }
-  .cc-tagline {
-    font-family: var(--font-mono);
+  .cc-principles {
     font-size: 14px;
-    line-height: 1.5;
-    color: var(--text-muted);
-    letter-spacing: 0.01em;
-    white-space: nowrap;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 12px;
+    flex-wrap: nowrap;              /* 한 줄 유지 — dock state에서도 동일 줄 */
     overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-    opacity: 0;                     /* 초기 숨김, docked로 갈 때 GSAP이 페이드인 */
+    white-space: nowrap;
+    transition: color 0.4s var(--ease-smooth);
   }
+  .cc-principles span { white-space: nowrap; }
 
   /* ===== Proof: Browser ===== */
   .proof-browser { background: #fff; border: 1px solid var(--hairline); border-radius: 10px; padding: 8px; }
@@ -216,9 +212,13 @@ const { capability: c, index } = Astro.props;
     max-width: 100% !important;
   }
   .cc[data-docked='true'] .cc-desc,
-  .cc[data-docked='true'] .cc-principles,
   .cc[data-docked='true'] .cc-right {
     display: none !important;
+  }
+  .cc[data-docked='true'] .cc-principles {
+    /* 그대로 유지하되 색만 약간 더 muted — 같은 엘리먼트가 연속 */
+    color: var(--text-muted) !important;
+    font-size: 14px !important;
   }
   /* check는 .cc-check 실 엘리먼트로 대체 (GSAP tween 대응) */
 </style>
