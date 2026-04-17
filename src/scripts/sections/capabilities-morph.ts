@@ -114,9 +114,30 @@ export async function initCapabilitiesMorph(): Promise<void> {
       height: () => dockTargets[idx].height,
       padding: 22,
       borderRadius: 12,
+      boxShadow: '0 2px 8px -4px rgba(0,0,0,0.05)',
       ease: EASE.expo,
       duration: morphDur,
     }, bigEnd);
+
+    // Accent bar + check mark 연속 fade-in — morph 후반에 등장
+    const accent = card.querySelector<HTMLElement>('[data-cc-accent]');
+    const check = card.querySelector<HTMLElement>('[data-cc-check]');
+    if (accent) {
+      tl.to(accent, {
+        opacity: 0.85,
+        scaleY: 1,
+        ease: EASE.expo,
+        duration: morphDur * 0.6,
+      }, bigEnd + morphDur * 0.4);
+    }
+    if (check) {
+      tl.to(check, {
+        opacity: 0.6,
+        scale: 1,
+        ease: EASE.smooth,
+        duration: morphDur * 0.4,
+      }, bigEnd + morphDur * 0.6);
+    }
 
     // Content font-size / margin 연속 보간 — box morph와 동기
     if (numEl) {
