@@ -34,7 +34,11 @@ const screens = [
       <div class="prod-window">
         <div class="window-bar">
           <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-          <span class="window-title" data-prod-window-title>TutorMate — 대시보드</span>
+          <span class="window-title-stack" data-prod-window-title-stack>
+            <span class="window-title" data-title-idx="0">TutorMate — 대시보드</span>
+            <span class="window-title" data-title-idx="1">TutorMate — 수강생</span>
+            <span class="window-title" data-title-idx="2">TutorMate — 수익</span>
+          </span>
         </div>
         <div class="window-body">
           {screens.map((s, i) => (
@@ -165,7 +169,9 @@ const screens = [
   .window-bar .dot.r { background: #ff5f57; }
   .window-bar .dot.y { background: #febc2e; }
   .window-bar .dot.g { background: #28c840; }
-  .window-title { margin-left: auto; font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); }
+  .window-title-stack { margin-left: auto; position: relative; display: inline-block; min-width: 180px; height: 1.3em; }
+  .window-title { position: absolute; right: 0; top: 0; font-family: var(--font-mono); font-size: 14px; color: var(--text-muted); white-space: nowrap; opacity: 0; transition: opacity 0.35s var(--ease-smooth); }
+  .window-title[data-title-idx="0"] { opacity: 1; }
   .window-body { position: relative; background: #f4f4ef; border-radius: 10px; padding: 10px; min-height: 320px; }
   .prod-screen { width: 100%; }
 

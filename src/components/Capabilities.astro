@@ -6,7 +6,12 @@ import { capabilities } from '../data/capabilities';
   <div class="cap-pin">
     <div class="cap-head">
       <div class="cap-eyebrow" data-cap-eyebrow>
-        CAPABILITIES &nbsp;/&nbsp; <span data-cap-active-title>01 · 웹 · 모바일 제품</span>
+        <span class="cap-eyebrow-static">CAPABILITIES &nbsp;/&nbsp;</span>
+        <span class="cap-title-stack" data-cap-title-stack>
+          <span class="cap-title-item" data-title-idx="0">01 · 웹 · 모바일 제품</span>
+          <span class="cap-title-item" data-title-idx="1">02 · 데스크톱 앱</span>
+          <span class="cap-title-item" data-title-idx="2">03 · B2B 맞춤 개발</span>
+        </span>
       </div>
       <div class="cap-progress" data-cap-progress>
         <div class="cap-progress-seg" data-seg="0"></div>
@@ -42,8 +47,11 @@ import { capabilities } from '../data/capabilities';
   .cap { position: relative; background: var(--bg-primary); color: var(--text-primary); padding-top: 120px; }
   .cap-pin { padding: 40px var(--section-pad-x); min-height: 100vh; display: flex; flex-direction: column; }
   .cap-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-  .cap-eyebrow { font-family: var(--font-mono); font-size: 14px; letter-spacing: var(--tracking-eyebrow); color: var(--text-muted); }
-  .cap-eyebrow [data-cap-active-title] { color: var(--text-primary); }
+  .cap-eyebrow { font-family: var(--font-mono); font-size: 14px; letter-spacing: var(--tracking-eyebrow); color: var(--text-muted); display: inline-flex; align-items: baseline; gap: 4px; }
+  .cap-eyebrow-static { flex-shrink: 0; }
+  .cap-title-stack { position: relative; display: inline-block; min-width: 260px; height: 1.3em; }
+  .cap-title-item { position: absolute; left: 0; top: 0; white-space: nowrap; color: var(--text-primary); opacity: 0; transition: opacity 0.35s var(--ease-smooth); }
+  .cap-title-item[data-title-idx="0"] { opacity: 1; }
   .cap-progress { display: flex; gap: 3px; width: 120px; }
   .cap-progress-seg { flex: 1; height: 2px; background: var(--hairline); position: relative; overflow: hidden; }
   .cap-progress-seg::after { content: ''; position: absolute; inset: 0; background: var(--text-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-expo); }

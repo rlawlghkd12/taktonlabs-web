@@ -43,8 +43,7 @@ export async function initProductsScrub(): Promise<void> {
   const captions = Array.from(section.querySelectorAll<HTMLElement>('[data-prod-caption]'));
   const indicators = Array.from(section.querySelectorAll<HTMLElement>('[data-prod-indicator]'));
   const progressSegs = Array.from(section.querySelectorAll<HTMLElement>('.prod-progress .seg'));
-  const windowTitle = section.querySelector<HTMLElement>('[data-prod-window-title]');
-  const titles = ['TutorMate — 대시보드', 'TutorMate — 수강생', 'TutorMate — 수익'];
+  const windowTitleItems = Array.from(section.querySelectorAll<HTMLElement>('.window-title-stack .window-title'));
 
   // Rail 설정 — 이 레일 안에서만 pin이 sticky로 동작
   const rail = section.querySelector<HTMLElement>('[data-prod-rail]')!;
@@ -66,14 +65,25 @@ export async function initProductsScrub(): Promise<void> {
     captions.forEach((c, i) => {
       tl.to(c, { opacity: i === idx ? 1 : 0, y: i === idx ? 0 : 12, duration: 0.6, ease: EASE.smooth }, at - 0.03);
     });
+    // window title crossfade — 스크럽 동기
+    windowTitleItems.forEach((el, i) => {
+      tl.to(el, { opacity: i === idx ? 1 : 0, duration: 0.5, ease: EASE.smooth }, at);
+    });
     indicators.forEach((el, i) => {
+      tl.to(el, { opacity: i === idx ? 1 : 0.35, duration: 0.4, ease: EASE.smooth }, at);
       tl.call(() => { el.dataset.active = String(i === idx); }, undefined, at);
     });
-    tl.call(() => {
-      if (windowTitle) windowTitle.textContent = titles[idx];
-      progressSegs.forEach((seg, i) => { seg.dataset.filled = String(i <= idx); });
-    }, undefined, at);
+    // progress segments — scroll 에 따라 data-filled 동기 (양방향)
+    tl.to({}, {
+      duration: 0.01,
+      onStart: () => { progressSegs.forEach((seg, i) => { seg.dataset.filled = String(i <= idx); }); },
+      onReverseComplete: () => { progressSegs.forEach((seg, i) => { seg.dataset.filled = String(i < idx); }); },
+    }, at);
   }
+
+  // 초기 상태
+  gsap.set(windowTitleItems[0], { opacity: 1 });
+  windowTitleItems.slice(1).forEach((el) => gsap.set(el, { opacity: 0 }));
 
   switchTo(0, 0);
   switchTo(1, 0.33);

@@ -42,8 +42,7 @@ export async function initCapabilitiesMorph(): Promise<void> {
   const cards = Array.from(section.querySelectorAll<HTMLElement>('[data-cap-card]'));
   const docks = Array.from(section.querySelectorAll<HTMLElement>('[data-cap-dock]'));
   const progressSegs = Array.from(section.querySelectorAll<HTMLElement>('.cap-progress-seg'));
-  const activeTitleEl = section.querySelector<HTMLElement>('[data-cap-active-title]');
-  const titles = ['01 · 웹 · 모바일 제품', '02 · 데스크톱 앱', '03 · B2B 맞춤 개발'];
+  const titleItems = Array.from(section.querySelectorAll<HTMLElement>('.cap-title-item'));
 
   // pin 섹션 높이 설정
   section.style.height = '300vh';
@@ -130,18 +129,18 @@ export async function initCapabilitiesMorph(): Promise<void> {
   addCardLifecycle(1, 0.25, 0.56, 0.74);
   addCardLifecycle(2, 0.60, 0.88, 1.00);
 
-  // eyebrow title swap — use dummy tween with onStart/onReverseComplete for scrub-reversible behavior
-  const titleSwaps = [
-    { at: 0.38, forward: titles[1], back: titles[0] },
-    { at: 0.74, forward: titles[2], back: titles[1] },
-  ];
-  titleSwaps.forEach((t) => {
-    tl.to({}, {
-      duration: 0.01,
-      onStart: () => { if (activeTitleEl) activeTitleEl.textContent = t.forward; },
-      onReverseComplete: () => { if (activeTitleEl) activeTitleEl.textContent = t.back; },
-    }, t.at);
-  });
+  // eyebrow title crossfade — 3개 span을 스크럽으로 opacity 전환 (부드러운 크로스페이드)
+  if (titleItems.length === 3) {
+    gsap.set(titleItems[0], { opacity: 1 });
+    gsap.set(titleItems[1], { opacity: 0 });
+    gsap.set(titleItems[2], { opacity: 0 });
+    // 01 → 02 transition: 0.34 ~ 0.42
+    tl.to(titleItems[0], { opacity: 0, ease: EASE.smooth, duration: 0.08 }, 0.34);
+    tl.to(titleItems[1], { opacity: 1, ease: EASE.smooth, duration: 0.08 }, 0.34);
+    // 02 → 03 transition: 0.70 ~ 0.78
+    tl.to(titleItems[1], { opacity: 0, ease: EASE.smooth, duration: 0.08 }, 0.70);
+    tl.to(titleItems[2], { opacity: 1, ease: EASE.smooth, duration: 0.08 }, 0.70);
+  }
 
   // Progress segments — scrubbed fill (use data-filled with onStart/onReverseComplete)
   const segMilestones = [0.22, 0.56, 0.88];
