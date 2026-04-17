@@ -127,12 +127,16 @@ export async function initCapabilitiesMorph(): Promise<void> {
     }
 
     // SCRUBBED box morph — use function refs so dockTargets is always current
+    // 도킹 최종 비주얼과 일치하는 목표값 (padding 18/22, radius 12)
     tl.to(card, {
       top: () => dockTargets[idx].top,
       left: () => dockTargets[idx].left,
       width: () => dockTargets[idx].width,
       height: () => dockTargets[idx].height,
-      padding: 22,
+      paddingTop: 18,
+      paddingBottom: 18,
+      paddingLeft: 22,
+      paddingRight: 22,
       borderRadius: 12,
       boxShadow: '0 2px 8px -4px rgba(0,0,0,0.05)',
       ease: EASE.expo,
@@ -160,12 +164,14 @@ export async function initCapabilitiesMorph(): Promise<void> {
     }
 
     // Content font-size / margin 연속 보간 — box morph와 동기
+    // margin을 최종 gap값(8px)으로 tween → 도킹 플립 시 레이아웃 점프 없음
     if (numEl) {
-      // 숫자는 gradient stop을 38% → 100%로 채워 solid로 전환 (stroke 얇아질 때 반쪽만 남는 현상 제거)
       tl.to(numEl, {
         fontSize: 20,
-        marginBottom: 0,
+        marginBottom: 8,
         lineHeight: 1,
+        letterSpacing: '-0.01em',
+        fontWeight: 600,
         webkitTextStrokeWidth: 0,
         '--grad-stop': '100%',
         ease: EASE.expo,
@@ -176,6 +182,8 @@ export async function initCapabilitiesMorph(): Promise<void> {
       tl.to(titleEl, {
         fontSize: 15,
         marginBottom: 0,
+        lineHeight: 1.3,
+        letterSpacing: '-0.01em',
         ease: EASE.expo,
         duration: morphDur,
       }, bigEnd);
