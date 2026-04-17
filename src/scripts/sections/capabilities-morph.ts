@@ -68,8 +68,8 @@ export async function initCapabilitiesMorph(): Promise<void> {
     });
   }
 
-  // Initial state lock
-  gsap.set(cards[0], { opacity: 1, top: 0, left: 0, width: '100%', height: 'auto' });
+  // Initial state lock — 모든 카드가 stage 안에서 inset:0 (CSS 상속)으로 풀 사이즈
+  gsap.set(cards[0], { opacity: 1 });
   gsap.set(cards[1], { opacity: 0, y: 20 });
   gsap.set(cards[2], { opacity: 0, y: 20 });
   gsap.set(docks, { opacity: 0 });
@@ -138,23 +138,12 @@ export async function initCapabilitiesMorph(): Promise<void> {
       }, bigEnd);
     }
 
-    // layout flip을 숨기기 위한 짧은 페이드 — cc-left가 순간적으로 투명해지는 동안 display 전환
-    const leftEl = card.querySelector<HTMLElement>('.cc-left');
-    if (leftEl) {
-      tl.to(leftEl, { opacity: 0, duration: 0.04, ease: EASE.detail }, shrinkEnd - 0.04);
-    }
-
-    // Docked state flip — cc-left가 invisible한 순간에 grid→flex row 전환
+    // Docked state flip — 내용이 이미 14px로 축소된 상태라 layout flip 시각 점프 최소
     tl.to({}, {
       duration: 0.01,
       onStart: () => { card.dataset.docked = 'true'; },
       onReverseComplete: () => { card.dataset.docked = 'false'; },
     }, shrinkEnd);
-
-    // 페이드 복귀 — 이제 flex row layout
-    if (leftEl) {
-      tl.to(leftEl, { opacity: 1, duration: 0.08, ease: EASE.smooth }, shrinkEnd + 0.005);
-    }
 
     // Dock slot reveal
     tl.to(docks[idx], { opacity: 1, duration: 0.2, ease: EASE.smooth }, shrinkEnd - 0.05);
