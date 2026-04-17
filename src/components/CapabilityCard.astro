@@ -77,6 +77,7 @@ const { capability: c, index } = Astro.props;
     padding: 28px 32px;
     background: #fff; border: 1px solid rgba(10,10,10,0.08); border-radius: 14px;
     box-shadow: 0 30px 60px -30px rgba(0,0,0,0.18);
+    overflow: hidden;             /* accent bar·체크가 항상 둥근 모서리 안쪽에서만 보이도록 */
     will-change: transform, width, height, top, left;
   }
   .cc[data-index='1'], .cc[data-index='2'] { opacity: 0; }   /* 초기 01만 보임 */
