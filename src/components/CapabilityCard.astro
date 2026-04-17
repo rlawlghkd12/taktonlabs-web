@@ -88,8 +88,8 @@ const { capability: c, index } = Astro.props;
     width: 3px;
     background: var(--text-primary);
     opacity: 0;                      /* GSAP이 morph 끝에 1로 페이드인 */
-    transform: scaleY(0.3);
-    transform-origin: center;
+    transform: scaleY(0);
+    transform-origin: top;            /* 위→아래로 progress bar처럼 채움 */
   }
   .cc-check {
     position: absolute;
