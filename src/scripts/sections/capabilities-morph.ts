@@ -81,7 +81,7 @@ export async function initCapabilitiesMorph(): Promise<void> {
       trigger: section,
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 1.2,                // slightly looser than 1 for buttery feel
+      scrub: 0.4,                // 스크롤과 1:1에 가까운 반응성 유지
       invalidateOnRefresh: true,
       onRefreshInit: measureDockTargets,
       onRefresh: measureDockTargets,
@@ -94,9 +94,9 @@ export async function initCapabilitiesMorph(): Promise<void> {
     const numEl = card.querySelector<HTMLElement>('.cc-num');
     const titleEl = card.querySelector<HTMLElement>('.cc-title');
 
-    // Enter (for idx 1, 2)
+    // Enter (for idx 1, 2) — 빠른 fade-up (이전 0.25~bigEnd 범위에서 완료)
     if (idx > 0) {
-      tl.to(card, { opacity: 1, y: 0, ease: EASE.expo, duration: 1 }, enterFrom);
+      tl.to(card, { opacity: 1, y: 0, ease: EASE.expo, duration: 0.15 }, enterFrom);
     }
 
     // Collapse details BEFORE box morph (slightly earlier, shorter)

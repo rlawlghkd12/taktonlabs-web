@@ -54,7 +54,7 @@ export async function initProductsScrub(): Promise<void> {
   // section.style.height 설정 제거 — rail + CTA + tags가 자연 flow로 쌓임
 
   const tl = gsap.timeline({
-    scrollTrigger: { trigger: rail, start: 'top top', end: 'bottom bottom', scrub: 1.2 },
+    scrollTrigger: { trigger: rail, start: 'top top', end: 'bottom bottom', scrub: 0.4 },
   });
 
   function switchTo(idx: number, at: number) {
