@@ -99,10 +99,17 @@ export async function initCapabilitiesMorph(): Promise<void> {
       tl.to(card, { opacity: 1, y: 0, ease: EASE.expo, duration: 0.15 }, enterFrom);
     }
 
-    // Grid 우측 컬럼 접기 — cc-right(프루프)가 0으로 축소되며 자연스럽게 overflow로 가려짐
-    // opacity 페이드는 쓰지 않음: "사라졌다 나타나는" 느낌 제거, 공간만 연속적으로 수축
+    // Flex: cc-right 너비 + gap을 0으로 연속 축소 → cc-left가 자연스럽게 확장
+    // opacity 페이드는 쓰지 않음. 공간만 수축.
+    const rightEl = card.querySelector<HTMLElement>('.cc-right');
+    if (rightEl) {
+      tl.to(rightEl, {
+        width: 0,
+        ease: EASE.expo,
+        duration: morphDur * 0.7,
+      }, bigEnd);
+    }
     tl.to(card, {
-      gridTemplateColumns: '1fr 0px',
       gap: 0,
       ease: EASE.expo,
       duration: morphDur * 0.7,
