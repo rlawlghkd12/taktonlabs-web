@@ -99,20 +99,25 @@ export async function initCapabilitiesMorph(): Promise<void> {
       tl.to(card, { opacity: 1, y: 0, ease: EASE.expo, duration: 0.15 }, enterFrom);
     }
 
-    // Collapse description + proof frame — 설명/프루프만 숨김 (principles는 dock state까지 유지)
-    tl.to(
-      card.querySelectorAll('.cc-desc, .cc-right'),
-      { opacity: 0, ease: EASE.detail, duration: morphDur * 0.55 },
-      bigEnd - 0.02,
-    );
-
-    // Grid의 우측 컬럼 접기 — cc-left가 morph 중에 클리핑되지 않도록 공간 확보
+    // Grid 우측 컬럼 접기 — cc-right(프루프)가 0으로 축소되며 자연스럽게 overflow로 가려짐
+    // opacity 페이드는 쓰지 않음: "사라졌다 나타나는" 느낌 제거, 공간만 연속적으로 수축
     tl.to(card, {
       gridTemplateColumns: '1fr 0px',
       gap: 0,
       ease: EASE.expo,
       duration: morphDur * 0.7,
     }, bigEnd);
+
+    // 설명 텍스트도 max-height로 공간 접기 (opacity 페이드 X, 공간만 수축)
+    const descEl = card.querySelector<HTMLElement>('.cc-desc');
+    if (descEl) {
+      tl.to(descEl, {
+        maxHeight: 0,
+        marginBottom: 0,
+        ease: EASE.expo,
+        duration: morphDur * 0.7,
+      }, bigEnd);
+    }
 
     // SCRUBBED box morph — use function refs so dockTargets is always current
     tl.to(card, {
