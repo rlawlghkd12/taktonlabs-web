@@ -10,11 +10,18 @@ interface Props {
 
 const { variant, otherVariantHref, otherVariantLabel } = Astro.props;
 const { macUrl, winUrl } = variant;
+const isQ = variant.slug === 'q';
 ---
 
-<div data-variant-slug={variant.slug} data-github-repo={variant.githubRepo} style="display:none;" aria-hidden="true"></div>
+<div
+  data-variant-slug={variant.slug}
+  data-github-repo={variant.githubRepo}
+  style="display:none;"
+  aria-hidden="true"
+></div>
 
-<nav class="mini-nav">
+<!-- Mini nav — 전체 Nav와 동일한 스타일 (투명 → 스크롤 시 블러) -->
+<nav class="mini-nav" data-mini-nav data-scrolled="false">
   <div class="mini-nav-inner">
     <a href="/" class="back-link">
       <Icon name="lucide:arrow-right" width={16} height={16} class="back-icon" />
@@ -28,66 +35,72 @@ const { macUrl, winUrl } = variant;
 </nav>
 
 <main id="main" class="page">
+  <!-- ============ HERO ============ -->
   <section class="hero">
     <div class="hero-inner">
-      <div class="badge">
+      <div class="hero-copy">
+        <div class="hero-eyebrow">PRODUCT &nbsp;·&nbsp; DESKTOP APP</div>
+        <h1 class="name">
+          {isQ ? <>TutorMate <span class="name-q">Q</span></> : variant.name}
+        </h1>
+        <p class="tagline">{variant.tagline}</p>
+        <p class="description">{variant.description}</p>
+
+        <div class="downloads">
+          <a href={macUrl} class="btn btn-primary" data-platform="mac" data-download>
+            <Icon name="lucide:app-window" width={18} height={18} />
+            <span>macOS 다운로드</span>
+          </a>
+          <a href={winUrl} class="btn btn-secondary" data-platform="windows" data-download>
+            <Icon name="lucide:layout-grid" width={18} height={18} />
+            <span>Windows 다운로드</span>
+          </a>
+        </div>
+
+        <div class="version-line">
+          <span class="version-label">CURRENT</span>
+          <span class="version-num">v{variant.version}</span>
+          <span class="version-sep">·</span>
+          <span class="version-date">{variant.releaseDate} 업데이트</span>
+        </div>
+      </div>
+
+      <div class="hero-icon-wrap" aria-hidden="true">
         <img
           src={variant.iconSrc}
           alt={`${variant.name} 앱 아이콘`}
-          width="140"
-          height="140"
+          width="280"
+          height="280"
           class="app-icon"
           loading="eager"
           decoding="async"
+          fetchpriority="high"
         />
       </div>
-
-      <h1 class="name">
-        {variant.slug === 'q'
-          ? <>TutorMate <span class="name-q">Q</span></>
-          : variant.name}
-      </h1>
-      <p class="tagline">{variant.tagline}</p>
-      <p class="description">{variant.description}</p>
-
-      <div class="downloads">
-        <a
-          href={macUrl}
-          class="btn btn-primary"
-          data-platform="mac"
-          data-download
-        >
-          <Icon name="lucide:app-window" width={20} height={20} />
-          <span>macOS 다운로드</span>
-        </a>
-        <a
-          href={winUrl}
-          class="btn btn-secondary"
-          data-platform="windows"
-          data-download
-        >
-          <Icon name="lucide:layout-grid" width={20} height={20} />
-          <span>Windows 다운로드</span>
-        </a>
-      </div>
-
-      <p class="version-info">
-        <span class="version-num">v{variant.version}</span>
-        <span class="version-sep">·</span>
-        <span class="version-date">{variant.releaseDate} 업데이트</span>
-      </p>
     </div>
   </section>
 
+  <!-- ============ FEATURES — 챕터 행 (Capabilities A 스타일) ============ -->
   <section class="features">
     <div class="features-inner">
-      <h2 class="features-title">주요 특징</h2>
-      <div class="feature-grid">
+      <div class="features-head">
+        <div class="features-eyebrow">FEATURES &nbsp;·&nbsp; 주요 특징</div>
+        <h2 class="features-headline">
+          매일 쓰기 좋게, <span class="muted">꼼꼼히 다듬었습니다.</span>
+        </h2>
+      </div>
+
+      <div class="feature-list">
         {
-          variant.features.map((feature) => (
-            <article class="feature-card">
-              <h3 class="feature-title">{feature.title}</h3>
-              <p class="feature-description">{feature.description}</p>
+          variant.features.map((feature, i) => (
+            <article class="feature-row">
+              <div class="feature-num-col">
+                <div class="feature-num">{String(i + 1).padStart(2, '0')}</div>
+              </div>
+              <div class="feature-body">
+                <h3 class="feature-title">{feature.title}</h3>
+                <p class="feature-desc">{feature.description}</p>
+              </div>
             </article>
           ))
         }
@@ -95,26 +108,56 @@ const { macUrl, winUrl } = variant;
     </div>
   </section>
 
+  <!-- ============ REQUIREMENTS — 편집지 모노 리스트 ============ -->
   <section class="requirements">
     <div class="requirements-inner">
-      <h2 class="requirements-title">시스템 요구사항</h2>
+      <div class="req-head">
+        <div class="req-eyebrow">SYSTEM &nbsp;·&nbsp; 시스템 요구사항</div>
+      </div>
       <dl class="req-list">
         <div class="req-item">
-          <dt>macOS</dt>
+          <dt>
+            <span class="req-mono">MACOS</span>
+          </dt>
           <dd>{variant.systemRequirements.mac}</dd>
         </div>
         <div class="req-item">
-          <dt>Windows</dt>
+          <dt>
+            <span class="req-mono">WINDOWS</span>
+          </dt>
           <dd>{variant.systemRequirements.windows}</dd>
         </div>
       </dl>
+
+      <div class="req-footer">
+        <span>모든 업데이트는 자동으로 적용됩니다.</span>
+        <a href="/#contact" class="req-help">궁금한 점 문의하기 →</a>
+      </div>
     </div>
   </section>
 </main>
 
 <script>
+  // ========== Mini-nav scroll state (메인 Nav와 동일 패턴) ==========
+  const miniNav = document.querySelector<HTMLElement>('[data-mini-nav]');
+  if (miniNav) {
+    const threshold = 40;
+    let ticking = false;
+    const update = (): void => {
+      miniNav.dataset.scrolled = String(window.scrollY > threshold);
+      ticking = false;
+    };
+    const onScroll = (): void => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+  }
+
   // ========== OS 자동 감지 — 사용 OS에 맞는 버튼 강조 ==========
-  function highlightPlatform() {
+  function highlightPlatform(): void {
     const platform = navigator.platform.toLowerCase();
     const userAgent = navigator.userAgent.toLowerCase();
     const isMac = platform.includes('mac') || userAgent.includes('mac');
@@ -134,13 +177,11 @@ const { macUrl, winUrl } = variant;
       macBtn?.classList.remove('btn-primary');
       macBtn?.classList.add('btn-secondary');
     }
-    // 알 수 없는 OS는 기본(Mac primary) 유지
   }
 
   highlightPlatform();
 
   // ========== 런타임 최신 버전 fetch (GitHub API 클라이언트 사이드) ==========
-  // 재배포 없이 새 릴리즈가 올라가면 자동 반영. 실패 시 정적 fallback 유지.
   interface GitHubAsset {
     name: string;
     browser_download_url: string;
@@ -161,17 +202,14 @@ const { macUrl, winUrl } = variant;
     try {
       const res = await fetch(
         `https://api.github.com/repos/${repo}/releases/latest`,
-        {
-          headers: { Accept: 'application/vnd.github+json' },
-        }
+        { headers: { Accept: 'application/vnd.github+json' } },
       );
-      if (!res.ok) return; // silent fail → static fallback 유지
+      if (!res.ok) return;
       const release = (await res.json()) as GitHubRelease;
 
       const version = release.tag_name.replace(/^v/, '');
       const releaseDate = release.published_at.slice(0, 10);
 
-      // variant 에 맞는 파일명 패턴
       const macPattern =
         slug === 'q'
           ? /^TutorMate-Q-\d+\.\d+\.\d+-universal-mac\.dmg$/
@@ -186,22 +224,18 @@ const { macUrl, winUrl } = variant;
 
       const macUrl = findAsset(macPattern);
       const winUrl = findAsset(winPattern);
-
-      // 하나라도 있으면 업데이트
       if (!macUrl && !winUrl) return;
 
-      // DOM 업데이트
       const versionEl = document.querySelector<HTMLElement>('.version-num');
       if (versionEl) versionEl.textContent = `v${version}`;
-
       const dateEl = document.querySelector<HTMLElement>('.version-date');
       if (dateEl) dateEl.textContent = `${releaseDate} 업데이트`;
 
       const macBtn = document.querySelector<HTMLAnchorElement>(
-        '[data-platform="mac"]'
+        '[data-platform="mac"]',
       );
       const winBtn = document.querySelector<HTMLAnchorElement>(
-        '[data-platform="windows"]'
+        '[data-platform="windows"]',
       );
       if (macBtn && macUrl) macBtn.href = macUrl;
       if (winBtn && winUrl) winBtn.href = winUrl;
@@ -214,372 +248,388 @@ const { macUrl, winUrl } = variant;
 </script>
 
 <style>
+  /* ===== Mini Nav ===== */
   .mini-nav {
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(250, 250, 249, 0.8);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: transparent;
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition:
+      background-color 0.4s var(--ease-smooth),
+      backdrop-filter 0.4s var(--ease-smooth),
+      -webkit-backdrop-filter 0.4s var(--ease-smooth);
   }
-
+  .mini-nav[data-scrolled='true'] {
+    background: rgba(250, 250, 247, 0.72);
+    backdrop-filter: saturate(1.4) blur(18px);
+    -webkit-backdrop-filter: saturate(1.4) blur(18px);
+  }
   .mini-nav::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    left: 0; right: 0; bottom: 0;
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(10, 25, 41, 0.1),
-      transparent
-    );
+    background: rgba(10, 10, 10, 0.08);
+    opacity: 0;
+    transition: opacity 0.4s var(--ease-smooth);
   }
-
+  .mini-nav[data-scrolled='true']::after { opacity: 1; }
   .mini-nav-inner {
     max-width: var(--container-wide);
     margin: 0 auto;
-    padding: 16px 24px;
+    padding: 18px 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 16px;
   }
-
   .back-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 14px;
-    font-weight: 600;
-    transition: color 0.3s var(--ease-in-out);
+    font-weight: 500;
+    transition: color 0.3s var(--ease-smooth);
   }
-
-  .back-link:hover {
-    color: var(--color-text);
-  }
-
-  .back-icon {
-    transform: rotate(180deg);
-  }
-
+  .back-link:hover { color: var(--text-primary); }
+  .back-icon { transform: rotate(180deg); }
   .variant-switch {
     display: inline-flex;
     align-items: center;
     gap: 6px;
     padding: 8px 14px;
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-md);
-    color: var(--color-text-secondary);
+    color: var(--text-secondary);
     text-decoration: none;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 500;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
     transition:
-      color 0.3s var(--ease-in-out),
-      border-color 0.3s var(--ease-in-out);
+      color 0.25s var(--ease-smooth),
+      border-color 0.25s var(--ease-smooth),
+      background-color 0.25s var(--ease-smooth);
   }
-
   .variant-switch:hover {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
+    color: var(--text-primary);
+    border-color: var(--text-primary);
+    background: rgba(10, 10, 10, 0.03);
   }
 
+  /* ===== Page ===== */
   .page {
+    background: var(--bg-primary);
+    color: var(--text-primary);
     min-height: 100vh;
   }
 
-  /* ============ Hero ============ */
+  /* ===== HERO ===== */
   .hero {
     position: relative;
-    padding: 96px 24px 80px;
+    padding: 120px var(--section-pad-x) 96px;
     overflow: hidden;
-    background:
-      radial-gradient(ellipse 60% 40% at 50% 0%, rgba(8, 145, 178, 0.06), transparent 60%),
-      var(--color-bg);
   }
-
   .hero-inner {
-    max-width: var(--container-narrow);
+    max-width: var(--container-wide);
     margin: 0 auto;
-    text-align: center;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 80px;
+    align-items: center;
   }
-
-  .badge {
-    display: inline-flex;
+  .hero-copy { min-width: 0; }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted);
     margin-bottom: 32px;
   }
-
-  .app-icon {
-    width: 140px;
-    height: 140px;
-    filter: drop-shadow(0 30px 60px rgba(10, 25, 41, 0.18));
-    transition: transform 0.6s var(--ease-smooth);
-  }
-
-  .app-icon:hover {
-    transform: translate3d(0, -4px, 0) scale3d(1.03, 1.03, 1);
-  }
-
-  @media (max-width: 768px) {
-    .app-icon {
-      width: 112px;
-      height: 112px;
-    }
-  }
-
   .name {
-    font-size: clamp(42px, 7vw, 80px);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-    color: var(--color-text);
-    margin: 0 0 16px;
-  }
-
-  .name-q {
-    color: var(--color-accent);
-  }
-
-  .tagline {
-    font-size: clamp(16px, 1.5vw, 20px);
+    font-size: clamp(48px, 7vw, 88px);
     font-weight: 600;
-    color: var(--color-accent);
-    margin: 0 0 12px;
+    letter-spacing: var(--tracking-headline);
+    line-height: 1;
+    margin: 0 0 20px;
+    color: var(--text-primary);
   }
-
+  .name-q {
+    color: var(--accent-q-blue);
+  }
+  .tagline {
+    font-size: clamp(18px, 1.6vw, 22px);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin: 0 0 18px;
+    max-width: 600px;
+  }
   .description {
-    font-size: clamp(15px, 1.2vw, 17px);
-    line-height: 1.75;
-    color: var(--color-text-secondary);
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--text-secondary);
     margin: 0 0 40px;
     max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
   }
-
   .downloads {
     display: flex;
-    gap: 12px;
-    justify-content: center;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
   }
-
   .btn {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 16px 28px;
-    border-radius: var(--radius-md);
+    padding: 14px 22px;
+    border-radius: 999px;
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 500;
     text-decoration: none;
+    letter-spacing: -0.01em;
     transition:
-      transform 0.3s var(--ease-in-out),
-      box-shadow 0.3s var(--ease-in-out),
-      background-color 0.3s var(--ease-in-out),
-      border-color 0.3s var(--ease-in-out);
-    will-change: transform;
+      transform 0.3s var(--ease-smooth),
+      background-color 0.3s var(--ease-smooth),
+      border-color 0.3s var(--ease-smooth);
   }
-
   .btn-primary {
-    background: var(--color-text);
-    color: var(--color-bg);
-    box-shadow: 0 4px 12px rgba(10, 25, 41, 0.15);
+    background: var(--text-primary);
+    color: var(--bg-primary);
   }
-
   .btn-primary:hover {
-    box-shadow: 0 8px 24px rgba(10, 25, 41, 0.25);
-    transform: translate3d(0, -2px, 0);
+    transform: translateY(-2px);
+    background: rgba(10, 10, 10, 0.88);
   }
-
   .btn-secondary {
     background: transparent;
-    color: var(--color-text);
-    border: 1.5px solid var(--color-border-solid);
+    color: var(--text-primary);
+    border: 1px solid var(--hairline-strong);
   }
-
   .btn-secondary:hover {
-    border-color: var(--color-text);
-    transform: translate3d(0, -2px, 0);
+    border-color: var(--text-primary);
+    transform: translateY(-2px);
   }
-
-  .version-info {
+  .version-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
     font-size: 14px;
-    color: var(--color-text-tertiary);
-    margin: 0;
+    color: var(--text-muted);
     font-variant-numeric: tabular-nums;
+    padding: 10px 14px;
+    background: rgba(10, 10, 10, 0.03);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
   }
-
+  .version-label {
+    font-size: 14px;
+    letter-spacing: var(--tracking-mono-label);
+    opacity: 0.7;
+  }
   .version-num {
-    font-weight: 700;
-    color: var(--color-text-secondary);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  .version-sep { opacity: 0.4; }
+  .version-date { color: var(--text-secondary); }
+
+  .hero-icon-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .app-icon {
+    width: clamp(180px, 24vw, 300px);
+    height: auto;
+    filter: drop-shadow(0 40px 80px rgba(10, 10, 10, 0.18));
+    transition: transform 0.5s var(--ease-smooth);
+    will-change: transform;
+  }
+  .app-icon:hover {
+    transform: translateY(-6px) scale(1.02);
   }
 
-  .version-sep {
-    margin: 0 8px;
-  }
-
-  /* ============ Features ============ */
+  /* ===== FEATURES ===== */
   .features {
-    padding: 80px 24px;
-    background: var(--color-bg-alt);
+    padding: var(--section-pad-y) var(--section-pad-x);
   }
-
   .features-inner {
-    max-width: var(--container-grid);
+    max-width: var(--container-wide);
     margin: 0 auto;
   }
-
-  .features-title {
-    text-align: center;
-    font-size: clamp(22px, 3vw, 32px);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: var(--color-text);
-    margin: 0 0 48px;
+  .features-head {
+    margin-bottom: 64px;
   }
-
-  .feature-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  .feature-card {
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-lg);
-    padding: 32px;
-    transition:
-      border-color 0.4s var(--ease-in-out),
-      box-shadow 0.4s var(--ease-smooth);
-  }
-
-  .feature-card:hover {
-    border-color: var(--color-accent);
-    box-shadow: 0 12px 28px rgba(10, 25, 41, 0.08);
-  }
-
-  .feature-title {
-    font-size: 17px;
-    font-weight: 800;
-    color: var(--color-text);
-    margin: 0 0 10px;
-    letter-spacing: -0.01em;
-  }
-
-  .feature-description {
+  .features-eyebrow {
+    font-family: var(--font-mono);
     font-size: 14px;
-    line-height: 1.65;
-    color: var(--color-text-secondary);
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .features-headline {
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
     margin: 0;
+    max-width: 900px;
+  }
+  .features-headline .muted { opacity: 0.35; }
+
+  .feature-list {
+    border-top: 1px solid var(--hairline-strong);
+  }
+  .feature-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 48px;
+    align-items: baseline;
+    padding: 44px 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .feature-row:last-child {
+    border-bottom: 1px solid var(--hairline-strong);
+  }
+  .feature-num {
+    font-size: 80px;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    line-height: 0.85;
+    font-variant-numeric: tabular-nums;
+    color: transparent;
+    -webkit-text-stroke: 1.4px rgba(10, 10, 10, 0.85);
+  }
+  .feature-title {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin: 0 0 12px;
+  }
+  .feature-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 640px;
   }
 
-  /* ============ Requirements ============ */
+  /* ===== REQUIREMENTS ===== */
   .requirements {
-    padding: 80px 24px;
-    background: var(--color-bg);
+    padding: var(--section-pad-y) var(--section-pad-x);
   }
-
   .requirements-inner {
-    max-width: var(--container-narrow);
+    max-width: var(--container-wide);
     margin: 0 auto;
   }
-
-  .requirements-title {
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: var(--color-accent);
-    margin: 0 0 24px;
-    text-align: center;
+  .req-head {
+    margin-bottom: 40px;
   }
-
+  .req-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: var(--tracking-eyebrow);
+    color: var(--text-muted);
+  }
   .req-list {
     margin: 0;
     padding: 0;
-    display: grid;
-    gap: 16px;
+    border-top: 1px solid var(--hairline-strong);
   }
-
   .req-item {
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border-soft);
-    border-radius: var(--radius-md);
-    padding: 20px 24px;
     display: grid;
-    grid-template-columns: 120px 1fr;
-    gap: 16px;
+    grid-template-columns: 180px 1fr;
+    gap: 48px;
     align-items: baseline;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--hairline);
   }
-
   .req-item dt {
-    font-weight: 800;
-    color: var(--color-text);
-    font-size: 14px;
+    margin: 0;
   }
-
+  .req-mono {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: var(--tracking-mono-label);
+    color: var(--text-muted);
+  }
   .req-item dd {
     margin: 0;
-    color: var(--color-text-secondary);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+  .req-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hairline-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 14px;
-    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+  .req-help {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid var(--text-primary);
+    padding-bottom: 2px;
+    transition: opacity 0.2s var(--ease-smooth);
+  }
+  .req-help:hover { opacity: 0.7; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 900px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      text-align: left;
+    }
+    .hero-icon-wrap {
+      order: -1;
+      justify-content: flex-start;
+    }
+    .app-icon {
+      width: 140px;
+    }
   }
 
-  /* ============ 반응형 ============ */
   @media (max-width: 768px) {
-    .mini-nav-inner {
-      padding: 14px 20px;
-    }
-
-    .variant-switch {
-      padding: 6px 10px;
-      font-size: 14px;
-    }
-
-    .hero {
-      padding: 64px 20px 60px;
-    }
-
-    .features,
-    .requirements {
-      padding: 60px 20px;
-    }
-
-    .feature-grid {
+    .mini-nav-inner { padding: 14px var(--section-pad-x-sm); }
+    .hero { padding: 80px var(--section-pad-x-sm) 64px; }
+    .features, .requirements { padding: 72px var(--section-pad-x-sm); }
+    .features-head { margin-bottom: 40px; }
+    .feature-row {
       grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 32px 0;
     }
-
+    .feature-num { font-size: 56px; }
+    .feature-title { font-size: 22px; }
     .req-item {
       grid-template-columns: 1fr;
-      gap: 6px;
+      gap: 8px;
+      padding: 24px 0;
     }
-
-    .downloads {
+    .req-footer {
       flex-direction: column;
-      align-items: stretch;
+      gap: 12px;
+      align-items: flex-start;
     }
-
-    .btn {
-      justify-content: center;
-    }
+    .downloads { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+    .version-line { flex-wrap: wrap; }
   }
 
   @media (min-width: 1536px) {
-    .hero {
-      padding: 128px 32px 120px;
-    }
-
-    .features,
-    .requirements {
-      padding: 120px 32px;
-    }
+    .hero { padding: var(--section-pad-y-lg) 40px 128px; }
+    .features, .requirements { padding: var(--section-pad-y-lg) 40px; }
   }
 </style>
