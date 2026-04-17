@@ -120,11 +120,13 @@ export async function initCapabilitiesMorph(): Promise<void> {
 
     // Content font-size / margin 연속 보간 — box morph와 동기
     if (numEl) {
+      // 숫자는 gradient stop을 38% → 100%로 채워 solid로 전환 (stroke 얇아질 때 반쪽만 남는 현상 제거)
       tl.to(numEl, {
         fontSize: 14,
         marginBottom: 0,
         lineHeight: 1.4,
         webkitTextStrokeWidth: 0,
+        '--grad-stop': '100%',
         ease: EASE.expo,
         duration: morphDur,
       }, bigEnd);
