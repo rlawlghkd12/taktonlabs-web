@@ -13,6 +13,7 @@ const { capability: c, index } = Astro.props;
     <div class="cc-principles">
       {c.principles.map((p) => <span>— {p}</span>)}
     </div>
+    <div class="cc-tagline" data-cc-tagline>{c.principles.join(' · ')}</div>
   </div>
   <div class="cc-right">
     {c.proofType === 'browser' && (
@@ -112,6 +113,18 @@ const { capability: c, index } = Astro.props;
   .cc-desc { font-size: 16px; line-height: 1.7; color: var(--text-secondary); margin: 0 0 14px; max-width: 460px; }
   .cc-principles { font-size: 14px; color: var(--text-secondary); display: flex; gap: 10px; flex-wrap: wrap; }
   .cc-principles span { white-space: nowrap; }
+  .cc-tagline {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    opacity: 0;                     /* 초기 숨김, docked로 갈 때 GSAP이 페이드인 */
+  }
 
   /* ===== Proof: Browser ===== */
   .proof-browser { background: #fff; border: 1px solid var(--hairline); border-radius: 10px; padding: 8px; }

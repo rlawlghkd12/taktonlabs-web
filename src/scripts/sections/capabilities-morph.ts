@@ -119,9 +119,10 @@ export async function initCapabilitiesMorph(): Promise<void> {
       duration: morphDur,
     }, bigEnd);
 
-    // Accent bar + check mark 연속 fade-in — morph 후반에 등장
+    // Accent bar + check mark + tagline 연속 fade-in — morph 후반에 등장
     const accent = card.querySelector<HTMLElement>('[data-cc-accent]');
     const check = card.querySelector<HTMLElement>('[data-cc-check]');
+    const tagline = card.querySelector<HTMLElement>('[data-cc-tagline]');
     if (accent) {
       tl.to(accent, {
         opacity: 0.85,
@@ -129,6 +130,13 @@ export async function initCapabilitiesMorph(): Promise<void> {
         ease: EASE.expo,
         duration: morphDur * 0.6,
       }, bigEnd + morphDur * 0.4);
+    }
+    if (tagline) {
+      tl.to(tagline, {
+        opacity: 1,
+        ease: EASE.smooth,
+        duration: morphDur * 0.4,
+      }, bigEnd + morphDur * 0.55);
     }
     if (check) {
       tl.to(check, {
