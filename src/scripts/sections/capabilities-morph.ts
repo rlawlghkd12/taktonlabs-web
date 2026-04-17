@@ -112,8 +112,8 @@ export async function initCapabilitiesMorph(): Promise<void> {
       left: () => dockTargets[idx].left,
       width: () => dockTargets[idx].width,
       height: () => dockTargets[idx].height,
-      padding: 16,
-      borderRadius: 10,
+      padding: 22,
+      borderRadius: 12,
       ease: EASE.expo,
       duration: morphDur,
     }, bigEnd);
@@ -122,9 +122,9 @@ export async function initCapabilitiesMorph(): Promise<void> {
     if (numEl) {
       // 숫자는 gradient stop을 38% → 100%로 채워 solid로 전환 (stroke 얇아질 때 반쪽만 남는 현상 제거)
       tl.to(numEl, {
-        fontSize: 14,
+        fontSize: 20,
         marginBottom: 0,
-        lineHeight: 1.4,
+        lineHeight: 1,
         webkitTextStrokeWidth: 0,
         '--grad-stop': '100%',
         ease: EASE.expo,
@@ -133,7 +133,7 @@ export async function initCapabilitiesMorph(): Promise<void> {
     }
     if (titleEl) {
       tl.to(titleEl, {
-        fontSize: 14,
+        fontSize: 15,
         marginBottom: 0,
         ease: EASE.expo,
         duration: morphDur,
