@@ -169,6 +169,19 @@ export async function initCapabilitiesMorph(): Promise<void> {
     tl.to(titleItems[2], { opacity: 1, ease: EASE.smooth, duration: 0.14 }, 0.60);
   }
 
+  // Outro (결론 + Process 앵커) — 카드 3 shrink 완료 즈음 등장
+  const outro = section.querySelector<HTMLElement>('[data-cap-outro]');
+  if (outro) {
+    gsap.set(outro, { opacity: 0, y: 24, pointerEvents: 'none' });
+    tl.to(outro, {
+      opacity: 1,
+      y: 0,
+      pointerEvents: 'auto',
+      ease: EASE.expo,
+      duration: 0.12,
+    }, 0.88);
+  }
+
   // Progress segments — 각 카드 shrink 완료 시점에 채움
   const segMilestones = [0.32, 0.70, 1.00];
   segMilestones.forEach((at, i) => {
