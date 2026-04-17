@@ -57,9 +57,9 @@ import { capabilities } from '../data/capabilities';
   .cap-progress-seg::after { content: ''; position: absolute; inset: 0; background: var(--text-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-expo); }
   .cap-progress-seg[data-filled='true']::after { transform: scaleX(1); }
   .cap-headline { font-size: clamp(40px, 6vw, 64px); font-weight: 600; letter-spacing: -0.04em; margin: 0 0 48px; line-height: 1; }
-  .cap-dock-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 56px; min-height: 76px; }
+  .cap-dock-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 56px; min-height: 92px; }
   .cap-dock {
-    display: flex; align-items: center; gap: 16px;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
     padding: 18px 22px;
     background: #fff; border: 1px solid var(--hairline); border-radius: 12px;
     box-shadow: 0 2px 8px -4px rgba(0,0,0,0.05);
@@ -86,11 +86,14 @@ import { capabilities } from '../data/capabilities';
   .dock-title {
     font-size: 15px;
     font-weight: 600;
-    flex: 1;
     letter-spacing: -0.01em;
     line-height: 1.3;
   }
-  .dock-check { font-size: 14px; color: var(--text-muted); opacity: 0.6; }
+  .dock-check {
+    position: absolute;
+    top: 18px; right: 22px;
+    font-size: 14px; color: var(--text-muted); opacity: 0.6;
+  }
   .cap-stage { position: relative; flex: 1; min-height: 340px; }
 
   @media (max-width: 768px) {
