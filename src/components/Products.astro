@@ -6,6 +6,7 @@ const screens = [
 ];
 ---
 <section id="products" class="prod">
+  <div class="prod-rail" data-prod-rail>
   <div class="prod-pin">
     <div class="prod-head">
       <div class="prod-eyebrow">06 &nbsp;/&nbsp; OUR PRODUCT &nbsp;·&nbsp; <span>TutorMate</span></div>
@@ -105,6 +106,7 @@ const screens = [
       </ol>
     </div>
   </div>
+  </div><!-- /.prod-rail -->
 
   <!-- CTA 스트립: pin 바깥 -->
   <div class="prod-cta">
@@ -131,6 +133,7 @@ const screens = [
     color: var(--dark-text-primary);
     padding: 0 var(--section-pad-x) 64px;
   }
+  .prod-rail { position: relative; /* height은 JS에서 280vh 로 설정 */ }
   .prod-pin { padding-top: 72px; padding-bottom: 72px; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
   .prod-pin::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 20%, rgba(255,255,255,0.04), transparent 60%); pointer-events: none; }
   .prod-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; position: relative; }

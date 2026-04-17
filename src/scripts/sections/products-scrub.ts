@@ -12,6 +12,10 @@ export async function initProductsScrub(): Promise<void> {
       pin.style.height = 'auto';
       pin.style.minHeight = 'auto';
     }
+    const rail = section.querySelector<HTMLElement>('[data-prod-rail]');
+    if (rail) {
+      rail.style.height = 'auto';
+    }
     // 모든 화면·캡션 펼치기
     section.querySelectorAll<HTMLElement>('[data-prod-screen]').forEach((el) => {
       el.style.position = 'relative';
@@ -42,15 +46,16 @@ export async function initProductsScrub(): Promise<void> {
   const windowTitle = section.querySelector<HTMLElement>('[data-prod-window-title]');
   const titles = ['TutorMate — 대시보드', 'TutorMate — 수강생', 'TutorMate — 수익'];
 
-  // pin 구간 = 280vh
-  section.style.setProperty('--pin-h', '280vh');
+  // Rail 설정 — 이 레일 안에서만 pin이 sticky로 동작
+  const rail = section.querySelector<HTMLElement>('[data-prod-rail]')!;
+  rail.style.height = '280vh';
   pinEl.style.position = 'sticky';
   pinEl.style.top = '0';
   pinEl.style.height = '100vh';
-  (section as HTMLElement).style.height = '280vh';
+  // section.style.height 설정 제거 — rail + CTA + tags가 자연 flow로 쌓임
 
   const tl = gsap.timeline({
-    scrollTrigger: { trigger: section, start: 'top top', end: 'bottom bottom', scrub: 0.8 },
+    scrollTrigger: { trigger: rail, start: 'top top', end: 'bottom bottom', scrub: 0.8 },
   });
 
   function switchTo(idx: number, at: number) {
