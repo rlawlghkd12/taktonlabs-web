@@ -110,7 +110,10 @@ const principles = [
       {principles.map((p) => (
         <div class="phil-principle" data-phil-principle>
           <div class="phil-principle-tag">{p.tag}</div>
-          <div class="phil-principle-line">{p.line1}<br />{p.line2}</div>
+          <div class="phil-principle-line">
+            <span class="phil-line">{p.line1}</span>
+            <span class="phil-line">{p.line2}</span>
+          </div>
         </div>
       ))}
     </div>
@@ -167,10 +170,16 @@ const principles = [
     margin-bottom: 10px;
   }
   .phil-principle-line { font-size: 16px; line-height: 1.65; color: var(--text-primary); }
+  .phil-line { display: block; }
+  @media (max-width: 768px) {
+    .phil-line { display: inline; }
+    .phil-line + .phil-line::before { content: ' '; }
+  }
   @media (max-width: 768px) {
     .phil { padding: 72px var(--section-pad-x-sm); }
     .phil-headline { font-size: 38px; margin-bottom: 48px; }
-    .phil-grid { grid-template-columns: 1fr; gap: 24px; }
+    .phil-grid { grid-template-columns: 1fr; gap: 40px; padding-top: 32px; }
+    .phil-principle-tag { margin-bottom: 14px; }
   }
 </style>
 
