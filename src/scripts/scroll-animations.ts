@@ -444,6 +444,7 @@ export function initScrollReveals(): void {
     '.contact-eyebrow', '.contact-headline', '.contact-grid',
   ];
 
+  // nav 아래로 충분히 내려왔을 때 트리거 — translateY 애니 중 nav 블러에 걸리지 않게
   const io = new IntersectionObserver(
     (entries) => {
       entries.forEach((e) => {
@@ -453,7 +454,7 @@ export function initScrollReveals(): void {
         }
       });
     },
-    { rootMargin: '-10% 0px' }
+    { rootMargin: '-120px 0px -5% 0px' }
   );
 
   selectors.forEach((sel, i) => {

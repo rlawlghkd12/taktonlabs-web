@@ -99,7 +99,7 @@ export async function initCapabilitiesMorph(): Promise<void> {
             io.unobserve(e.target);
           });
         },
-        { rootMargin: '-8% 0px' },
+        { rootMargin: '-100px 0px -5% 0px' },
       );
       cardEls.forEach((el) => io.observe(el));
     } else {
