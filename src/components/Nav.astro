@@ -222,10 +222,7 @@
   .nav[data-over-dark='true'] .nav-progress-seg {
     background: rgba(255, 255, 255, 0.12);
   }
-  .nav[data-over-dark='true'] .brand-logo {
-    /* 컬러 파트까지 뒤집히지 않도록 — 전체를 흰색 실루엣으로 */
-    filter: brightness(0) invert(1);
-  }
+  /* 로고는 원본 그대로 유지 — 다크 섹션에서도 필터 적용 안 함 */
   .nav[data-over-dark='true'] .links > li > a:not(.cta) {
     color: rgba(255, 255, 255, 0.72);
   }
