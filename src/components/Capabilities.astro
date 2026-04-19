@@ -140,7 +140,24 @@ import { capabilities } from '../data/capabilities';
   .cap-outro-link:hover { opacity: 0.7; }
 
   @media (max-width: 768px) {
+    .cap { padding-top: 80px; }
     .cap-pin { padding: 48px var(--section-pad-x-sm); min-height: auto; }
+    .cap-head { margin-bottom: 32px; }
+    .cap-eyebrow {
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 4px 6px;
+      line-height: 1.6;
+    }
+    .cap-title-stack {
+      position: relative;
+      display: inline-block;
+      min-width: 0;
+      width: auto;
+      height: auto;
+      min-height: 1.3em;
+    }
+    .cap-title-item { white-space: normal; }
     .cap-headline { font-size: 32px; margin-bottom: 32px; }
     .cap-dock-bar { display: none; }
     .cap-stage { min-height: auto; display: flex; flex-direction: column; gap: 16px; }

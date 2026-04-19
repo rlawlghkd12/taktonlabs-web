@@ -25,15 +25,45 @@ export async function initCapabilitiesMorph(): Promise<void> {
       stage.style.minHeight = 'auto';
     }
 
-    section.querySelectorAll<HTMLElement>('[data-cap-card]').forEach((el) => {
+    const cardEls = Array.from(
+      section.querySelectorAll<HTMLElement>('[data-cap-card]'),
+    );
+    cardEls.forEach((el) => {
       el.style.position = 'relative';
       el.style.inset = 'auto';
-      el.style.opacity = '1';
       el.style.top = 'auto';
       el.style.left = 'auto';
       el.style.width = 'auto';
       el.style.height = 'auto';
     });
+
+    // 모바일: 각 카드 개별 scroll reveal (fade + 위에서 내려옴)
+    if (!prefersReducedMotion()) {
+      cardEls.forEach((el) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(28px)';
+        el.style.transition =
+          'opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)';
+      });
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              const t = e.target as HTMLElement;
+              t.style.opacity = '1';
+              t.style.transform = 'translateY(0)';
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { rootMargin: '-10% 0px' },
+      );
+      cardEls.forEach((el) => io.observe(el));
+    } else {
+      cardEls.forEach((el) => {
+        el.style.opacity = '1';
+      });
+    }
     return;
   }
 

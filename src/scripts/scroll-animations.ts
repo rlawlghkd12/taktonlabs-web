@@ -437,6 +437,7 @@ export function initScrollReveals(): void {
 
   const selectors = [
     '.phil-eyebrow', '.phil-headline', '.phil-grid',
+    '.cap-eyebrow', '.cap-headline',
     '.proc-eyebrow', '.proc-headline',
     '.why-eyebrow', '.why-headline', '.why-grid',
     '.faq-eyebrow', '.faq-headline', '.faq-list',
