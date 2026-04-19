@@ -78,22 +78,11 @@ function showAllImmediately(): void {
 }
 
 /**
- * Hero: 단어별 0.08s stagger 페이드업
+ * Hero 진입 애니메이션은 이제 Hero.astro의 CSS @keyframes로 처리됨
+ * (eyebrow / 단어 stagger / subcopy / CTAs / 워드마크 슬라이드인 / 스크롤 힌트 pulse)
  */
 function animateHero(): void {
-  const words = document.querySelectorAll('#hero .word');
-  words.forEach((el, i) => {
-    (el as HTMLElement).style.opacity = '0';
-    (el as HTMLElement).style.transform = 'translateY(12px)';
-    (el as HTMLElement).style.transition =
-      `opacity 0.75s var(--ease-expo) ${i * 0.12}s, transform 0.75s var(--ease-expo) ${i * 0.12}s`;
-  });
-  requestAnimationFrame(() => {
-    words.forEach((el) => {
-      (el as HTMLElement).style.opacity = '';  // word-muted는 CSS 0.3 유지
-      (el as HTMLElement).style.transform = 'translateY(0)';
-    });
-  });
+  // no-op — CSS가 담당
 }
 
 /**

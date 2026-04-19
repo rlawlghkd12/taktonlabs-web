@@ -54,6 +54,78 @@ import { Icon } from 'astro-icon/components';
     will-change: transform;
   }
   .hero-inner { position: relative; max-width: var(--container-wide); margin: 0 auto; width: 100%; z-index: 1; }
+
+  /* ===== 첫 진입 랜딩 애니메이션 ===== */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes heroWordFade {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: var(--word-final-opacity, 1); transform: translateY(0); }
+  }
+  @keyframes heroWordmarkSlide {
+    from { opacity: 0; transform: translateX(80px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes heroScrollHintPulse {
+    0%, 100% { opacity: 0.5; transform: translateY(0); }
+    50%      { opacity: 1;   transform: translateY(4px); }
+  }
+  .hero-wordmark {
+    animation: heroWordmarkSlide 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  }
+  .hero-eyebrow {
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+  .headline .word {
+    opacity: 0;
+    --word-final-opacity: 1;
+    animation: heroWordFade 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .headline .word[data-word="0"] { animation-delay: 0.35s; }
+  .headline .word[data-word="1"] { animation-delay: 0.5s; }
+  .headline .word[data-word="2"] {
+    --word-final-opacity: 0.3;
+    animation-delay: 0.65s;
+  }
+  .subcopy {
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+  }
+  .ctas {
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.08s both;
+  }
+  .hero-now-shipping {
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.24s both;
+  }
+  .hero-est {
+    opacity: 0;
+    animation: heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.4s both;
+  }
+  .hero-scroll-hint {
+    opacity: 0;
+    animation:
+      heroFadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 1.55s both,
+      heroScrollHintPulse 2.4s ease-in-out 2.3s infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-wordmark,
+    .hero-eyebrow,
+    .headline .word,
+    .subcopy,
+    .ctas,
+    .hero-now-shipping,
+    .hero-est,
+    .hero-scroll-hint {
+      animation: none;
+      opacity: 1;
+    }
+    .headline .word[data-word="2"] { opacity: 0.3; }
+  }
   .hero-eyebrow {
     font-family: var(--font-mono);
     font-size: 14px;
