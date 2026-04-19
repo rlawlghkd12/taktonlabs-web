@@ -382,7 +382,9 @@ const isQ = variant.slug === 'q';
       const lerp = 0.14;
       currentX += (targetX - currentX) * lerp;
       currentY += (targetY - currentY) * lerp;
-      card.style.transform = `perspective(1600px) rotateX(${currentY.toFixed(3)}deg) rotateY(${currentX.toFixed(3)}deg)`;
+      // perspective는 부모 .hero-mockup-wrap의 CSS perspective 속성 사용
+      // transform에서 perspective() 함수를 쓰면 children의 translateZ가 납작해짐
+      card.style.transform = `rotateX(${currentY.toFixed(3)}deg) rotateY(${currentX.toFixed(3)}deg)`;
       const dx = Math.abs(targetX - currentX);
       const dy = Math.abs(targetY - currentY);
       if (dx > 0.02 || dy > 0.02 || active) {
@@ -645,7 +647,7 @@ const isQ = variant.slug === 'q';
       0 0 0 1px rgba(255, 255, 255, 0.9) inset,
       0 1px 0 0 rgba(255, 255, 255, 1) inset;
     transform-style: preserve-3d;
-    transform: perspective(1600px) rotateX(0deg) rotateY(0deg);
+    transform: rotateX(0deg) rotateY(0deg);
     transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
     will-change: transform;
   }
