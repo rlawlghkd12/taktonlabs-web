@@ -57,19 +57,7 @@ const principles = [
             <path d="M 576 102 L 614 114 L 600 118 L 622 122 L 602 126 Z" />
             <path d="M 564 110 L 598 126 L 582 130 L 606 138 Z" />
 
-            <!-- 상단 wisp (짧게 위로 튀는 붓털) -->
-            <path d="M 170 62 L 162 30 L 170 40 Z" />
-            <path d="M 260 58 L 268 24 L 272 34 Z" />
-            <path d="M 360 58 L 362 28 L 368 36 Z" />
-            <path d="M 460 62 L 466 34 L 472 42 Z" />
-
-            <!-- 하단 wisp (붓자국 아래로 흐르는 방울) -->
-            <path d="M 140 104 L 134 138 L 140 128 Z" />
-            <path d="M 230 106 L 232 144 L 228 132 Z" />
-            <path d="M 340 106 L 344 140 L 348 128 Z" />
-            <path d="M 450 102 L 456 136 L 462 126 Z" />
-
-            <!-- 스플래터 (먼 곳에 튄 잉크) -->
+            <!-- 스플래터 (양끝 근처에만 튄 잉크) -->
             <circle cx="26" cy="44" r="2" />
             <circle cx="48" cy="34" r="1.4" />
             <circle cx="602" cy="46" r="2.4" />
@@ -192,12 +180,12 @@ const principles = [
       {
         clipPath: 'inset(0 0% 0 0)',
         webkitClipPath: 'inset(0 0% 0 0)',
-        ease: 'none',
+        duration: 1.2,
+        ease: 'power3.out',
         scrollTrigger: {
           trigger: '#philosophy .phil-headline',
-          start: 'top 80%',
-          end: 'top 35%',
-          scrub: 0.8,
+          start: 'top 75%',
+          toggleActions: 'play none none reverse',
         },
       },
     );
