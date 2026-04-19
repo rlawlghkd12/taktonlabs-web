@@ -124,7 +124,15 @@ import { Icon } from 'astro-icon/components';
   @media (max-width: 768px) {
     .hero { padding: 80px var(--section-pad-x-sm) 96px; min-height: auto; }
     .hero-wordmark { font-size: 32vw; right: -8vw; }
-    .hero-eyebrow { margin-bottom: 32px; }
+    /* 모바일: eyebrow 줄이고 우측 EST는 숨김(공간 부족으로 겹침) */
+    .hero-eyebrow {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      margin-bottom: 28px;
+      max-width: 100%;
+    }
+    .hero-est { display: none; }
+    .hero-scroll-hint { display: none; }
     .ctas { margin-bottom: 32px; }
   }
   @media (min-width: 1536px) {
