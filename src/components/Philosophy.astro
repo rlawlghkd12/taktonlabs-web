@@ -33,48 +33,49 @@ const principles = [
             </filter>
           </defs>
 
-          <!-- ① 좌측 무거운 둥근 시작점 (brush landing) — 살짝 아래에서 시작 -->
+          <!-- ① 좌측 무거운 둥근 시작점 (brush landing) — 굵게 -->
           <g filter="url(#phil-brush-rough)" fill="currentColor">
             <path d="
-              M 40 88
-              C 26 84, 22 76, 28 68
-              C 34 60, 48 58, 62 62
-              C 74 65, 82 70, 86 76
-              L 86 92
-              C 80 98, 66 102, 52 100
-              C 42 98, 38 94, 40 88 Z
+              M 40 96
+              C 20 90, 16 74, 24 60
+              C 32 48, 50 46, 66 52
+              C 78 57, 88 64, 92 72
+              L 92 104
+              C 84 112, 66 116, 50 112
+              C 40 108, 36 102, 40 96 Z
             " />
           </g>
 
-          <!-- ② 본체 (좌하 → 우상 살짝 sweep, 오른쪽으로 갈수록 얇아짐) -->
+          <!-- ② 본체 (굵게 + 살짝 우상 sweep) -->
           <g filter="url(#phil-brush-rough)" fill="currentColor">
             <path d="
-              M 82 70
-              C 180 64, 300 60, 420 60
-              C 470 60, 510 62, 540 66
-              L 544 78
-              C 510 82, 430 84, 320 84
-              C 200 84, 130 86, 86 90
-              C 82 84, 80 76, 82 70 Z
+              M 84 60
+              C 180 52, 300 48, 420 48
+              C 470 48, 510 50, 540 56
+              L 544 92
+              C 510 98, 430 102, 320 102
+              C 200 102, 130 104, 88 106
+              C 82 98, 80 74, 84 60 Z
             " />
           </g>
 
-          <!-- ③ 본체 내부 "붓털 사이 틈" — 배경색 얇은 가로줄, 직접 stroke gap 효과 -->
+          <!-- ③ 본체 내부 "붓털 사이 틈" — 배경색 얇은 가로줄 (더 굵어진 body 중간) -->
           <g filter="url(#phil-brush-rough)" fill="none" stroke="#fafaf7" stroke-linecap="round" opacity="0.7">
-            <path d="M 110 66 C 240 62, 360 62, 510 66" stroke-width="0.7" />
-            <path d="M 120 74 C 260 72, 380 74, 520 76" stroke-width="0.55" />
-            <path d="M 100 82 C 240 82, 380 82, 510 82" stroke-width="0.9" />
+            <path d="M 110 60 C 240 54, 360 54, 510 60" stroke-width="0.8" />
+            <path d="M 120 74 C 260 72, 380 74, 520 76" stroke-width="0.6" />
+            <path d="M 100 86 C 240 86, 380 86, 510 84" stroke-width="0.7" />
+            <path d="M 110 96 C 250 96, 390 94, 510 92" stroke-width="0.9" />
           </g>
 
-          <!-- ④ 우측 바리스트 — 두꺼운 내부 층 (본체에서 뻗는 굵은 털) -->
+          <!-- ④ 우측 바리스트 — 두꺼운 내부 층 (굵어진 body에 맞춰 분포 확장) -->
           <g filter="url(#phil-brush-bristle)" stroke="currentColor" stroke-linecap="round" fill="none">
-            <path d="M 540 66 C 568 62, 590 58, 612 54" stroke-width="2.2" />
-            <path d="M 542 70 C 572 66, 600 64, 624 62" stroke-width="2.1" />
-            <path d="M 544 74 C 576 72, 608 70, 630 68" stroke-width="2" />
-            <path d="M 546 78 C 580 77, 612 76, 632 74" stroke-width="1.9" />
-            <path d="M 544 82 C 578 82, 610 82, 630 82" stroke-width="1.8" />
-            <path d="M 542 86 C 572 88, 602 90, 624 91" stroke-width="1.7" />
-            <path d="M 538 90 C 566 94, 594 98, 614 100" stroke-width="1.5" />
+            <path d="M 540 56 C 568 50, 590 46, 612 42" stroke-width="2.4" />
+            <path d="M 542 64 C 572 58, 600 54, 624 52" stroke-width="2.3" />
+            <path d="M 544 72 C 576 68, 608 66, 630 64" stroke-width="2.2" />
+            <path d="M 546 80 C 580 78, 612 76, 632 74" stroke-width="2.1" />
+            <path d="M 544 88 C 578 88, 610 88, 630 88" stroke-width="2" />
+            <path d="M 542 96 C 572 98, 602 100, 624 101" stroke-width="1.9" />
+            <path d="M 538 104 C 566 108, 594 112, 614 114" stroke-width="1.7" />
           </g>
 
           <!-- ⑤ 우측 바리스트 — 얇은 외곽 층 (가장 멀리 뻗는 wispy hair) -->
@@ -86,10 +87,10 @@ const principles = [
             <path d="M 548 98 C 576 106, 600 112, 620 116" stroke-width="0.9" />
           </g>
 
-          <!-- ⑥ 좌측 바리스트 — 최소한만 (시작 지점 뻗는 짧은 2개) -->
+          <!-- ⑥ 좌측 바리스트 — 최소한만 (굵어진 시작점 위·아래 뻗는 짧은 2개) -->
           <g filter="url(#phil-brush-bristle)" stroke="currentColor" stroke-linecap="round" fill="none" opacity="0.85">
-            <path d="M 28 72 L 8 68" stroke-width="1.3" />
-            <path d="M 32 92 L 10 98" stroke-width="1.2" />
+            <path d="M 26 64 L 6 58" stroke-width="1.4" />
+            <path d="M 30 106 L 8 112" stroke-width="1.3" />
           </g>
 
           <!-- ⑦ 스플래터 — 양끝 근처 최소 배치 -->
