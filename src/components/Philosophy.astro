@@ -14,76 +14,91 @@ const principles = [
         <svg
           class="highlight-brush"
           data-phil-brush
-          viewBox="0 0 640 170"
+          viewBox="0 0 640 150"
           preserveAspectRatio="none"
           aria-hidden="true"
           focusable="false"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
-            <!-- 거칠기 필터: 저주파(x) + 고주파(y)로 가로로 긴 붓결 결 구현 -->
-            <filter id="phil-brush-rough" x="-8%" y="-30%" width="116%" height="160%" filterUnits="userSpaceOnUse">
-              <feTurbulence type="fractalNoise" baseFrequency="0.012 0.09" numOctaves="3" seed="11" />
-              <feDisplacementMap in="SourceGraphic" scale="26" />
+            <!-- 거칠기 필터: 가로결 강조 -->
+            <filter id="phil-brush-rough" x="-5%" y="-25%" width="110%" height="150%" filterUnits="userSpaceOnUse">
+              <feTurbulence type="fractalNoise" baseFrequency="0.014 0.12" numOctaves="2" seed="6" />
+              <feDisplacementMap in="SourceGraphic" scale="14" />
             </filter>
-            <!-- 끝단 페더 효과용 soft blur -->
-            <filter id="phil-brush-soft" x="-10%" y="-20%" width="120%" height="140%" filterUnits="userSpaceOnUse">
-              <feGaussianBlur stdDeviation="0.6" />
+            <!-- 바리스트 전용: 세로 결 강조해 털 질감 -->
+            <filter id="phil-brush-bristle" x="-5%" y="-30%" width="110%" height="160%" filterUnits="userSpaceOnUse">
+              <feTurbulence type="fractalNoise" baseFrequency="0.02 0.18" numOctaves="2" seed="13" />
+              <feDisplacementMap in="SourceGraphic" scale="9" />
             </filter>
           </defs>
 
-          <!-- 메인 몸체 (거칠기 필터 적용) -->
+          <!-- ① 좌측 무거운 둥근 시작점 (brush landing) — 살짝 아래에서 시작 -->
           <g filter="url(#phil-brush-rough)" fill="currentColor">
-            <!-- 본체: 좌측 약간 두껍고 우측으로 흐르는 S-curve -->
             <path d="
-              M 70 72
-              C 130 58, 230 62, 330 64
-              C 420 66, 510 72, 575 80
-              C 598 84, 600 92, 578 100
-              C 490 112, 360 104, 250 102
-              C 160 100, 100 98, 70 92
-              C 50 86, 55 78, 70 72 Z
+              M 40 88
+              C 26 84, 22 76, 28 68
+              C 34 60, 48 58, 62 62
+              C 74 65, 82 70, 86 76
+              L 86 92
+              C 80 98, 66 102, 52 100
+              C 42 98, 38 94, 40 88 Z
             " />
-
-            <!-- 좌측 붓자국 기점 (얇은 삼각 꼬리) -->
-            <path d="M 70 70 L 32 54 L 46 64 L 22 62 Z" />
-            <path d="M 62 82 L 20 80 L 38 88 L 16 90 Z" />
-            <path d="M 68 94 L 24 100 L 40 104 L 20 110 Z" />
-
-            <!-- 우측 붓자국 끝단 (가장 풍부한 바리스트) -->
-            <path d="M 590 70 L 628 58 L 612 66 L 632 68 L 614 72 Z" />
-            <path d="M 594 82 L 634 82 L 618 87 L 636 90 L 616 92 Z" />
-            <path d="M 586 93 L 628 100 L 612 104 L 630 108 L 612 112 Z" />
-            <path d="M 576 102 L 614 114 L 600 118 L 622 122 L 602 126 Z" />
-            <path d="M 564 110 L 598 126 L 582 130 L 606 138 Z" />
-
-            <!-- 스플래터 (양끝 근처에만 튄 잉크) -->
-            <circle cx="26" cy="44" r="2" />
-            <circle cx="48" cy="34" r="1.4" />
-            <circle cx="602" cy="46" r="2.4" />
-            <circle cx="632" cy="108" r="2" />
-            <circle cx="574" cy="148" r="2.6" />
-            <circle cx="42" cy="130" r="1.8" />
           </g>
 
-          <!-- 내부 붓결 (soft-light 블렌드로 종이 결 느낌) -->
-          <g filter="url(#phil-brush-rough)" fill="none" stroke="rgba(0,0,0,0.22)" stroke-linecap="round" stroke-width="1.1">
-            <path d="M 90 78 C 220 74, 360 80, 560 88" />
-            <path d="M 80 88 C 220 88, 360 90, 558 94" />
-            <path d="M 100 96 C 240 96, 380 96, 548 100" />
-            <path d="M 110 84 C 250 82, 400 86, 540 92" />
+          <!-- ② 본체 (좌하 → 우상 살짝 sweep, 오른쪽으로 갈수록 얇아짐) -->
+          <g filter="url(#phil-brush-rough)" fill="currentColor">
+            <path d="
+              M 82 70
+              C 180 64, 300 60, 420 60
+              C 470 60, 510 62, 540 66
+              L 544 78
+              C 510 82, 430 84, 320 84
+              C 200 84, 130 86, 86 90
+              C 82 84, 80 76, 82 70 Z
+            " />
           </g>
 
-          <!-- 외곽 부드러운 테두리 (살짝 blur) — 종이에 스민 효과 -->
-          <g filter="url(#phil-brush-soft)" fill="currentColor" opacity="0.35">
-            <path d="
-              M 75 74 C 135 62, 230 64, 330 66
-              C 420 68, 510 74, 572 82
-              C 592 86, 594 92, 574 98
-              C 490 108, 360 102, 250 100
-              C 160 98, 100 96, 72 90
-              C 54 86, 58 80, 75 74 Z
-            " />
+          <!-- ③ 본체 내부 "붓털 사이 틈" — 배경색 얇은 가로줄, 직접 stroke gap 효과 -->
+          <g filter="url(#phil-brush-rough)" fill="none" stroke="#fafaf7" stroke-linecap="round" opacity="0.7">
+            <path d="M 110 66 C 240 62, 360 62, 510 66" stroke-width="0.7" />
+            <path d="M 120 74 C 260 72, 380 74, 520 76" stroke-width="0.55" />
+            <path d="M 100 82 C 240 82, 380 82, 510 82" stroke-width="0.9" />
+          </g>
+
+          <!-- ④ 우측 바리스트 — 두꺼운 내부 층 (본체에서 뻗는 굵은 털) -->
+          <g filter="url(#phil-brush-bristle)" stroke="currentColor" stroke-linecap="round" fill="none">
+            <path d="M 540 66 C 568 62, 590 58, 612 54" stroke-width="2.2" />
+            <path d="M 542 70 C 572 66, 600 64, 624 62" stroke-width="2.1" />
+            <path d="M 544 74 C 576 72, 608 70, 630 68" stroke-width="2" />
+            <path d="M 546 78 C 580 77, 612 76, 632 74" stroke-width="1.9" />
+            <path d="M 544 82 C 578 82, 610 82, 630 82" stroke-width="1.8" />
+            <path d="M 542 86 C 572 88, 602 90, 624 91" stroke-width="1.7" />
+            <path d="M 538 90 C 566 94, 594 98, 614 100" stroke-width="1.5" />
+          </g>
+
+          <!-- ⑤ 우측 바리스트 — 얇은 외곽 층 (가장 멀리 뻗는 wispy hair) -->
+          <g filter="url(#phil-brush-bristle)" stroke="currentColor" stroke-linecap="round" fill="none" opacity="0.82">
+            <path d="M 556 56 C 588 48, 612 44, 634 42" stroke-width="0.9" />
+            <path d="M 562 62 C 596 56, 622 54, 636 52" stroke-width="0.85" />
+            <path d="M 560 78 C 596 77, 624 76, 638 76" stroke-width="0.8" />
+            <path d="M 556 90 C 588 94, 616 98, 636 102" stroke-width="0.85" />
+            <path d="M 548 98 C 576 106, 600 112, 620 116" stroke-width="0.9" />
+          </g>
+
+          <!-- ⑥ 좌측 바리스트 — 최소한만 (시작 지점 뻗는 짧은 2개) -->
+          <g filter="url(#phil-brush-bristle)" stroke="currentColor" stroke-linecap="round" fill="none" opacity="0.85">
+            <path d="M 28 72 L 8 68" stroke-width="1.3" />
+            <path d="M 32 92 L 10 98" stroke-width="1.2" />
+          </g>
+
+          <!-- ⑦ 스플래터 — 양끝 근처 최소 배치 -->
+          <g fill="currentColor">
+            <circle cx="14" cy="62" r="1.3" />
+            <circle cx="20" cy="108" r="1.4" />
+            <circle cx="632" cy="38" r="1.5" />
+            <circle cx="628" cy="118" r="1.3" />
+            <circle cx="608" cy="48" r="0.9" />
           </g>
         </svg>
         <span class="highlight-text">오래 쓰이는</span>
