@@ -223,7 +223,8 @@
     background: rgba(255, 255, 255, 0.12);
   }
   .nav[data-over-dark='true'] .brand-logo {
-    filter: invert(1);
+    /* 컬러 파트까지 뒤집히지 않도록 — 전체를 흰색 실루엣으로 */
+    filter: brightness(0) invert(1);
   }
   .nav[data-over-dark='true'] .links > li > a:not(.cta) {
     color: rgba(255, 255, 255, 0.72);
