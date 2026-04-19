@@ -6,11 +6,9 @@ import { whyPromises } from '../data/why';
   <div class="why-inner">
     <div class="why-eyebrow">05 &nbsp;&nbsp; WHY TAKTON</div>
     <h2 id="why-title" class="why-headline">네 가지 약속.</h2>
-    <p class="why-subcopy">우리가 반드시 지키는 네 가지.</p>
     <div class="why-grid">
       {whyPromises.map((promise) => <WhyCard promise={promise} />)}
     </div>
-    <p class="why-closing">네 가지가 같이 지켜질 때만 "외주가 성공"이라 말할 수 있습니다.</p>
   </div>
 </section>
 <style>

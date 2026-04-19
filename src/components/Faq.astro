@@ -22,7 +22,6 @@ const faqJsonLd = {
         <div class="faq-eyebrow">07 &nbsp;&nbsp; FAQ</div>
         <h2 id="faq-title" class="faq-headline">자주 받는 질문.</h2>
       </div>
-      <p class="faq-right">그 외 궁금한 점은 바로 연락주세요.<br />답변은 1 영업일 안에.</p>
     </div>
     <div class="faq-list">
       {faqItems.map((item, i) => <FaqItem item={item} index={String(i + 1).padStart(2, '0')} />)}

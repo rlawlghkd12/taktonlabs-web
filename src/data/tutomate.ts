@@ -112,8 +112,8 @@ export const tutomateQ: TutomateVariant = {
       description: '최적화된 렌더링으로 더 빠르게 반응합니다.',
     },
     {
-      title: '자동 업데이트',
-      description: '동일한 자동 업데이트 시스템. 항상 최신 상태로.',
+      title: '키보드 중심 UX',
+      description: '단축키와 키보드 내비게이션으로 마우스 없이도 빠르게.',
     },
   ],
 };
