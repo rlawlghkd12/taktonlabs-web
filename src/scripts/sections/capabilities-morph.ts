@@ -37,26 +37,69 @@ export async function initCapabilitiesMorph(): Promise<void> {
       el.style.height = 'auto';
     });
 
-    // 모바일: 각 카드 개별 scroll reveal (fade + 위에서 내려옴)
+    // 모바일: 각 카드 개별 scroll reveal
+    // 1) 카드 fade-up (기본 진입)
+    // 2) accent bar scaleY grow (좌측 세로 진행 바)
+    // 3) 번호 그라디언트 채움 (38% → 100%)
+    // 4) 체크마크 등장 (scale + opacity)
     if (!prefersReducedMotion()) {
+      const EXPO = 'cubic-bezier(0.16, 1, 0.3, 1)';
+      const SMOOTH = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+
       cardEls.forEach((el) => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(28px)';
-        el.style.transition =
-          'opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)';
+        el.style.transform = 'translateY(40px)';
+        el.style.transition = `opacity 0.8s ${EXPO}, transform 0.8s ${EXPO}`;
+
+        const accent = el.querySelector<HTMLElement>('[data-cc-accent]');
+        if (accent) {
+          accent.style.opacity = '0';
+          accent.style.transformOrigin = 'top';
+          accent.style.transform = 'scaleY(0)';
+          accent.style.transition = `transform 0.9s ${EXPO} 0.25s, opacity 0.3s ease 0.25s`;
+        }
+
+        const num = el.querySelector<HTMLElement>('.cc-num');
+        if (num) {
+          num.style.setProperty('--grad-stop', '38%');
+          num.style.transition = `-webkit-text-stroke-width 1s ${EXPO} 0.15s`;
+        }
+
+        const check = el.querySelector<HTMLElement>('[data-cc-check]');
+        if (check) {
+          check.style.opacity = '0';
+          check.style.transform = 'scale(0.7)';
+          check.style.transition = `opacity 0.4s ${SMOOTH} 0.55s, transform 0.4s ${SMOOTH} 0.55s`;
+        }
       });
+
       const io = new IntersectionObserver(
         (entries) => {
           entries.forEach((e) => {
-            if (e.isIntersecting) {
-              const t = e.target as HTMLElement;
-              t.style.opacity = '1';
-              t.style.transform = 'translateY(0)';
-              io.unobserve(e.target);
+            if (!e.isIntersecting) return;
+            const t = e.target as HTMLElement;
+            t.style.opacity = '1';
+            t.style.transform = 'translateY(0)';
+
+            const accent = t.querySelector<HTMLElement>('[data-cc-accent]');
+            if (accent) {
+              accent.style.opacity = '0.85';
+              accent.style.transform = 'scaleY(1)';
             }
+            const num = t.querySelector<HTMLElement>('.cc-num');
+            if (num) {
+              num.style.setProperty('--grad-stop', '100%');
+              num.style.setProperty('-webkit-text-stroke-width', '0');
+            }
+            const check = t.querySelector<HTMLElement>('[data-cc-check]');
+            if (check) {
+              check.style.opacity = '0.6';
+              check.style.transform = 'scale(1)';
+            }
+            io.unobserve(e.target);
           });
         },
-        { rootMargin: '-10% 0px' },
+        { rootMargin: '-8% 0px' },
       );
       cardEls.forEach((el) => io.observe(el));
     } else {
