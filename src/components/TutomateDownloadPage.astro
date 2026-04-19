@@ -68,123 +68,126 @@ const isQ = variant.slug === 'q';
       <div class="hero-mockup-wrap" data-tilt aria-hidden="true">
         <div class="mockup-ambient"></div>
         <div class="mockup-window">
-          <div class="mockup-bar">
-            <span class="mockup-dots">
-              <span class="mockup-dot r"></span>
-              <span class="mockup-dot y"></span>
-              <span class="mockup-dot g"></span>
-            </span>
-            <span class="mockup-title">{variant.name}</span>
-            <span class="mockup-chip">v{variant.version}</span>
+          <!-- macOS traffic lights (드래그 영역) -->
+          <div class="mockup-traffic">
+            <span class="mockup-dot r"></span>
+            <span class="mockup-dot y"></span>
+            <span class="mockup-dot g"></span>
           </div>
           <div class="mockup-body">
+            <!-- 사이드바 220px: 조직 스위처 + nav + 하단 설정 -->
             <aside class="mockup-side">
-              <div class="mockup-logo">
-                <img src={variant.iconSrc} alt="" width="32" height="32" />
-                <div class="mockup-logo-text">
-                  <span class="mockup-logo-name">{variant.name}</span>
-                  <span class="mockup-logo-sub">양산 · 튜토매이트 학원</span>
+              <div class="mockup-org">
+                <img src={variant.iconSrc} alt="" width="28" height="28" class="mockup-org-icon" />
+                <div class="mockup-org-text">
+                  <div class="mockup-org-name">
+                    튜토매이트 학원
+                    <Icon name="lucide:chevron-down" width={12} height={12} />
+                  </div>
+                  <div class="mockup-org-badge">체험판</div>
                 </div>
               </div>
               <nav class="mockup-nav-list">
                 <span class="mockup-nav active">
-                  <span class="mockup-nav-dot"></span>
+                  <Icon name="lucide:layout-dashboard" width={16} height={16} />
                   <span>대시보드</span>
                 </span>
                 <span class="mockup-nav">
-                  <span class="mockup-nav-dot"></span>
-                  <span>수강생</span>
-                  <span class="mockup-nav-badge">42</span>
+                  <Icon name="lucide:book-open" width={16} height={16} />
+                  <span>강좌 관리</span>
                 </span>
                 <span class="mockup-nav">
-                  <span class="mockup-nav-dot"></span>
-                  <span>수업 일정</span>
+                  <Icon name="lucide:users" width={16} height={16} />
+                  <span>수강생 관리</span>
                 </span>
                 <span class="mockup-nav">
-                  <span class="mockup-nav-dot"></span>
-                  <span>결제 내역</span>
+                  <Icon name="lucide:calendar" width={16} height={16} />
+                  <span>캘린더</span>
                 </span>
                 <span class="mockup-nav">
-                  <span class="mockup-nav-dot"></span>
+                  <Icon name="lucide:circle-dollar-sign" width={16} height={16} />
                   <span>수익 관리</span>
                 </span>
+              </nav>
+              <div class="mockup-nav-bottom">
                 <span class="mockup-nav">
-                  <span class="mockup-nav-dot"></span>
+                  <Icon name="lucide:settings" width={16} height={16} />
                   <span>설정</span>
                 </span>
-              </nav>
-              <div class="mockup-side-foot">
-                <div class="mockup-side-foot-l">이달 매출</div>
-                <div class="mockup-side-foot-v">₩ 18.4M</div>
-                <div class="mockup-side-foot-d">▲ 12.4%</div>
               </div>
             </aside>
+
+            <!-- 메인: 52px 헤더 + 20px 패딩 컨텐츠 -->
             <div class="mockup-main">
-              <div class="mockup-main-head">
-                <div>
-                  <div class="mockup-month">2026 · 4월 · 화요일</div>
-                  <div class="mockup-hello">오늘 수업 14건 · 출석 대기 3건</div>
+              <header class="mockup-header">
+                <h3>대시보드</h3>
+                <div class="mockup-header-actions">
+                  <span class="mockup-hbtn">
+                    <Icon name="lucide:search" width={14} height={14} />
+                  </span>
+                  <span class="mockup-hbtn">
+                    <Icon name="lucide:bell" width={14} height={14} />
+                  </span>
                 </div>
-                <div class="mockup-actions">
-                  <span class="mockup-action">＋ 수강생 추가</span>
-                </div>
-              </div>
+              </header>
 
-              <div class="mockup-stats">
-                <div class="mockup-stat">
-                  <div class="mockup-stat-l">오늘 수업</div>
-                  <div class="mockup-stat-v">14</div>
-                  <div class="mockup-stat-spark">
-                    <i style="height:50%"></i><i style="height:70%"></i><i style="height:60%"></i>
-                    <i style="height:80%"></i><i style="height:65%"></i><i style="height:90%"></i>
+              <div class="mockup-content">
+                <div class="mockup-stats">
+                  <div class="mockup-stat">
+                    <div class="mockup-stat-l">오늘 수업</div>
+                    <div class="mockup-stat-v">14</div>
+                    <div class="mockup-stat-spark">
+                      <i style="height:50%"></i><i style="height:70%"></i><i style="height:60%"></i>
+                      <i style="height:80%"></i><i style="height:65%"></i><i style="height:90%"></i>
+                    </div>
+                  </div>
+                  <div class="mockup-stat">
+                    <div class="mockup-stat-l">출석률</div>
+                    <div class="mockup-stat-v">94<span class="mockup-stat-unit">%</span></div>
+                    <div class="mockup-stat-spark">
+                      <i style="height:70%"></i><i style="height:85%"></i><i style="height:75%"></i>
+                      <i style="height:90%"></i><i style="height:88%"></i><i style="height:94%"></i>
+                    </div>
+                  </div>
+                  <div class="mockup-stat dark">
+                    <div class="mockup-stat-l">이달 매출</div>
+                    <div class="mockup-stat-v">₩18.4<span class="mockup-stat-unit">M</span></div>
+                    <div class="mockup-stat-delta">전월 대비 ▲ 12.4%</div>
                   </div>
                 </div>
-                <div class="mockup-stat">
-                  <div class="mockup-stat-l">출석률</div>
-                  <div class="mockup-stat-v">94<span class="mockup-stat-unit">%</span></div>
-                  <div class="mockup-stat-spark">
-                    <i style="height:70%"></i><i style="height:85%"></i><i style="height:75%"></i>
-                    <i style="height:90%"></i><i style="height:88%"></i><i style="height:94%"></i>
-                  </div>
-                </div>
-                <div class="mockup-stat dark">
-                  <div class="mockup-stat-l">미납 알림</div>
-                  <div class="mockup-stat-v">3<span class="mockup-stat-unit">건</span></div>
-                  <div class="mockup-stat-delta">전주 대비 −2</div>
-                </div>
-              </div>
 
-              <div class="mockup-schedule">
-                <div class="mockup-schedule-head">
-                  <span>오늘 일정</span>
-                  <span class="mockup-schedule-meta">4 / 14건 완료</span>
+                <div class="mockup-schedule">
+                  <div class="mockup-schedule-head">
+                    <span>오늘 일정</span>
+                    <span class="mockup-schedule-meta">4 / 14건 완료</span>
+                  </div>
+                  <ul class="mockup-schedule-list">
+                    <li class="done">
+                      <span class="mockup-t">09:00</span>
+                      <span class="mockup-s">김○○</span>
+                      <span class="mockup-c">피아노 · 주 3회</span>
+                      <span class="mockup-st">완료</span>
+                    </li>
+                    <li class="active">
+                      <span class="mockup-t">10:30</span>
+                      <span class="mockup-s">이○○</span>
+                      <span class="mockup-c">피아노 · 주 2회</span>
+                      <span class="mockup-st on">진행 중</span>
+                    </li>
+                    <li>
+                      <span class="mockup-t">14:00</span>
+                      <span class="mockup-s">박○○</span>
+                      <span class="mockup-c">바이올린 · 주 1회</span>
+                      <span class="mockup-st">예정</span>
+                    </li>
+                    <li>
+                      <span class="mockup-t">16:00</span>
+                      <span class="mockup-s">최○○</span>
+                      <span class="mockup-c">피아노 · 주 2회</span>
+                      <span class="mockup-st">예정</span>
+                    </li>
+                  </ul>
                 </div>
-                <ul class="mockup-schedule-list">
-                  <li class="done">
-                    <span class="mockup-t">09:00</span>
-                    <span class="mockup-s">김○○</span>
-                    <span class="mockup-c">피아노 · 주 3회</span>
-                    <span class="mockup-st">완료</span>
-                  </li>
-                  <li class="active">
-                    <span class="mockup-t">10:30</span>
-                    <span class="mockup-s">이○○</span>
-                    <span class="mockup-c">피아노 · 주 2회</span>
-                    <span class="mockup-st on">진행 중</span>
-                  </li>
-                  <li>
-                    <span class="mockup-t">14:00</span>
-                    <span class="mockup-s">박○○</span>
-                    <span class="mockup-c">바이올린 · 주 1회</span>
-                    <span class="mockup-st">예정</span>
-                  </li>
-                  <li>
-                    <span class="mockup-t">16:00</span>
-                    <span class="mockup-s">최○○</span>
-                    <span class="mockup-c">피아노 · 주 2회</span>
-                    <span class="mockup-st">예정</span>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>
@@ -679,190 +682,140 @@ const isQ = variant.slug === 'q';
     transform: translateZ(80px);
   }
 
-  /* Title bar */
-  .mockup-bar {
-    display: flex; align-items: center;
-    padding: 2px 8px 12px;
-    border-bottom: 1px solid rgba(10, 10, 10, 0.06);
-    margin-bottom: 12px;
-    position: relative;
-    transform: translateZ(8px);
-    transform-style: preserve-3d;
+  /* macOS Traffic lights — 좌상단 absolute (drag region) */
+  .mockup-traffic {
+    position: absolute;
+    top: 14px; left: 16px;
+    display: flex; gap: 7px;
+    z-index: 4;
+    transform: translateZ(14px);
   }
-  .mockup-dots { transform: translateZ(14px); }
-  .mockup-title { transform: translateZ(6px); }
-  .mockup-chip { transform: translateZ(12px); }
-  .mockup-dots { display: flex; gap: 7px; }
   .mockup-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08) inset; }
   .mockup-dot.r { background: #ff5f57; }
   .mockup-dot.y { background: #febc2e; }
   .mockup-dot.g { background: #28c840; }
-  .mockup-title {
-    position: absolute; left: 50%; transform: translateX(-50%);
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: var(--text-muted);
-  }
-  .mockup-chip {
-    margin-left: auto;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    background: rgba(10, 10, 10, 0.04);
-    padding: 3px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--hairline);
-  }
 
-  /* Body grid */
+  /* Body — 실제 앱과 동일한 220px 사이드바 + 메인 영역 */
   .mockup-body {
     display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 12px;
-    min-height: 440px;
+    grid-template-columns: 220px 1fr;
+    min-height: 460px;
     transform-style: preserve-3d;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid rgba(10, 10, 10, 0.06);
   }
 
   /* Sidebar */
   .mockup-side {
-    background: #f4f2ea;
-    border-radius: 12px;
-    padding: 16px 14px;
+    background: #f6f5ef;
+    border-right: 1px solid rgba(10, 10, 10, 0.06);
+    padding-top: 48px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    transform: translateZ(12px);
+    transform: translateZ(10px);
     transform-style: preserve-3d;
-    box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.04);
   }
-  .mockup-logo { transform: translateZ(10px); }
-  .mockup-nav.active { transform: translateZ(20px); }
-  .mockup-side-foot { transform: translateZ(14px); }
-  .mockup-logo {
-    display: flex; align-items: center; gap: 10px;
-    padding: 2px 2px 14px;
-    border-bottom: 1px solid rgba(10, 10, 10, 0.08);
-    margin-bottom: 10px;
+  .mockup-org {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    padding: 0 16px 10px;
+    min-height: 52px;
+    transform: translateZ(12px);
   }
-  .mockup-logo img { width: 30px; height: 30px; border-radius: 7px; flex-shrink: 0; }
-  .mockup-logo-text { display: flex; flex-direction: column; min-width: 0; }
-  .mockup-logo-name {
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+  .mockup-org-icon {
+    width: 28px; height: 28px; border-radius: 6px; flex-shrink: 0;
   }
-  .mockup-logo-sub {
-    font-size: 10px;
-    color: var(--text-muted);
-    letter-spacing: -0.005em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .mockup-nav-list {
+  .mockup-org-text {
     display: flex; flex-direction: column; gap: 2px;
+    min-width: 0;
+  }
+  .mockup-org-name {
+    display: flex; align-items: center; gap: 3px;
+    font-size: 15px; font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.015em;
+  }
+  .mockup-org-name svg { opacity: 0.5; flex-shrink: 0; }
+  .mockup-org-badge {
+    align-self: flex-start;
+    font-size: 9px; font-weight: 700;
+    color: #d97706;
+    background: rgba(217, 119, 6, 0.1);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    border-radius: 6px;
+    padding: 0 6px;
+    letter-spacing: 0.02em;
+  }
+  .mockup-nav-list {
+    display: flex; flex-direction: column; gap: 1px;
+    padding: 4px 10px 0;
   }
   .mockup-nav {
     display: flex; align-items: center; gap: 10px;
     font-size: 12.5px;
-    color: var(--text-secondary);
-    padding: 8px 10px;
-    border-radius: 7px;
+    color: var(--text-muted);
+    padding: 9px 12px;
+    border-radius: 6px;
     letter-spacing: -0.005em;
+    font-weight: 450;
   }
-  .mockup-nav-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--hairline-strong);
-    flex-shrink: 0;
-  }
+  .mockup-nav svg { flex-shrink: 0; opacity: 0.75; }
   .mockup-nav.active {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    font-weight: 600;
-    box-shadow: 0 1px 2px rgba(10, 10, 10, 0.25);
-  }
-  .mockup-nav.active .mockup-nav-dot { background: var(--bg-primary); }
-  .mockup-nav-badge {
-    margin-left: auto;
-    font-size: 10px;
-    font-family: var(--font-mono);
-    padding: 1px 6px;
-    border-radius: 999px;
     background: rgba(10, 10, 10, 0.06);
-    color: var(--text-muted);
-  }
-
-  .mockup-side-foot {
-    margin-top: auto;
-    padding-top: 14px;
-    border-top: 1px solid rgba(10, 10, 10, 0.08);
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .mockup-side-foot-l {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-  }
-  .mockup-side-foot-v {
-    font-size: 17px;
-    font-weight: 700;
-    letter-spacing: -0.01em;
     color: var(--text-primary);
-    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    transform: translateZ(16px);
+    box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.12);
   }
-  .mockup-side-foot-d { font-size: 11px; color: var(--text-muted); }
+  .mockup-nav.active svg { opacity: 1; }
+  .mockup-nav-bottom {
+    margin-top: auto;
+    padding: 8px 10px 14px;
+    border-top: 1px solid rgba(10, 10, 10, 0.08);
+  }
 
   /* Main pane */
   .mockup-main {
-    background: #fff;
-    border-radius: 12px;
-    padding: 22px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
-    border: 1px solid rgba(10, 10, 10, 0.04);
-    transform: translateZ(18px);
+    background: #fafaf8;
+    transform: translateZ(14px);
     transform-style: preserve-3d;
-    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.06);
   }
-  .mockup-main-head { transform: translateZ(16px); }
-  .mockup-action {
-    transform: translateZ(36px);
-    box-shadow: 0 6px 14px -4px rgba(0, 0, 0, 0.35);
+  .mockup-header {
+    height: 52px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(10, 10, 10, 0.06);
+    background: #fafaf8;
+    transform: translateZ(10px);
   }
-  .mockup-main-head {
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
-  }
-  .mockup-month {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    color: var(--text-muted);
-    margin-bottom: 4px;
-  }
-  .mockup-hello {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.015em;
+  .mockup-header h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
     color: var(--text-primary);
+    letter-spacing: -0.02em;
   }
-  .mockup-actions { display: flex; gap: 6px; }
-  .mockup-action {
-    font-size: 11px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    font-weight: 600;
-    letter-spacing: -0.005em;
+  .mockup-header-actions { display: flex; gap: 2px; }
+  .mockup-hbtn {
+    width: 28px; height: 28px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 5px;
+    color: var(--text-muted);
+  }
+  .mockup-hbtn:first-child { background: rgba(10, 10, 10, 0.04); }
+  .mockup-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transform-style: preserve-3d;
   }
 
   .mockup-stats {
