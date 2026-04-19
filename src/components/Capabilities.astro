@@ -143,21 +143,27 @@ import { capabilities } from '../data/capabilities';
     .cap { padding-top: 80px; }
     .cap-pin { padding: 48px var(--section-pad-x-sm); min-height: auto; }
     .cap-head { margin-bottom: 32px; }
+    /* eyebrow: CAPABILITIES / 는 윗줄, 01 · 웹 · 모바일 제품은 아랫줄로 강제 분리 */
     .cap-eyebrow {
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 4px 6px;
+      display: block;
       line-height: 1.6;
     }
+    .cap-eyebrow-static { display: block; margin-bottom: 4px; }
     .cap-title-stack {
-      position: relative;
-      display: inline-block;
-      min-width: 0;
-      width: auto;
+      position: static;
+      display: block;
+      width: 100%;
       height: auto;
-      min-height: 1.3em;
+      min-width: 0;
+      min-height: 0;
     }
-    .cap-title-item { white-space: normal; }
+    /* absolute 로 겹쳐 있던 3개 타이틀 → 일반 flow + 첫 번째만 표시 (모바일엔 순환 없음) */
+    .cap-title-item {
+      position: static;
+      display: none;
+      white-space: normal;
+    }
+    .cap-title-item[data-title-idx='0'] { display: inline; opacity: 1; }
     .cap-headline { font-size: 32px; margin-bottom: 32px; }
     .cap-dock-bar { display: none; }
     .cap-stage { min-height: auto; display: flex; flex-direction: column; gap: 16px; }
