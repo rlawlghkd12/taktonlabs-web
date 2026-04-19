@@ -65,17 +65,62 @@ const isQ = variant.slug === 'q';
         </div>
       </div>
 
-      <div class="hero-icon-wrap" aria-hidden="true">
-        <img
-          src={variant.iconSrc}
-          alt={`${variant.name} 앱 아이콘`}
-          width="280"
-          height="280"
-          class="app-icon"
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        />
+      <div class="hero-mockup-wrap" data-tilt aria-hidden="true">
+        <div class="mockup-window">
+          <div class="mockup-bar">
+            <span class="mockup-dot r"></span>
+            <span class="mockup-dot y"></span>
+            <span class="mockup-dot g"></span>
+            <span class="mockup-title">{variant.name} — 대시보드</span>
+          </div>
+          <div class="mockup-body">
+            <aside class="mockup-side">
+              <div class="mockup-logo">
+                <img src={variant.iconSrc} alt="" width="28" height="28" />
+                <span>{variant.name}</span>
+              </div>
+              <span class="mockup-nav active">대시보드</span>
+              <span class="mockup-nav">수강생</span>
+              <span class="mockup-nav">수업 일정</span>
+              <span class="mockup-nav">결제 내역</span>
+              <span class="mockup-nav">수익 관리</span>
+              <span class="mockup-nav">설정</span>
+            </aside>
+            <div class="mockup-main">
+              <div class="mockup-head">
+                <div class="mockup-month">2026 · 4월</div>
+                <div class="mockup-amount">₩ 18,420,000</div>
+                <div class="mockup-delta">전월 대비 ▲ 12.4%</div>
+              </div>
+              <div class="mockup-stats">
+                <div class="mockup-stat">
+                  <div class="mockup-stat-l">오늘 수업</div>
+                  <div class="mockup-stat-v">14</div>
+                </div>
+                <div class="mockup-stat">
+                  <div class="mockup-stat-l">출석률</div>
+                  <div class="mockup-stat-v">94%</div>
+                </div>
+                <div class="mockup-stat dark">
+                  <div class="mockup-stat-l">미납 알림</div>
+                  <div class="mockup-stat-v">3건</div>
+                </div>
+              </div>
+              <div class="mockup-chart">
+                <div style="height:40%"></div>
+                <div style="height:62%"></div>
+                <div style="height:50%"></div>
+                <div style="height:75%"></div>
+                <div style="height:68%"></div>
+                <div class="accent" style="height:92%"></div>
+              </div>
+              <div class="mockup-foot">
+                <span>최근 결제</span>
+                <span class="mockup-foot-num">142건</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -245,6 +290,60 @@ const isQ = variant.slug === 'q';
   }
 
   refreshLatestVersion();
+
+  // ========== Hero mockup 3D tilt (마우스 따라 perspective 회전) ==========
+  (function initMockupTilt(): void {
+    const wrap = document.querySelector<HTMLElement>('[data-tilt]');
+    if (!wrap) return;
+    const card = wrap.querySelector<HTMLElement>('.mockup-window');
+    if (!card) return;
+
+    // hover-capable device만 (모바일 터치 제외)
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const MAX_TILT = 9; // degrees
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let rafId: number | null = null;
+    let active = false;
+
+    const animate = (): void => {
+      const lerp = 0.14;
+      currentX += (targetX - currentX) * lerp;
+      currentY += (targetY - currentY) * lerp;
+      card.style.transform = `perspective(1400px) rotateX(${currentY.toFixed(3)}deg) rotateY(${currentX.toFixed(3)}deg)`;
+      const dx = Math.abs(targetX - currentX);
+      const dy = Math.abs(targetY - currentY);
+      if (dx > 0.02 || dy > 0.02 || active) {
+        rafId = requestAnimationFrame(animate);
+      } else {
+        rafId = null;
+      }
+    };
+
+    const onMove = (e: MouseEvent): void => {
+      const rect = wrap.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      targetX = x * MAX_TILT * 2;
+      targetY = -y * MAX_TILT * 2;
+      active = true;
+      if (rafId === null) rafId = requestAnimationFrame(animate);
+    };
+
+    const onLeave = (): void => {
+      targetX = 0;
+      targetY = 0;
+      active = false;
+      if (rafId === null) rafId = requestAnimationFrame(animate);
+    };
+
+    wrap.addEventListener('mousemove', onMove);
+    wrap.addEventListener('mouseleave', onLeave);
+  })();
 </script>
 
 <style>
@@ -438,21 +537,138 @@ const isQ = variant.slug === 'q';
   .version-sep { opacity: 0.4; }
   .version-date { color: var(--text-secondary); }
 
-  .hero-icon-wrap {
+  /* ===== Hero — 제품 mockup with 3D tilt ===== */
+  .hero-mockup-wrap {
+    perspective: 1400px;
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .app-icon {
-    width: clamp(180px, 24vw, 300px);
-    height: auto;
-    filter: drop-shadow(0 40px 80px rgba(10, 10, 10, 0.18));
-    transition: transform 0.5s var(--ease-smooth);
+  .mockup-window {
+    width: min(520px, 100%);
+    background: linear-gradient(180deg, #fff, #f4f4ef);
+    border: 1px solid rgba(10,10,10,0.08);
+    border-radius: 14px;
+    padding: 12px;
+    box-shadow:
+      0 50px 100px -30px rgba(0,0,0,0.25),
+      0 20px 40px -20px rgba(0,0,0,0.12),
+      0 0 0 1px rgba(255,255,255,0.6) inset;
+    transform-style: preserve-3d;
+    transform: perspective(1400px) rotateX(0deg) rotateY(0deg);
+    transition: transform 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
     will-change: transform;
   }
-  .app-icon:hover {
-    transform: translateY(-6px) scale(1.02);
+  .mockup-bar {
+    display: flex; gap: 6px; align-items: center;
+    padding: 2px 4px 10px;
+    border-bottom: 1px solid rgba(10,10,10,0.05);
+    margin-bottom: 10px;
   }
+  .mockup-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+  .mockup-dot.r { background: #ff5f57; }
+  .mockup-dot.y { background: #febc2e; }
+  .mockup-dot.g { background: #28c840; }
+  .mockup-title {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+  .mockup-body {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 10px;
+    min-height: 320px;
+  }
+  .mockup-side {
+    background: #f4f4ef;
+    border-radius: 8px;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mockup-logo {
+    display: flex; align-items: center; gap: 8px;
+    padding: 2px 2px 14px;
+    border-bottom: 1px solid rgba(10,10,10,0.08);
+    margin-bottom: 8px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--text-primary);
+  }
+  .mockup-logo img { width: 22px; height: 22px; border-radius: 5px; }
+  .mockup-nav {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 7px 10px;
+    border-radius: 5px;
+    letter-spacing: -0.005em;
+  }
+  .mockup-nav.active {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    font-weight: 600;
+  }
+  .mockup-main {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .mockup-head { display: flex; flex-direction: column; gap: 2px; }
+  .mockup-month {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+  }
+  .mockup-amount {
+    font-size: 26px; font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  .mockup-delta { font-size: 11px; color: var(--text-muted); }
+  .mockup-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .mockup-stat {
+    background: #f4f4ef;
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .mockup-stat.dark { background: var(--text-primary); color: var(--bg-primary); }
+  .mockup-stat-l { font-size: 10px; color: var(--text-muted); }
+  .mockup-stat.dark .mockup-stat-l { color: rgba(255,255,255,0.55); }
+  .mockup-stat-v {
+    font-size: 18px; font-weight: 700; margin-top: 2px;
+    font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
+  }
+  .mockup-chart {
+    display: flex; gap: 3px; align-items: flex-end;
+    height: 56px;
+  }
+  .mockup-chart > div {
+    flex: 1;
+    background: #e5e3dc;
+    border-radius: 2px;
+  }
+  .mockup-chart > div.accent { background: var(--text-primary); }
+  .mockup-foot {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(10,10,10,0.06);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+  .mockup-foot-num { font-variant-numeric: tabular-nums; color: var(--text-primary); font-weight: 600; }
 
   /* ===== FEATURES ===== */
   .features {
@@ -592,13 +808,12 @@ const isQ = variant.slug === 'q';
       gap: 40px;
       text-align: left;
     }
-    .hero-icon-wrap {
+    .hero-mockup-wrap {
       order: -1;
       justify-content: flex-start;
     }
-    .app-icon {
-      width: 140px;
-    }
+    .mockup-window { width: 100%; max-width: 480px; }
+    .mockup-body { min-height: 280px; }
   }
 
   @media (max-width: 768px) {
