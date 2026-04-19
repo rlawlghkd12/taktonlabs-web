@@ -386,23 +386,24 @@ function animatePhilosophy(): void {
 }
 
 /**
- * Process 섹션: step stagger reveal (세로 타임라인)
+ * Process 섹션: 각 step을 개별 ScrollTrigger로 — 스크롤하면서 한 개씩 등장.
  */
 function animateProcessSection(): void {
   const steps = document.querySelectorAll<HTMLElement>('[data-process-step]');
   if (steps.length === 0) return;
 
-  gsap.from(steps, {
-    y: 32,
-    opacity: 0,
-    duration: 0.8,
-    stagger: 0.12,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#process',
-      start: 'top 75%',
-      toggleActions: 'play none none reverse',
-    },
+  steps.forEach((step) => {
+    gsap.from(step, {
+      y: 40,
+      opacity: 0,
+      duration: 0.85,
+      ease: 'power3.out',
+      scrollTrigger: {
+        trigger: step,
+        start: 'top 85%',
+        toggleActions: 'play none none reverse',
+      },
+    });
   });
 }
 
@@ -436,7 +437,7 @@ export function initScrollReveals(): void {
 
   const selectors = [
     '.phil-eyebrow', '.phil-headline', '.phil-grid',
-    '.proc-eyebrow', '.proc-headline', '.proc-list',
+    '.proc-eyebrow', '.proc-headline',
     '.why-eyebrow', '.why-headline', '.why-grid',
     '.faq-eyebrow', '.faq-headline', '.faq-list',
     '.contact-eyebrow', '.contact-headline', '.contact-grid',
