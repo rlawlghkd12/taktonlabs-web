@@ -10,7 +10,13 @@ const principles = [
     <div class="phil-eyebrow">02 &nbsp;&nbsp; PHILOSOPHY</div>
     <h2 class="phil-headline">
       <span>쓰이는 소프트웨어가</span>
-      <span class="highlight">오래 쓰이는</span>
+      <span class="highlight">
+        <svg class="highlight-brush" viewBox="0 0 400 80" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path d="M 6 34 C 40 24, 110 30, 168 28 S 260 22, 320 26 S 388 30, 395 32 C 402 38, 398 58, 388 60 C 340 62, 270 56, 210 58 S 120 64, 72 60 S 18 58, 8 54 C 2 48, 0 38, 6 34 Z" />
+          <path class="highlight-brush-streak" d="M 18 42 C 90 38, 180 42, 260 40 S 370 44, 386 42" />
+        </svg>
+        <span class="highlight-text">오래 쓰이는</span>
+      </span>
       <span>소프트웨어입니다.</span>
     </h2>
     <div class="phil-grid">
@@ -37,8 +43,33 @@ const principles = [
     max-width: 1100px; margin: 0 0 72px;
   }
   .phil-headline .highlight {
-    background: linear-gradient(180deg, transparent 68%, var(--accent-highlight) 68%, var(--accent-highlight) 92%, transparent 92%);
-    padding: 0 6px;
+    position: relative;
+    display: inline-block;
+    padding: 0 10px;
+  }
+  .phil-headline .highlight-brush {
+    position: absolute;
+    left: -4px;
+    right: -4px;
+    bottom: -0.08em;
+    width: calc(100% + 8px);
+    height: 0.52em;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .phil-headline .highlight-brush path {
+    fill: var(--accent-highlight);
+  }
+  .phil-headline .highlight-brush path.highlight-brush-streak {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.55);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    mix-blend-mode: soft-light;
+  }
+  .phil-headline .highlight-text {
+    position: relative;
+    z-index: 1;
   }
   .phil-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; padding-top: 28px; border-top: 1px solid var(--hairline-strong); }
   .phil-principle-tag {
