@@ -164,10 +164,28 @@ const { capability: c, index } = Astro.props;
   .tile.dark .t-label { color: rgba(255,255,255,0.55); }
   .t-value { font-size: 14px; font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; }
 
-  @media (max-width: 768px) {
-    .cc { position: relative; inset: auto; opacity: 1 !important; grid-template-columns: 1fr; gap: 20px; }
+  @media (max-width: 900px) {
+    .cc {
+      position: relative;
+      inset: auto;
+      opacity: 1 !important;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 24px;
+      padding: 24px;
+    }
     .cc[data-index] { opacity: 1 !important; }
-    .cc-right .proof { max-width: 480px; }
+    .cc-left { width: 100%; }
+    .cc-num { font-size: 72px; margin-bottom: 10px; }
+    .cc-title { font-size: 22px; }
+    .cc-desc { font-size: 14px; max-width: 100%; }
+    .cc-principles { font-size: 13px; gap: 8px; flex-wrap: wrap; white-space: normal; }
+    .cc-right {
+      width: 100% !important;
+      max-width: 100%;
+      flex-shrink: 1;
+    }
+    .cc-right .proof { max-width: 100%; }
   }
 
   /* Docked state — 대부분 값은 GSAP이 이미 연속 tween으로 목표 상태로 만듦.
