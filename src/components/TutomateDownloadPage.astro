@@ -370,7 +370,7 @@ const isQ = variant.slug === 'q';
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const MAX_TILT = 9; // degrees
+    const MAX_TILT = 11; // degrees
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
@@ -382,7 +382,7 @@ const isQ = variant.slug === 'q';
       const lerp = 0.14;
       currentX += (targetX - currentX) * lerp;
       currentY += (targetY - currentY) * lerp;
-      card.style.transform = `perspective(1400px) rotateX(${currentY.toFixed(3)}deg) rotateY(${currentX.toFixed(3)}deg)`;
+      card.style.transform = `perspective(1600px) rotateX(${currentY.toFixed(3)}deg) rotateY(${currentX.toFixed(3)}deg)`;
       const dx = Math.abs(targetX - currentX);
       const dy = Math.abs(targetY - currentY);
       if (dx > 0.02 || dy > 0.02 || active) {
@@ -394,10 +394,16 @@ const isQ = variant.slug === 'q';
 
     const onMove = (e: MouseEvent): void => {
       const rect = wrap.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      const rx = (e.clientX - rect.left) / rect.width;
+      const ry = (e.clientY - rect.top) / rect.height;
+      const x = rx - 0.5;
+      const y = ry - 0.5;
       targetX = x * MAX_TILT * 2;
       targetY = -y * MAX_TILT * 2;
+      // 마우스 위치를 CSS 변수로 전달 — radial highlight 따라감
+      card.style.setProperty('--mx', `${(rx * 100).toFixed(2)}%`);
+      card.style.setProperty('--my', `${(ry * 100).toFixed(2)}%`);
+      card.style.setProperty('--light-opacity', '1');
       active = true;
       if (rafId === null) rafId = requestAnimationFrame(animate);
     };
@@ -405,6 +411,7 @@ const isQ = variant.slug === 'q';
     const onLeave = (): void => {
       targetX = 0;
       targetY = 0;
+      card.style.setProperty('--light-opacity', '0');
       active = false;
       if (rafId === null) rafId = requestAnimationFrame(animate);
     };
@@ -643,13 +650,31 @@ const isQ = variant.slug === 'q';
     will-change: transform;
   }
   .mockup-window::before {
-    /* 상단 specular highlight */
+    /* 상단 specular highlight (정적) */
     content: '';
     position: absolute;
     top: 0; left: 12%; right: 12%;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
     border-radius: 18px;
+  }
+  .mockup-window::after {
+    /* 마우스 따라다니는 radial light (JS에서 --mx/--my 업데이트) */
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      420px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 255, 255, 0.35),
+      transparent 55%
+    );
+    mix-blend-mode: overlay;
+    opacity: var(--light-opacity, 0);
+    transition: opacity 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    pointer-events: none;
+    z-index: 5;
+    transform: translateZ(80px);
   }
 
   /* Title bar */
@@ -659,7 +684,12 @@ const isQ = variant.slug === 'q';
     border-bottom: 1px solid rgba(10, 10, 10, 0.06);
     margin-bottom: 12px;
     position: relative;
+    transform: translateZ(8px);
+    transform-style: preserve-3d;
   }
+  .mockup-dots { transform: translateZ(14px); }
+  .mockup-title { transform: translateZ(6px); }
+  .mockup-chip { transform: translateZ(12px); }
   .mockup-dots { display: flex; gap: 7px; }
   .mockup-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08) inset; }
   .mockup-dot.r { background: #ff5f57; }
@@ -691,6 +721,7 @@ const isQ = variant.slug === 'q';
     grid-template-columns: 180px 1fr;
     gap: 12px;
     min-height: 440px;
+    transform-style: preserve-3d;
   }
 
   /* Sidebar */
@@ -701,7 +732,13 @@ const isQ = variant.slug === 'q';
     display: flex;
     flex-direction: column;
     gap: 4px;
+    transform: translateZ(12px);
+    transform-style: preserve-3d;
+    box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.04);
   }
+  .mockup-logo { transform: translateZ(10px); }
+  .mockup-nav.active { transform: translateZ(20px); }
+  .mockup-side-foot { transform: translateZ(14px); }
   .mockup-logo {
     display: flex; align-items: center; gap: 10px;
     padding: 2px 2px 14px;
@@ -790,6 +827,14 @@ const isQ = variant.slug === 'q';
     flex-direction: column;
     gap: 18px;
     border: 1px solid rgba(10, 10, 10, 0.04);
+    transform: translateZ(18px);
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.06);
+  }
+  .mockup-main-head { transform: translateZ(16px); }
+  .mockup-action {
+    transform: translateZ(36px);
+    box-shadow: 0 6px 14px -4px rgba(0, 0, 0, 0.35);
   }
   .mockup-main-head {
     display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
@@ -820,6 +865,7 @@ const isQ = variant.slug === 'q';
 
   .mockup-stats {
     display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;
+    transform-style: preserve-3d;
   }
   .mockup-stat {
     background: #f6f5ef;
@@ -829,11 +875,16 @@ const isQ = variant.slug === 'q';
     display: flex;
     flex-direction: column;
     gap: 6px;
+    transform: translateZ(24px);
+    box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.08);
   }
+  .mockup-stat:nth-child(2) { transform: translateZ(28px); }
   .mockup-stat.dark {
     background: var(--text-primary);
     color: var(--bg-primary);
     border-color: transparent;
+    transform: translateZ(36px);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
   }
   .mockup-stat-l {
     font-size: 11px;
@@ -862,7 +913,7 @@ const isQ = variant.slug === 'q';
   .mockup-stat-delta { font-size: 11px; color: rgba(255, 255, 255, 0.6); }
 
   /* Schedule */
-  .mockup-schedule { display: flex; flex-direction: column; gap: 10px; }
+  .mockup-schedule { display: flex; flex-direction: column; gap: 10px; transform-style: preserve-3d; transform: translateZ(14px); }
   .mockup-schedule-head {
     display: flex; justify-content: space-between;
     font-size: 11px;
@@ -901,6 +952,8 @@ const isQ = variant.slug === 'q';
     background: rgba(10, 10, 10, 0.04);
     padding: 8px 8px;
     border-radius: 7px;
+    transform: translateZ(22px);
+    box-shadow: 0 4px 10px -4px rgba(0, 0, 0, 0.15);
   }
   .mockup-t {
     font-family: var(--font-mono);
