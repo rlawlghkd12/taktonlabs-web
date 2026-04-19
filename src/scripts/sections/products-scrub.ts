@@ -1,5 +1,10 @@
 // src/scripts/sections/products-scrub.ts
-import { EASE, prefersReducedMotion, isDesktopViewport, loadGsap } from '../../lib/motion';
+// Products 섹션 — 섹션 진입 시 3개 화면/캡션이 타이머 기반으로 자동 순환.
+// 스크롤 위치와 분리되어 mid-scroll에서 오버랩이 발생하지 않음.
+
+import { prefersReducedMotion, isDesktopViewport } from '../../lib/motion';
+
+const CYCLE_MS = 3400;
 
 export async function initProductsScrub(): Promise<void> {
   const section = document.querySelector<HTMLElement>('#products');
@@ -16,7 +21,6 @@ export async function initProductsScrub(): Promise<void> {
     if (rail) {
       rail.style.height = 'auto';
     }
-    // 모든 화면·캡션 펼치기
     section.querySelectorAll<HTMLElement>('[data-prod-screen]').forEach((el) => {
       el.style.position = 'relative';
       el.style.inset = 'auto';
@@ -28,7 +32,6 @@ export async function initProductsScrub(): Promise<void> {
       el.style.inset = 'auto';
       el.style.opacity = '1';
     });
-    // 인디케이터·progress bar 숨김
     const indicators = section.querySelector<HTMLElement>('.prod-indicators');
     if (indicators) indicators.style.display = 'none';
     section.querySelectorAll<HTMLElement>('.prod-progress .seg').forEach((el) => {
@@ -37,55 +40,101 @@ export async function initProductsScrub(): Promise<void> {
     return;
   }
 
-  const { gsap } = await loadGsap();
   const pinEl = section.querySelector<HTMLElement>('.prod-pin')!;
+  const rail = section.querySelector<HTMLElement>('[data-prod-rail]')!;
   const screens = Array.from(section.querySelectorAll<HTMLElement>('[data-prod-screen]'));
   const captions = Array.from(section.querySelectorAll<HTMLElement>('[data-prod-caption]'));
   const indicators = Array.from(section.querySelectorAll<HTMLElement>('[data-prod-indicator]'));
   const progressSegs = Array.from(section.querySelectorAll<HTMLElement>('.prod-progress .seg'));
-  const windowTitleItems = Array.from(section.querySelectorAll<HTMLElement>('.window-title-stack .window-title'));
+  const windowTitleItems = Array.from(
+    section.querySelectorAll<HTMLElement>('.window-title-stack .window-title'),
+  );
 
-  // Rail 설정 — 이 레일 안에서만 pin이 sticky로 동작
-  const rail = section.querySelector<HTMLElement>('[data-prod-rail]')!;
+  // Sticky pin 설정 — 레일 안에서 280vh 동안 고정
   rail.style.height = '280vh';
   pinEl.style.position = 'sticky';
   pinEl.style.top = '0';
   pinEl.style.height = '100vh';
-  // section.style.height 설정 제거 — rail + CTA + tags가 자연 flow로 쌓임
 
-  const tl = gsap.timeline({
-    scrollTrigger: { trigger: rail, start: 'top top', end: 'bottom bottom', scrub: 0.4 },
+  // CSS transitions — 타이머 전환 시 부드러운 페이드
+  const EXPO = 'cubic-bezier(0.16, 1, 0.3, 1)';
+  const SMOOTH = 'cubic-bezier(0.22, 0.61, 0.36, 1)';
+  screens.forEach((s) => {
+    s.style.transition = `opacity 0.7s ${EXPO}, transform 0.7s ${EXPO}`;
+    s.style.willChange = 'opacity, transform';
+  });
+  captions.forEach((c) => {
+    c.style.transition = `opacity 0.55s ${SMOOTH}, transform 0.55s ${SMOOTH}`;
+    c.style.willChange = 'opacity, transform';
+  });
+  windowTitleItems.forEach((el) => {
+    el.style.transition = `opacity 0.45s ${SMOOTH}`;
+  });
+  indicators.forEach((el) => {
+    el.style.transition = `opacity 0.35s ${SMOOTH}`;
   });
 
-  function switchTo(idx: number, at: number) {
-    // 현재 활성화된 것만 opacity 1, 나머지는 0
+  function showIndex(idx: number): void {
     screens.forEach((s, i) => {
-      tl.to(s, { opacity: i === idx ? 1 : 0, scale: i === idx ? 1 : 1.04, duration: 0.7, ease: EASE.expo }, at);
+      s.style.opacity = i === idx ? '1' : '0';
+      s.style.transform = i === idx ? 'scale(1)' : 'scale(1.04)';
     });
     captions.forEach((c, i) => {
-      tl.to(c, { opacity: i === idx ? 1 : 0, y: i === idx ? 0 : 12, duration: 0.6, ease: EASE.smooth }, at - 0.03);
+      c.style.opacity = i === idx ? '1' : '0';
+      c.style.transform = i === idx ? 'translateY(0)' : 'translateY(12px)';
     });
-    // window title crossfade — 스크럽 동기
     windowTitleItems.forEach((el, i) => {
-      tl.to(el, { opacity: i === idx ? 1 : 0, duration: 0.5, ease: EASE.smooth }, at);
+      el.style.opacity = i === idx ? '1' : '0';
     });
     indicators.forEach((el, i) => {
-      tl.to(el, { opacity: i === idx ? 1 : 0.35, duration: 0.4, ease: EASE.smooth }, at);
-      tl.call(() => { el.dataset.active = String(i === idx); }, undefined, at);
+      el.style.opacity = i === idx ? '1' : '0.35';
+      el.dataset.active = String(i === idx);
     });
-    // progress segments — scroll 에 따라 data-filled 동기 (양방향)
-    tl.to({}, {
-      duration: 0.01,
-      onStart: () => { progressSegs.forEach((seg, i) => { seg.dataset.filled = String(i <= idx); }); },
-      onReverseComplete: () => { progressSegs.forEach((seg, i) => { seg.dataset.filled = String(i < idx); }); },
-    }, at);
+    progressSegs.forEach((seg, i) => {
+      seg.dataset.filled = String(i <= idx);
+    });
   }
 
   // 초기 상태
-  gsap.set(windowTitleItems[0], { opacity: 1 });
-  windowTitleItems.slice(1).forEach((el) => gsap.set(el, { opacity: 0 }));
+  showIndex(0);
 
-  switchTo(0, 0);
-  switchTo(1, 0.33);
-  switchTo(2, 0.66);
+  // 자동 순환 — IntersectionObserver로 섹션 보일 때만 작동
+  let currentIdx = 0;
+  let interval: number | null = null;
+
+  function next(): void {
+    currentIdx = (currentIdx + 1) % 3;
+    showIndex(currentIdx);
+  }
+
+  function start(): void {
+    if (interval !== null) return;
+    interval = window.setInterval(next, CYCLE_MS);
+  }
+
+  function stop(): void {
+    if (interval !== null) {
+      clearInterval(interval);
+      interval = null;
+    }
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) start();
+        else stop();
+      });
+    },
+    { threshold: 0.3 },
+  );
+  observer.observe(pinEl);
+
+  // 탭 비활성/blur 시 타이머 절약
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stop();
+    else if (pinEl.getBoundingClientRect().top < window.innerHeight && pinEl.getBoundingClientRect().bottom > 0) {
+      start();
+    }
+  });
 }
