@@ -1,16 +1,28 @@
 ---
 import '../styles/global.css';
 
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  ogImageAlt?: string;
+  breadcrumbs?: BreadcrumbItem[];
 }
+
+const SITE_NAME = 'Taktonlabs';
+const SITE_URL = 'https://taktonlabs.com';
 
 const {
   title = 'Taktonlabs — 제품을 만듭니다. 끝까지.',
   description = '웹·모바일·데스크톱. 설계부터 운영까지 직접 만드는 소프트웨어 스튜디오.',
   ogImage = '/og-image.png',
+  ogImageAlt = 'Taktonlabs — 제품을 만듭니다. 끝까지.',
+  breadcrumbs,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -19,9 +31,9 @@ const ogImageURL = new URL(ogImage, Astro.site);
 const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Taktonlabs',
-  url: 'https://taktonlabs.com',
-  logo: 'https://taktonlabs.com/icon-512.png',
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/icon-512.png`,
   description: description,
   sameAs: [],
   address: {
@@ -31,7 +43,50 @@ const organizationSchema = {
     addressLocality: '양산시',
     streetAddress: '하북면 신평로 18, 1층',
   },
+  contactPoint: [
+    {
+      '@type': 'ContactPoint',
+      contactType: 'customer support',
+      email: 'support@taktonlabs.com',
+      areaServed: 'KR',
+      availableLanguage: ['Korean'],
+    },
+    {
+      '@type': 'ContactPoint',
+      contactType: 'sales',
+      email: 'hello@taktonlabs.com',
+      areaServed: 'KR',
+      availableLanguage: ['Korean'],
+    },
+  ],
 };
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_NAME,
+  alternateName: ['텍톤랩스', 'Takton Labs'],
+  url: SITE_URL,
+  inLanguage: 'ko-KR',
+  publisher: {
+    '@type': 'Organization',
+    name: SITE_NAME,
+    url: SITE_URL,
+  },
+};
+
+const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: b.name,
+        item: new URL(b.url, Astro.site).toString(),
+      })),
+    }
+  : null;
 
 const productSchema = {
   '@context': 'https://schema.org',
@@ -138,6 +193,7 @@ const serviceSchema = {
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content="ko_KR" />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
@@ -145,17 +201,23 @@ const serviceSchema = {
     <meta property="og:image" content={ogImageURL} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogImageAlt} />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={ogImageAlt} />
 
-    <!-- JSON-LD: Organization + Product + Service -->
+    <!-- JSON-LD: WebSite + Organization + Product + Service (+ BreadcrumbList) -->
+    <script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
     <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+    {breadcrumbSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    )}
   </head>
   <body>
     <a href="#main" class="skip-link">본문으로 건너뛰기</a>

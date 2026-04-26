@@ -8,7 +8,14 @@ const pageTitle = `${tutomateQ.name} — ${tutomateQ.tagline} | Taktonlabs`;
 const pageDescription = tutomateQ.description;
 ---
 
-<Base title={pageTitle} description={pageDescription}>
+<Base
+  title={pageTitle}
+  description={pageDescription}
+  breadcrumbs={[
+    { name: '홈', url: '/' },
+    { name: 'TutorMate Q', url: '/tutomate/q' },
+  ]}
+>
   <TutomateDownloadPage variant={tutomateQ} />
   <Footer />
 </Base>

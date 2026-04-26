@@ -4,7 +4,14 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Base title="개인정보 처리방침 — Taktonlabs">
+<Base
+  title="개인정보 처리방침 — Taktonlabs"
+  description="텍톤랩스(Takton Labs)의 개인정보 처리방침. 수집·이용 목적, 보관 기간, 이용자 권리, 문의 절차 안내."
+  breadcrumbs={[
+    { name: '홈', url: '/' },
+    { name: '개인정보 처리방침', url: '/privacy' },
+  ]}
+>
   <Nav />
   <main id="main" class="legal-page">
     <div class="legal-inner">
