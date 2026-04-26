@@ -1,4 +1,59 @@
+# Default — 검색 크롤러 모두 허용
 User-agent: *
 Allow: /
+
+# ─────────────────────────────────────────────
+# AI 학습용 크롤러 차단 (검색/실시간 fetch는 허용)
+# ─────────────────────────────────────────────
+
+# OpenAI — 학습 차단 (검색용 OAI-SearchBot, 실시간용 ChatGPT-User는 위 *에서 허용)
+User-agent: GPTBot
+Disallow: /
+
+# Google — Gemini 등 AI 학습 차단 (Googlebot 검색은 허용)
+User-agent: Google-Extended
+Disallow: /
+
+# Anthropic — Claude 학습 차단 (실시간 fetch용 Claude-User 등은 허용)
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+# Apple — Apple Intelligence 학습 차단 (Applebot 검색은 허용)
+User-agent: Applebot-Extended
+Disallow: /
+
+# Meta — Llama 등 학습 차단
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+# ByteDance — Doubao 등 학습 차단
+User-agent: Bytespider
+Disallow: /
+
+# Common Crawl — 다수 LLM 학습 데이터 출처
+User-agent: CCBot
+Disallow: /
+
+# 기타 AI 데이터 수집
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Omgili
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
 
 Sitemap: https://taktonlabs.com/sitemap-index.xml
