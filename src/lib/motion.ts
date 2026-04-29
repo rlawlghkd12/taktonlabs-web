@@ -21,10 +21,12 @@ export function prefersReducedMotion(): boolean {
 
 /**
  * 뷰포트가 데스크톱 기준인지. pinned 인터랙션 분기용.
+ * scroll-animations.ts의 ScrollTrigger.matchMedia('(min-width: 1024px)')와 정합.
+ * 768~1023px(태블릿)에서 JS는 모바일 폴백 사용 → CSS도 1023px까지 모바일 레이아웃이어야 어긋남 없음.
  */
 export function isDesktopViewport(): boolean {
   if (typeof window === 'undefined') return true;
-  return window.matchMedia('(min-width: 768px)').matches;
+  return window.matchMedia('(min-width: 1024px)').matches;
 }
 
 /**

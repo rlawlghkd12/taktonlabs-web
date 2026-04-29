@@ -52,8 +52,6 @@ export function initScrollAnimations(): void {
 
   // v2 신규 섹션
   animatePhilosophy();
-  animateProcessSection();
-  animateWhy();
 }
 
 /**
@@ -73,8 +71,6 @@ function showAllImmediately(): void {
   gsap.set('[data-reveal]', { opacity: 1, y: 0 });
   // v2 신규
   gsap.set('[data-phil-principle]', { opacity: 1, y: 0 });
-  gsap.set('[data-process-step]', { opacity: 1, y: 0 });
-  gsap.set('[data-why-card]', { opacity: 1, y: 0 });
 }
 
 /**
@@ -90,7 +86,7 @@ function animateHero(): void {
  */
 function animateSectionHeaders(): void {
   const headers = document.querySelectorAll(
-    '#capabilities .capabilities-header, #products .products-header, #contact .contact-header, #philosophy .philosophy-header, #process .process-header, #why .why-header, #faq .faq-header'
+    '#capabilities .capabilities-header, #products .products-header, #contact .contact-header, #philosophy .philosophy-header, #faq .faq-header'
   );
 
   headers.forEach((header) => {
@@ -375,49 +371,6 @@ function animatePhilosophy(): void {
 }
 
 /**
- * Process 섹션: 각 step을 개별 ScrollTrigger로 — 스크롤하면서 한 개씩 등장.
- */
-function animateProcessSection(): void {
-  const steps = document.querySelectorAll<HTMLElement>('[data-process-step]');
-  if (steps.length === 0) return;
-
-  steps.forEach((step) => {
-    gsap.from(step, {
-      y: 40,
-      opacity: 0,
-      duration: 0.85,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: step,
-        start: 'top 85%',
-        toggleActions: 'play none none reverse',
-      },
-    });
-  });
-}
-
-/**
- * Why 섹션: 카드 stagger reveal
- */
-function animateWhy(): void {
-  const cards = document.querySelectorAll('[data-why-card]');
-  if (cards.length === 0) return;
-
-  gsap.from(cards, {
-    y: 32,
-    opacity: 0,
-    duration: 0.9,
-    stagger: 0.15,
-    ease: 'power3.out',
-    scrollTrigger: {
-      trigger: '#why',
-      start: 'top 75%',
-      toggleActions: 'play none none reverse',
-    },
-  });
-}
-
-/**
  * 섹션 진입 스크롤 reveal — IntersectionObserver 기반 stagger fade-up.
  * Hero(자체 word-stagger)와 pinned 섹션(GSAP ScrollTrigger)은 제외.
  */
@@ -428,7 +381,6 @@ export function initScrollReveals(): void {
     '.phil-eyebrow', '.phil-headline', '.phil-grid',
     '.cap-eyebrow', '.cap-headline',
     '.proc-eyebrow', '.proc-headline',
-    '.why-eyebrow', '.why-headline', '.why-grid',
     '.faq-eyebrow', '.faq-headline', '.faq-list',
     '.contact-eyebrow', '.contact-headline', '.contact-grid',
   ];

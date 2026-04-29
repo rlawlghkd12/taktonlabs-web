@@ -21,7 +21,7 @@ import { capabilities } from '../data/capabilities';
     </div>
 
     <h2 class="cap-headline" data-cap-headline>
-      세 가지로 만듭니다.
+      <span class="cap-headline-line">세 가지를 만듭니다.</span>
     </h2>
 
     <!-- dock bar: 3 docked slots (초기엔 hidden, 카드가 이동하며 채움) -->
@@ -41,9 +41,6 @@ import { capabilities } from '../data/capabilities';
       {capabilities.map((c, i) => (
         <CapabilityCard capability={c} index={i} />
       ))}
-      <div class="cap-outro" data-cap-outro>
-        <a href="#process" class="cap-outro-link">진행 방식 보기 ↓</a>
-      </div>
     </div>
   </div>
 </section>
@@ -60,14 +57,21 @@ import { capabilities } from '../data/capabilities';
   .cap-progress-seg { flex: 1; height: 2px; background: var(--hairline); position: relative; overflow: hidden; }
   .cap-progress-seg::after { content: ''; position: absolute; inset: 0; background: var(--text-primary); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease-expo); }
   .cap-progress-seg[data-filled='true']::after { transform: scaleX(1); }
-  .cap-headline { font-size: clamp(40px, 6vw, 64px); font-weight: 600; letter-spacing: -0.04em; margin: 0 0 48px; line-height: 1; }
+
+  .cap-headline {
+    font-size: clamp(40px, 6vw, 64px);
+    font-weight: 600; letter-spacing: -0.04em;
+    margin: 0 0 48px; line-height: 1.05;
+  }
+  .cap-headline-line { display: block; }
+
   .cap-dock-bar { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 56px; min-height: 116px; }
   .cap-dock {
     display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
     padding: 18px 22px;
     background: #fff; border: 1px solid var(--hairline); border-radius: 12px;
     box-shadow: 0 2px 8px -4px rgba(0,0,0,0.05);
-    opacity: 0;                  /* 초기 hidden, 타임라인에서 띄움 */
+    opacity: 0;
     transition: opacity 0.3s var(--ease-smooth);
     position: relative;
     overflow: hidden;
@@ -81,26 +85,19 @@ import { capabilities } from '../data/capabilities';
   }
   .dock-num {
     font-family: var(--font-mono);
-    font-size: 20px;
-    font-weight: 600;
+    font-size: 20px; font-weight: 600;
     color: var(--text-primary);
-    letter-spacing: -0.01em;
-    line-height: 1;
+    letter-spacing: -0.01em; line-height: 1;
   }
   .dock-title {
-    font-size: 15px;
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
+    font-size: 15px; font-weight: 600;
+    letter-spacing: -0.01em; line-height: 1.3;
   }
   .dock-tagline {
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 14px; line-height: 1.5;
     color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
+    white-space: nowrap; overflow: hidden;
+    text-overflow: ellipsis; max-width: 100%;
   }
   .dock-check {
     position: absolute;
@@ -108,63 +105,26 @@ import { capabilities } from '../data/capabilities';
     font-size: 14px; color: var(--text-muted); opacity: 0.6;
   }
   .cap-stage { position: relative; flex: 1; min-height: 340px; }
-  .cap-outro {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 32px;
-    opacity: 0;
-    pointer-events: none;
-  }
-  .cap-outro-title {
-    font-size: clamp(32px, 4.5vw, 52px);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin: 0;
-    max-width: 900px;
-  }
-  .cap-outro-link {
-    font-size: 16px;
-    color: var(--text-primary);
-    border-bottom: 1px solid var(--text-primary);
-    padding-bottom: 2px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: opacity 0.2s var(--ease-smooth);
-  }
-  .cap-outro-link:hover { opacity: 0.7; }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1023px) {
     .cap { padding-top: 48px; scroll-margin-top: 80px; }
     .cap-pin { padding: 64px var(--section-pad-x-sm); min-height: auto; }
     .cap-head { margin-bottom: 32px; }
-    /* eyebrow: CAPABILITIES / 는 윗줄, 01 · 웹 · 모바일 제품은 아랫줄로 강제 분리 */
     .cap-eyebrow {
       display: block;
       line-height: 1.6;
     }
     .cap-eyebrow-static { display: block; margin-bottom: 4px; }
     .cap-title-stack {
-      position: static;
-      display: block;
-      width: 100%;
-      height: auto;
-      min-width: 0;
-      min-height: 0;
+      position: static; display: block;
+      width: 100%; height: auto;
+      min-width: 0; min-height: 0;
     }
-    /* absolute 로 겹쳐 있던 3개 타이틀 → 일반 flow + 첫 번째만 표시 (모바일엔 순환 없음) */
     .cap-title-item {
-      position: static;
-      display: none;
-      white-space: normal;
+      position: static; display: none; white-space: normal;
     }
     .cap-title-item[data-title-idx='0'] { display: inline; opacity: 1; }
-    .cap-headline { font-size: 32px; margin-bottom: 32px; }
+    .cap-headline { font-size: 32px; margin-bottom: 32px; line-height: 1.15; }
     .cap-dock-bar { display: none; }
     .cap-stage { min-height: auto; display: flex; flex-direction: column; gap: 16px; }
   }
