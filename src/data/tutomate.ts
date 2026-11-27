@@ -89,9 +89,9 @@ export const tutomate: TutomateVariant = {
 export const tutomateQ: TutomateVariant = {
   slug: 'q',
   name: 'TutorMate Q',
-  tagline: '현대적인 UI를 선호하는 강사를 위한 버전',
+  tagline: '학원·문화원을 위한 수강 관리 프로그램',
   description:
-    '더 세련된 인터페이스와 빠른 동작. 익숙한 기능은 그대로, 경험은 한 단계 업그레이드.',
+    '수강생 등록부터 수강료 납부·환불, 분기별 수익까지 한 곳에서. Windows PC에 설치해 바로 쓸 수 있습니다.',
   version: FALLBACK_VERSION,
   releaseDate: FALLBACK_DATE,
   githubRepo: GITHUB_REPO,
