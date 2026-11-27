@@ -49,11 +49,12 @@ const isQ = variant.slug === 'q';
         <p class="description">{variant.description}</p>
 
         <div class="downloads">
-          <a href={macUrl} class="btn btn-primary" data-platform="mac" data-download>
+          <!-- Mac 설치 파일이 최신 릴리스에 있을 때만 런타임에 보임 (없는 파일 404 방지) -->
+          <a href={macUrl} class="btn btn-secondary" data-platform="mac" data-download hidden>
             <Icon name="lucide:app-window" width={18} height={18} />
             <span>macOS 다운로드</span>
           </a>
-          <a href={winUrl} class="btn btn-secondary" data-platform="windows" data-download>
+          <a href={winUrl} class="btn btn-primary" data-platform="windows" data-download>
             <Icon name="lucide:layout-grid" width={18} height={18} />
             <span>Windows 다운로드</span>
           </a>
@@ -283,7 +284,7 @@ const isQ = variant.slug === 'q';
     const macBtn = document.querySelector<HTMLElement>('[data-platform="mac"]');
     const winBtn = document.querySelector<HTMLElement>('[data-platform="windows"]');
 
-    if (isMac && macBtn) {
+    if (isMac && macBtn && !macBtn.hidden) {
       macBtn.classList.add('btn-primary');
       macBtn.classList.remove('btn-secondary');
       winBtn?.classList.remove('btn-primary');
@@ -354,7 +355,11 @@ const isQ = variant.slug === 'q';
       const winBtn = document.querySelector<HTMLAnchorElement>(
         '[data-platform="windows"]',
       );
-      if (macBtn && macUrl) macBtn.href = macUrl;
+      if (macBtn && macUrl) {
+        macBtn.href = macUrl;
+        macBtn.hidden = false;
+        highlightPlatform();
+      }
       if (winBtn && winUrl) winBtn.href = winUrl;
     } catch {
       // 네트워크/CORS 오류 시 silent fail
@@ -560,6 +565,9 @@ const isQ = variant.slug === 'q';
     gap: 10px;
     flex-wrap: wrap;
     margin-bottom: 28px;
+  }
+  .btn[hidden] {
+    display: none;
   }
   .btn {
     display: inline-flex;
